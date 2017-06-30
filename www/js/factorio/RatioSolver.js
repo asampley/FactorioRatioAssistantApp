@@ -6,6 +6,7 @@ factorio.RatioSolver = function(environment) {
 	this.machineLevels = {};
 	this._rawListeners = [];
 	this._unrawListeners = [];
+	this._machineLevelListeners = [];
 
 	var self = this;
 	this.environment.addItemListener(function(item) {
@@ -21,6 +22,14 @@ factorio.RatioSolver = function(environment) {
 
 factorio.RatioSolver.prototype.setMachineLevel = function(machineClassName, level) {
 	this.machineLevels[machineClassName] = level;
+
+	for (var i = 0; i < this._machineLevelListeners.length; ++i) {
+		this._machineLevelListeners[i](this.environment.machineClasses[machineClassName], level);
+	}
+}
+
+factorio.RatioSolver.prototype.getMachineLevel = function(machineClassName) {
+	return this.machineLevels[machineClassName];
 }
 
 factorio.RatioSolver.prototype.solve = function(item) {
@@ -141,5 +150,13 @@ factorio.RatioSolver.prototype.addSetRawListener = function(fRaw, fUnraw) {
 		} else {
 			fUnraw(item);
 		}
+	}
+}
+
+factorio.RatioSolver.prototype.addMachineLevelListener = function(f) {
+	this._machineLevelListeners.push(f);
+
+	for (mcName in this.machineLevels) {
+		f(this.environment.machineClasses[mcName], this.machineLevels[mcName]);
 	}
 }

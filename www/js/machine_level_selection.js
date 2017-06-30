@@ -5,6 +5,8 @@ document.addEventListener(
 		var treeTemplate = document.getElementById('template-tree-node-machine');
 		var rootTreeNode = null;
 
+		var mcButtons = {};
+
 		app.factorioEnvironment.addMachineClassListener(
 			function(machineClass) {
 				var machineSelector = treeTemplate.cloneNode(true);
@@ -24,21 +26,49 @@ document.addEventListener(
 					childElement.classList.toggle('hidden');
 				}
 
+				mcButtons[machineClass.className] = [];
+
 				for (var i = 0; i < machineClass.names.length; ++i) {
 					var machineLevelButton = childTemplate.cloneNode(true);
-					var level = i;
 					machineLevelButton.classList.remove('hidden');
 
 					var machineLevelIcon = machineLevelButton.getElementsByClassName('tree-node-machine-icon')[0];
 					machineLevelIcon.onerror = function() {this.onerror = null; this.src = 'img/default.png'};
-					machineLevelIcon.src = app.factorioEnvironment.itemImgPaths[machineClass.name(level)];
-					machineLevelButton.getElementsByClassName('tree-node-machine-name')[0].textContent = machineClass.name(level);
+					machineLevelIcon.src = app.factorioEnvironment.itemImgPaths[machineClass.name(i)];
+					machineLevelButton.getElementsByClassName('tree-node-machine-name')[0].textContent = machineClass.name(i);
 
-					machineLevelButton.onclick = function() {
-						app.ratioSolver.setMachineLevel(machineClass.className, level);
+					mcButtons[machineClass.className].push(machineLevelButton);
+
+					function createButtonClick(className, level) {
+						return function() {
+							app.ratioSolver.setMachineLevel(className, level);
+							console.log("Set machine class " + className + " to " + level);
+						}
 					}
 
+					machineLevelButton.onclick = createButtonClick(machineClass.className, i);
+
 					childElement.appendChild(machineLevelButton);
+
+					if (app.ratioSolver.getMachineLevel(machineClass.className) == i) {
+						machineLevelButton.style.backgroundColor = "var(--color-button-selected)";
+					}
+				}
+			}
+		);
+
+		app.ratioSolver.addMachineLevelListener(
+			function(machineClass, level) {
+				if (!(machineClass.className in mcButtons)) return;
+				
+				var classButtons = mcButtons[machineClass.className];
+
+				for (var i = 0; i < classButtons.length; ++i) {
+					classButtons[i].style.backgroundColor = "";
+				}
+
+				if (classButtons.length > level) {
+					classButtons[level].style.backgroundColor = "var(--color-button-selected)";
 				}
 			}
 		);
