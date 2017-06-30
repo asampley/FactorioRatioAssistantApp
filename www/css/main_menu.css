@@ -1,0 +1,13 @@
+/* Portrait button */
+.button-menu {
+	box-sizing: border-box;
+	margin: 2px 2px;
+	width: calc(100% - 4px); /* full width minus margins */
+}
+
+/* Landscape button */
+@media screen and (min-aspect-ratio: 1/1) and (min-width:500px) {
+	.button-menu {
+		width: calc(50% - 4px - 2px); /* half width minus margins and 1px for each button */
+	}
+}

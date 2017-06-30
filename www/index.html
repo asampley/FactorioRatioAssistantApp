@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<!--
+    Licensed to the Apache Software Foundation (ASF) under one
+    or more contributor license agreements.  See the NOTICE file
+    distributed with this work for additional information
+    regarding copyright ownership.  The ASF licenses this file
+    to you under the Apache License, Version 2.0 (the
+    "License"); you may not use this file except in compliance
+    with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on an
+    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+     KIND, either express or implied.  See the License for the
+    specific language governing permissions and limitations
+    under the License.
+-->
+<html>
+    <head>
+        <!--
+        Customize this policy to fit your own app's needs. For more guidance, see:
+            https://github.com/apache/cordova-plugin-whitelist/blob/master/README.md#content-security-policy
+        Some notes:
+            * gap: is required only on iOS (when using UIWebView) and is needed for JS->native communication
+            * https://ssl.gstatic.com is required only on Android and is needed for TalkBack to function properly
+            * Disables use of inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
+                * Enable inline JS: add 'unsafe-inline' to default-src
+        -->
+        <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *; img-src 'self' data: content:;">
+        <meta name="format-detection" content="telephone=no">
+        <meta name="msapplication-tap-highlight" content="no">
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+        <link rel="stylesheet" type="text/css" href="css/colors.css">
+        <link rel="stylesheet" type="text/css" href="css/index.css">
+        <link rel="stylesheet" type="text/css" href="css/button.css">
+        <link rel="stylesheet" type="text/css" href="css/border.css">
+        <link rel="stylesheet" type="text/css" href="css/content.css">
+        <link rel="stylesheet" type="text/css" href="css/main_menu.css">
+        <link rel="stylesheet" type="text/css" href="css/grid.css">
+        <link rel="stylesheet" type="text/css" href="css/tree.css">
+
+        <title>Factorio Ratio Assistant</title>
+        <link rel="shortcut icon" href="img/icon.png"/>
+    </head>
+    <body>
+        <div id="templates" class="hidden">
+                <button id="template-item_button" class="hidden button-item">
+                    <img class="icon"/>
+                </button>
+        </div>
+
+        <div class="border">
+        
+            <button id="button-settings" class="button-settings"></button>
+            <button id="button-back" class="button-back"></button>
+
+            <div class="content">
+                <div id="main_menu">
+                    <button id="main_menu-button-ratio" class="button-menu">
+                        <img class="icon" src="img/main_menu/button-ratio.png"/>
+                        Ratio
+                    </button>
+                    <button id="main_menu-button-raw_materials" class="button-menu">
+                        <img class="icon" src="img/main_menu/button-raw_materials.png"/>
+                        Raw Materials
+                    </button>
+                    <button id="main_menu-button-machine_levels" class="button-menu">
+                        <img class="icon" src="img/main_menu/button-machine_levels.png"/>
+                        Machine Levels
+                    </button>
+                </div>
+
+                <div id="ratio_selection" class="hidden">
+                    <div id="ratio_selection-item_buttons" class="grid">
+
+                    </div>
+                </div>
+
+                <div id="ratio_display" class="hidden">
+                    <div id="template-tree-node-ratio" class="hidden">
+                        <button class="tree-node-button">
+                            <span class="tree-node-machine-count"></span>
+                            <img class="icon tree-node-machine-icon"></img>
+                            <img class="icon tree-node-item-icon"></img>
+                            <span class="tree-node-item-per-sec"></span>
+                            <span class="tree-node-item-name"></span>
+                        </button>
+                        <div class="tree-node-children">
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="machine_level_selection" class="hidden">
+                    <div id="template-tree-node-machine" class="hidden">
+                        <button class="tree-node-button">
+                            <img class="icon tree-node-machine-icon"></img>
+                            <span class="tree-node-machine-name"></span>
+                        </button>
+                        <div class="hidden tree-node-children">
+                        </div> 
+                    </div>
+
+
+                    <button id="template-button-machine-level" class="hidden">
+                        <img class="icon tree-node-machine-icon"></img>
+                        <span class="tree-node-machine-name"></span>
+                    </button>
+                </div>
+
+                <div id="raw_materials_selection" class="hidden">
+                    <div id="raw_materials_selection-item_buttons" class="grid">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script type="text/javascript" src="cordova.js"></script>
+
+        <script type="text/javascript" src="js/Fraction.js"></script>
+        <script type="text/javascript" src="js/Tree.js"></script>
+
+        <script type="text/javascript" src="js/fileutil.js"></script>
+
+        <script type="text/javascript" src="js/factorio/factorio.js"></script>
+        <script type="text/javascript" src="js/factorio/Environment.js"></script>
+        <script type="text/javascript" src="js/factorio/Machine.js"></script>
+        <script type="text/javascript" src="js/factorio/MachineClass.js"></script>
+        <script type="text/javascript" src="js/factorio/Recipe.js"></script>
+        <script type="text/javascript" src="js/factorio/RatioSolver.js"></script>
+        <script type="text/javascript" src="js/ModLoader.js"></script>
+
+        <script type="text/javascript" src="js/index.js"></script>
+        <script type="text/javascript" src="js/content.js"></script>
+        <script type="text/javascript" src="js/main_menu.js"></script>
+        <script type="text/javascript" src="js/ratio_selection.js"></script>
+        <script type="text/javascript" src="js/ratio_display.js"></script>
+        <script type="text/javascript" src="js/raw_materials_selection.js"></script>
+        <script type="text/javascript" src="js/machine_level_selection.js"></script>
+        <script type="text/javascript" src="js/overrides.js"></script>
+
+    </body>
+</html>

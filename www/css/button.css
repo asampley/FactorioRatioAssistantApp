@@ -1,0 +1,73 @@
+button {
+	box-sizing: border-box;
+	background-color: var(--color-button);
+	color: white;
+    border: none;
+    padding: 8px 8px;
+    margin: 2px;
+    text-align: left;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 24px;
+    width: calc(100% - 4px); /* full width minux margin */
+    cursor: pointer;
+    -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
+}
+
+button:hover {
+    -webkit-transition-duration: 0.2s; /* Safari */
+    transition-duration: 0.2s;
+	background-color: var(--color-button-hover);
+	color: black;
+}
+
+button:active {
+    -webkit-transition-duration: 0.1s; /* Safari */
+    transition-duration: 0.1s;
+	background-color: var(--color-button-active);
+	color: white;
+}
+
+button:disabled {
+    opacity: 0.5;
+}
+
+button:disabled * {
+    opacity: 0.5;
+}
+
+.icon {
+	box-sizing: border-box;
+	height: 1em;
+}
+
+button:hover .icon {
+	animation: grow 1.5s infinite;
+}
+
+.button-bold {
+	background-color: #CC7700;
+	color: white;
+}
+
+@keyframes grow {
+    from { transform: scale(1); transform-origin: center; }
+    50% { transform: scale(1.25); transform-origin: center; }
+    to { transform: scale(1); transform-origin: center; }
+}
+ 
+@-webkit-keyframes grow {
+    from { transform: scale(1); transform-origin: center; }
+    50% { transform: scale(1.25); transform-origin: center; }
+    to { transform: scale(1); transform-origin: center; }
+}
+
+.button-item {
+    padding: 4px;
+}
+
+.button-item .icon {
+    width: 100%;
+    height: auto;
+}
