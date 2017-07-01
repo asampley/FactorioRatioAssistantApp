@@ -8,11 +8,12 @@ button {
     text-align: left;
     text-decoration: none;
     display: inline-block;
-    font-size: 24px;
+    font-size: 1em;
     width: calc(100% - 4px); /* full width minux margin */
     cursor: pointer;
     -webkit-transition-duration: 0.4s; /* Safari */
     transition-duration: 0.4s;
+    white-space: nowrap;
 }
 
 button:hover {

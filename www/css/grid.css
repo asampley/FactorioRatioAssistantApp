@@ -6,5 +6,8 @@
 	/* flexbox setup */
 	display: grid;
 	grid-template-columns: repeat(auto-fit, minmax(64px, 1fr));
+	grid-template-rows: repeat(auto-fill, minmax(64px, 1fr));
 	grid-gap: 2px;
+
+	min-height: 0;
 }

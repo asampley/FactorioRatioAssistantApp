@@ -1,7 +1,11 @@
 .content {
+	display: grid;
+	grid-template-columns: 1fr;
+
 	box-sizing: border-box;
 	background-color: var(--color-background);
-	width: 100%;
+	min-width: 100%;
+	width: auto;
 	height: 100%;
 	margin: 0px;
 	padding: 2px;

@@ -8,6 +8,6 @@
 /* Landscape button */
 @media screen and (min-aspect-ratio: 1/1) and (min-width:500px) {
 	.button-menu {
-		width: calc(50% - 4px - 2px); /* half width minus margins and 1px for each button */
+		width: calc(floor(50%) - 4px); /* half width minus margins and 1.5px for each button */
 	}
 }

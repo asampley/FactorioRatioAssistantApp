@@ -31,7 +31,8 @@ document.addEventListener(
 				treeNode.classList.remove('hidden');
 				treeNode.getElementsByClassName('tree-node-machine-count')[0].textContent = machineCount;
 				treeNode.getElementsByClassName('tree-node-item-name')[0].textContent = outputItem;
-				treeNode.getElementsByClassName('tree-node-item-per-sec')[0].textContent = "(" + outputCountPerSec + " per second)";
+				treeNode.getElementsByClassName('tree-node-item-pre-icon-text')[0].textContent = "(" + outputCountPerSec;
+				treeNode.getElementsByClassName('tree-node-item-post-icon-text')[0].textContent = " per second)";
 				var treeNodeIcon = treeNode.getElementsByClassName('tree-node-item-icon')[0];
 				var treeNodeMachineIcon = treeNode.getElementsByClassName('tree-node-machine-icon')[0];
 				treeNodeIcon.onerror = function() {this.onerror = null; this.src = 'img/default.png'};
