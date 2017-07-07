@@ -98,5 +98,5 @@ Fraction.parse = function(string, radix = 10) {
 }
 
 Fraction.prototype.toString = function() {
-	return this.num + (this.den != 1 ? " / " + this.den : "");
+	return this.num + (this.den != 1 ? "/" + this.den : "");
 }

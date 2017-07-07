@@ -30,9 +30,8 @@ document.addEventListener(
 
 				treeNode.classList.remove('hidden');
 				treeNode.getElementsByClassName('tree-node-machine-count')[0].textContent = machineCount;
-				treeNode.getElementsByClassName('tree-node-item-name')[0].textContent = outputItem;
 				treeNode.getElementsByClassName('tree-node-item-pre-icon-text')[0].textContent = "(" + outputCountPerSec;
-				treeNode.getElementsByClassName('tree-node-item-post-icon-text')[0].textContent = " per second)";
+				treeNode.getElementsByClassName('tree-node-item-post-icon-text')[0].textContent = " / s)";
 				var treeNodeIcon = treeNode.getElementsByClassName('tree-node-item-icon')[0];
 				var treeNodeMachineIcon = treeNode.getElementsByClassName('tree-node-machine-icon')[0];
 				treeNodeIcon.onerror = function() {this.onerror = null; this.src = 'img/default.png'};
@@ -62,6 +61,7 @@ document.addEventListener(
 
 			var tree = app.ratioSolver.solve(item);
 			rootTreeNode = constructTree(mainElement, tree);
+			rootTreeNode.getElementsByClassName('tree-node-children')[0].classList.remove('hidden');
 		}
 
 		content.addPage('ratio_display', new Page(
