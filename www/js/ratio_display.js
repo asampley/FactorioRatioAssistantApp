@@ -19,7 +19,7 @@ document.addEventListener(
 				var machineCount = treeRoot[1];
 				var recipe = machine.recipe;
 				var outputItem = recipe.outputItem();
-				var outputCountPerSec = machine.outputCountPerSec();
+				var outputCountPerSec = machine.outputCountPerSec().multiply(machineCount);
 				var outputIconPath = app.factorioEnvironment.itemImgPaths[outputItem];
 				var machineIconPath = app.factorioEnvironment.itemImgPaths[machine.name()];
 
