@@ -75,25 +75,35 @@ factorio.RatioSolver.prototype.solveRecurse = function(item, itemPerSec) {
 		} else {
 			this.solution.raw[item] = itemPerSec;
 		}
-		return null;
-	}
-
-	var mc = recipe.machineClass;
-	var machine = new factorio.Machine(mc, this.machineLevels[mc.className], recipe);
-	//var machine = new factorio.Machine(mc, 0, recipe);
-	var machineCount = itemPerSec.divide(machine.outputCountPerSec());
-	var tree = new Tree([machine, machineCount]);
-	
-	/*if (machineCounts.contains(machine)) {
-		machineCounts.put(machine, machineCounts.get(machine).add(machineCount));
+		var tree = new Tree({
+			machine: null,
+			machineCount: null,
+			itemPerSec: itemPerSec,
+			item: item
+		});
 	} else {
-		machineCounts.put(machine, machineCount);
-	}*/
-	
-	for (var item in recipe.inputs) {
-		var child = this.solveRecurse(item, itemPerSec.multiply(recipe.inputs[item]).divide(recipe.outputCount()));
-		if (child != null) {
-			tree.addChild(child);
+		var mc = recipe.machineClass;
+		var machine = new factorio.Machine(mc, this.machineLevels[mc.className], recipe);
+		//var machine = new factorio.Machine(mc, 0, recipe);
+		var machineCount = itemPerSec.divide(machine.outputCountPerSec());
+		var tree = new Tree({
+			machine: machine, 
+			machineCount: machineCount,
+			itemPerSec: machineCount.multiply(machine.outputCountPerSec()),
+			item: item
+		});
+		
+		/*if (machineCounts.contains(machine)) {
+			machineCounts.put(machine, machineCounts.get(machine).add(machineCount));
+		} else {
+			machineCounts.put(machine, machineCount);
+		}*/
+		
+		for (var item in recipe.inputs) {
+			var child = this.solveRecurse(item, itemPerSec.multiply(recipe.inputs[item]).divide(recipe.outputCount()));
+			if (child != null) {
+				tree.addChild(child);
+			}
 		}
 	}
 	

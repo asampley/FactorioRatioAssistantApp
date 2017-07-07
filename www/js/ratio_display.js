@@ -15,13 +15,11 @@ document.addEventListener(
 			function constructTree(parent, tree) {
 
 				var treeRoot = tree.rootValue();
-				var machine = treeRoot[0];
-				var machineCount = treeRoot[1];
-				var recipe = machine.recipe;
-				var outputItem = recipe.outputItem();
-				var outputCountPerSec = machine.outputCountPerSec().multiply(machineCount);
+				var machine = treeRoot.machine;
+				var machineCount = treeRoot.machineCount;
+				var outputItem = treeRoot.item;
+				var outputCountPerSec = treeRoot.itemPerSec;
 				var outputIconPath = app.factorioEnvironment.itemImgPaths[outputItem];
-				var machineIconPath = app.factorioEnvironment.itemImgPaths[machine.name()];
 
 				var treeNode = treeTemplate.cloneNode(true);
 				parent.appendChild(treeNode);
@@ -29,15 +27,18 @@ document.addEventListener(
 				var childrenElement = treeNode.getElementsByClassName('tree-node-children')[0];
 
 				treeNode.classList.remove('hidden');
-				treeNode.getElementsByClassName('tree-node-machine-count')[0].textContent = machineCount;
 				treeNode.getElementsByClassName('tree-node-item-pre-icon-text')[0].textContent = "(" + outputCountPerSec;
 				treeNode.getElementsByClassName('tree-node-item-post-icon-text')[0].textContent = " / s)";
 				var treeNodeIcon = treeNode.getElementsByClassName('tree-node-item-icon')[0];
-				var treeNodeMachineIcon = treeNode.getElementsByClassName('tree-node-machine-icon')[0];
 				treeNodeIcon.onerror = function() {this.onerror = null; this.src = 'img/default.png'};
-				treeNodeMachineIcon.onerror = function() {this.onerror = null; this.src = 'img/default.png'};
+				if (machine != null) {
+					var machineIconPath = app.factorioEnvironment.itemImgPaths[machine.name()];
+					var treeNodeMachineIcon = treeNode.getElementsByClassName('tree-node-machine-icon')[0];
+					treeNodeMachineIcon.onerror = function() {this.onerror = null; this.src = 'img/default.png'};
+					treeNodeMachineIcon.src = machineIconPath;
+					treeNode.getElementsByClassName('tree-node-machine-count')[0].textContent = machineCount;
+				}
 				treeNodeIcon.src = outputIconPath;
-				treeNodeMachineIcon.src = machineIconPath;
 				var treeNodeButton = treeNode.getElementsByClassName('tree-node-button')[0];
 
 				if (app.ratioSolver.isRaw(outputItem)) {
