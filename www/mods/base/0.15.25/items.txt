@@ -2,6 +2,7 @@ Raw Wood
 Coal
 Iron Ore
 Copper Ore
+Uranium Ore
 Stone
 Raw Fish
 Wood
@@ -9,6 +10,8 @@ Iron Plate
 Copper Plate
 Steel Plate
 Stone Brick
+Uranium 238
+Uranium 235
 Concrete
 Sulfur
 Plastic Bar
@@ -51,13 +54,17 @@ Car
 Tank
 Firearm Magazine
 Piercing Rounds Magazine
+Uranium Rounds Magazine
 Shotgun Shells
 Piercing Shotgun Shells
 Rocket
 Explosive Rocket
+Atomic Bomb
 Flamethrower Ammo
-Cannon Shells
-Explosive Cannon Shells
+Cannon Shell
+Explosive Cannon Shell
+Uranium Cannon Shell
+Explosive Uranium Cannon Shell
 Light Armor
 Heavy Armor
 Modular Armor
