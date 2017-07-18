@@ -3,7 +3,7 @@ document.addEventListener(
 	function() {
 		var mainMenuPage = new Page(document.getElementById('main_menu'))
 		content.addPage('main_menu', mainMenuPage);
-		content.currentPage = mainMenuPage;
+		content.switchToPage('main_menu');
 
                 var ratioButton = document.getElementById('main_menu-button-ratio');
                 ratioButton.onclick = function() {

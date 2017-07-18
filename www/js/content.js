@@ -2,13 +2,15 @@ var content = {
 	currentPage: null,
 	currentPageName: null,
 	pageMap: {},
-	prevPageStack: [],
+	prevPageNameStack: [],
 	pageListeners: [],
 
 	switchToPage: function(pageName, arguments) {
 		if (pageName in this.pageMap) {
-			this.currentPage.hide();
-			this.prevPageStack.push(this.currentPage);
+			if (this.currentPage != null) {
+				this.currentPage.hide();
+				this.prevPageNameStack.push(this.currentPageName);
+			}
 			this.currentPage = this.pageMap[pageName];
 			this.currentPageName = pageName;
 			this.currentPage.show(arguments);
@@ -20,11 +22,15 @@ var content = {
 	},
 
 	goBackToPage: function() {
-		if (this.prevPageStack.length > 0) {
+		if (this.prevPageNameStack.length > 0) {
 			this.currentPage.hide();
-			this.currentPage = this.prevPageStack.pop();
+			this.currentPageName = this.prevPageNameStack.pop();
+			this.currentPage = this.pageMap[this.currentPageName];
 			this.currentPage.show();
 			console.log('Went back a page');
+			for (var i = 0; i < this.pageListeners.length; ++i) {
+				this.pageListeners[i](this.currentPageName);
+			}
 			return true;
 		} else {
 			return false;
