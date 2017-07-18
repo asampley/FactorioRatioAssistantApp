@@ -1,15 +1,21 @@
 var content = {
 	currentPage: null,
+	currentPageName: null,
 	pageMap: {},
 	prevPageStack: [],
+	pageListeners: [],
 
 	switchToPage: function(pageName, arguments) {
 		if (pageName in this.pageMap) {
 			this.currentPage.hide();
 			this.prevPageStack.push(this.currentPage);
 			this.currentPage = this.pageMap[pageName];
+			this.currentPageName = pageName;
 			this.currentPage.show(arguments);
 			console.log('Switched to page named "' + pageName + '"');
+			for (var i = 0; i < this.pageListeners.length; ++i) {
+				this.pageListeners[i](this.currentPageName);
+			}
 		}
 	},
 
@@ -27,6 +33,14 @@ var content = {
 
 	addPage: function(pageName, page) {
 		this.pageMap[pageName] = page;
+	},
+
+	addPageListener: function(listener, immediateUpdate=true) {
+		this.pageListeners.push(listener);
+
+		if (immediateUpdate) {
+			listener(this.currentPageName);
+		}
 	}
 };
 
@@ -46,23 +60,3 @@ Page.prototype.show = function(arguments) {
 Page.prototype.hide = function() {
 	this.view.style.display = 'none';
 };
-
-document.addEventListener(
-	'deviceready',
-	function() {
-		document.getElementById('button-back').onclick = function() {
-			cordova.fireDocumentEvent('backbutton');
-		}
-	},
-	false
-);
-
-document.addEventListener(
-	'backbutton',
-	function() {
-		if (!content.goBackToPage()) {
-			navigator.app.exitApp();
-		}
-	},
-	false
-);
