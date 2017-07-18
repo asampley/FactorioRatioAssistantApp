@@ -1,8 +1,10 @@
 var content = {
 	currentPage: null,
 	currentPageName: null,
+	currentArgs: null,
 	pageMap: {},
 	prevPageNameStack: [],
+	prevArgsStack: [],
 	pageListeners: [],
 
 	switchToPage: function(pageName, arguments) {
@@ -10,9 +12,11 @@ var content = {
 			if (this.currentPage != null) {
 				this.currentPage.hide();
 				this.prevPageNameStack.push(this.currentPageName);
+				this.prevArgsStack.push(this.currentArgs)
 			}
 			this.currentPage = this.pageMap[pageName];
 			this.currentPageName = pageName;
+			this.currentArgs = arguments;
 			this.currentPage.show(arguments);
 			console.log('Switched to page named "' + pageName + '"');
 			for (var i = 0; i < this.pageListeners.length; ++i) {
@@ -26,7 +30,8 @@ var content = {
 			this.currentPage.hide();
 			this.currentPageName = this.prevPageNameStack.pop();
 			this.currentPage = this.pageMap[this.currentPageName];
-			this.currentPage.show();
+			this.currentArgs = this.prevArgsStack.pop();
+			this.currentPage.show(this.currentArgs);
 			console.log('Went back a page');
 			for (var i = 0; i < this.pageListeners.length; ++i) {
 				this.pageListeners[i](this.currentPageName);
