@@ -6,6 +6,7 @@ document.addEventListener(
 		var rootTreeNode = null;
 
 		var mcButtons = {};
+		var machineButtons = {};
 
 		app.factorioEnvironment.addMachineClassListener(
 			function(machineClass) {
@@ -17,7 +18,7 @@ document.addEventListener(
 				machineIcon.onerror = function() {this.onerror = null; this.src = 'img/default.png'};
 				machineIcon.src = app.factorioEnvironment.itemImgPaths[machineClass.name(0)];
 				machineSelector.getElementsByClassName('tree-node-machine-name')[0].textContent = machineClass.className;
-				
+				machineButtons[machineClass.className] = machineSelector;
 
 				var childElement = machineSelector.getElementsByClassName('tree-node-children')[0];
 				var childTemplate = document.getElementById('template-button-machine-level');
@@ -61,7 +62,12 @@ document.addEventListener(
 			function(machineClass, level) {
 				if (!(machineClass.className in mcButtons)) return;
 				
+				var machineButton = machineButtons[machineClass.className];
 				var classButtons = mcButtons[machineClass.className];
+
+				var machineIcon = machineButton.getElementsByClassName('tree-node-machine-icon')[0];
+				machineIcon.onerror = function() {this.onerror = null; this.src = 'img/default.png'};
+				machineIcon.src = app.factorioEnvironment.itemImgPaths[machineClass.name(level)];
 
 				for (var i = 0; i < classButtons.length; ++i) {
 					classButtons[i].style.backgroundColor = "";
