@@ -115,13 +115,15 @@ factorio.RatioSolver.prototype.perSecForWhole = function(item) {
 	var machinesToGo = [];
 
 	var recipe = this.getRecipe(item);
-	if (recipe == null || this.isRaw(item)) return multiple;
+	if (recipe == null) return new Fraction(multiple);
 
 	var mc = recipe.machineClass;
 	var machine = new factorio.Machine(mc, this.machineLevels[mc.className], recipe);
 	//var machine = new factorio.Machine(mc, 0, recipe);
 	var topItemPerSec = machine.outputCountPerSec();
 	var itemPerSec = topItemPerSec;
+
+	if (this.isRaw(item)) return topItemPerSec;
 
 	machinesToGo.push([machine, itemPerSec]);
 

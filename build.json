@@ -9,9 +9,7 @@
         },
         "release": {
             "keystore": "release.keystore",
-            "storePassword": "android",
-            "alias": "androidreleasekey",
-            "password" : "android",
+            "alias": "factorio",
             "keystoreType": ""
         }
     }
