@@ -20,9 +20,10 @@ var app = {
 	// Application Constructor
 	initialize: function() {
 		this.factorioEnvironment = new factorio.Environment();
-		this.modLoader = new ModLoader(this.factorioEnvironment, [{name: 'base', version: '0.15.25'}]);
+		this.modLoader = new ModLoader(this.factorioEnvironment, [{name: 'base', version: '0.15.25'}], this.onModsLoaded.bind(this));
 		this.ratioSolver = new factorio.RatioSolver(this.factorioEnvironment);
 		document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
+		document.addEventListener('fileutilready', this.onFileUtilReady.bind(this), false)
 	},
 
 	// deviceready Event Handler
@@ -33,12 +34,31 @@ var app = {
 		this.receivedEvent('deviceready');
 	},
 
+	onModsLoaded: function() {
+		this.preferences.apply();
+		console.log("Applied preferences");
+	},
+
+	onFileUtilReady: function() {
+		self = this;
+		Preferences.fromJSON(this.ratioSolver, "preferences.json",
+			function(pref) {
+				self.preferences = pref;
+				console.log("Loaded preferences " + self.preferences);
+			},
+			function(error) {
+				console.error("Could not access preferences.json: " + error);
+				self.preferences = new Preferences(self.ratioSolver, "preferences.json");
+			}
+		);
+		this.modLoader.loadMods();
+	},
+
 	// Update DOM on a Received Event
 	receivedEvent: function(id) {
 		var parentElement = document.getElementById(id);
 
 		console.log('Received Event: ' + id);
-		this.modLoader.loadMods();
 	}
 };
 

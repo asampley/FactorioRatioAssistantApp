@@ -79,7 +79,14 @@ document.addEventListener(
 			}
 		);
 
-		content.addPage('machine_level_selection', new Page(mainElement));
+		content.addPage('machine_level_selection', new Page(
+			mainElement,
+			undefined,
+			function() {
+				app.preferences.inherit();
+				app.preferences.save();
+			})
+		);
 	},
 	false
 );

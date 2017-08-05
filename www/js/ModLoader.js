@@ -1,13 +1,16 @@
-var ModLoader = function(environment, mods) {
+var ModLoader = function(environment, mods, onModsLoaded = function(){}) {
 	this.environment = environment;
 	this.mods = mods;
 	this.modStatus = {};
 
+	this.onModsLoaded = onModsLoaded;
+
 	for (var i = 0; i < mods.length; ++i) {
 		this.modStatus[mods[i].name] = {
+			overall: 0,
 			items: 0,
 			machines: 0,
-			recipes: 0
+			recipes: {status : 0}
 		}
 	}
 }
@@ -35,11 +38,29 @@ ModLoader.prototype.updateModStatusAndContinue = function(mod) {
 		console.log('Loading machines from ' + modString);
 		this.loadMachineClassesFromMod(mod);
 	}
-	if (this.modStatus[mod.name].recipes == 0 
+	if (this.modStatus[mod.name].recipes.status == 0 
 		&& this.modStatus[mod.name].items == 2 
 		&& this.modStatus[mod.name].machines == 2) {
 		console.log('Loading recipes from ' + modString);
 		this.loadRecipesFromMod(mod);
+	}
+	if (this.modStatus[mod.name].recipes.status == 2
+		&& this.modStatus[mod.name].items == 2 
+		&& this.modStatus[mod.name].machines == 2) {
+		this.modStatus[mod.name].overall = 2;
+		console.log('Done loading mod ' + modString);
+
+		var done = true;
+		for (var modName in this.modStatus) {
+			if (this.modStatus[modName].overall != 2) {
+				done = false;
+				break;
+			}
+		}
+
+		if (done) {
+			this.onModsLoaded();
+		}
 	}
 }
 
@@ -142,7 +163,7 @@ ModLoader.prototype.loadMachineClassFromMod = function(mod, machineName) {
 ModLoader.prototype.loadRecipesFromMod = function(mod) {
 	var self = this;
 	var recipesPath = 'mods/' + mod.name + '/' + mod.version + '/recipes.txt';
-	self.modStatus[mod.name].recipes = 1;
+	self.modStatus[mod.name].recipes.status = 1;
 	self.updateModStatusAndContinue(mod);
 
 	fileutil.readTextAppWWW(
@@ -154,6 +175,7 @@ ModLoader.prototype.loadRecipesFromMod = function(mod) {
 
 			var nRecipes = 0;
 
+			recipeDef = [];
 			for (var i = 0; i < lines.length; ++i) {
 				var line = lines[i].trim();
 				if (line.length == 0) continue;
@@ -168,15 +190,19 @@ ModLoader.prototype.loadRecipesFromMod = function(mod) {
 
 				++nRecipes;
 
-				self.loadRecipeFromMod(mod, machineName, line);
+				recipeDef.push([mod, machineName, line]);
 			}
 
 			self.modStatus[mod.name].recipes.done = 0;
 			self.modStatus[mod.name].recipes.total = nRecipes;
+
+			for (var i = 0; i < recipeDef.length; ++i) {
+				self.loadRecipeFromMod.apply(self, recipeDef[i]);
+			}
 		},
 		function(error) {
 			console.log(error);
-			self.modStatus[mod.name].recipes = -1;
+			self.modStatus[mod.name].recipes.status = -1;
 			self.updateModStatusAndContinue(mod);
 		}
 	);
@@ -227,7 +253,7 @@ ModLoader.prototype.loadRecipeFromMod = function(mod, machineName, outputName) {
 
 			++self.modStatus[mod.name].recipes.done;
 			if (self.modStatus[mod.name].recipes.done == self.modStatus[mod.name].recipes.total) {
-				self.modStatus[mod.name].recipes = 2;
+				self.modStatus[mod.name].recipes.status = 2;
 				self.updateModStatusAndContinue(mod);
 			}
 		},

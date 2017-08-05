@@ -1,5 +1,16 @@
 var fileutil = {
 	appWWW: {valueOf: function() {return cordova.file.applicationDirectory + 'www/'}},
+	persistent: {},
+
+
+	init: function() {
+		self = this;
+		window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fs) {
+			console.log("Opened file system: " + fs.name);
+			self.persistent = fs;
+			cordova.fireDocumentEvent('fileutilready');
+		})
+	},
 
 	readText: function(path, fText, eText) {
 		var request = new XMLHttpRequest();
@@ -16,7 +27,64 @@ var fileutil = {
 		request.send();
 	},
 
+	readTextPersistent: function(
+		relPath, 
+		fText = function(text) {console.log(text)}, 
+		eText = function(error) {console.error(error)}, 
+		eFile = function(error) {console.error(error)})
+	{
+		this.persistent.root.getFile(relPath, {create: false, exclusive: false}, 
+			function(fileEntry) {
+				fileEntry.file(function(file) {
+					var reader = new FileReader();
+
+					reader.onload = function(e) {
+						fText(e.target.result)
+					}
+
+					reader.onerror = function(e) {
+						eText(e.target.result);
+					}
+
+					reader.readAsText(file);
+				})
+			}, 
+			eFile
+		);
+	},
+
 	readTextAppWWW: function(relPath, fText, eText) {
 		this.readText(this.appWWW + relPath, fText, eText);
+	},
+
+	writeTextPersistent: function(relPath, text, 
+		onDone = function() {console.log('Success writing file')}, 
+		onWriteError = function(error) {console.error(error)}, 
+		onFileError = function(error) {console.error(error)}
+	) {
+		this.persistent.root.getFile(relPath, {create: true}, 
+			function(fileEntry) {
+				fileEntry.createWriter(function(writer) {
+
+					writer.onwriteend = function() {
+						writer.onwriteend = function() {
+							onDone();
+						}
+
+						var blob = new Blob([text], {type: 'text/plain'});
+						writer.write(blob);
+					}
+
+					writer.onerror = function(e) {
+						onWriteError(e);
+					}
+
+					writer.truncate(0);
+				})
+			}, 
+			onFileError
+		);
 	}
 }
+
+document.addEventListener('deviceready', fileutil.init.bind(fileutil), false);

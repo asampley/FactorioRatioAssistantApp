@@ -18,7 +18,8 @@ var content = {
 			this.currentPageName = pageName;
 			this.currentArgs = arguments;
 			this.currentPage.show(arguments);
-			console.log('Switched to page named "' + pageName + '"');
+			console.log('Switched to page named "' + pageName + '"' + 
+				(arguments == undefined ? "" : ' with arguments "' + arguments + '"'));
 			for (var i = 0; i < this.pageListeners.length; ++i) {
 				this.pageListeners[i](this.currentPageName);
 			}
@@ -32,7 +33,8 @@ var content = {
 			this.currentPage = this.pageMap[this.currentPageName];
 			this.currentArgs = this.prevArgsStack.pop();
 			this.currentPage.show(this.currentArgs);
-			console.log('Went back a page');
+			console.log('Went back to page "' + this.currentPageName + '"' + 
+				(arguments == undefined ? "" : ' with arguments "' + arguments + '"'));
 			for (var i = 0; i < this.pageListeners.length; ++i) {
 				this.pageListeners[i](this.currentPageName);
 			}
@@ -55,9 +57,10 @@ var content = {
 	}
 };
 
-Page = function(view, onenter) {
+Page = function(view, onenter, onexit) {
 	this.view = view;
 	this.onenter = onenter;
+	this.onexit = onexit;
 };
 
 Page.prototype.show = function(arguments) {
@@ -70,4 +73,8 @@ Page.prototype.show = function(arguments) {
 
 Page.prototype.hide = function() {
 	this.view.style.display = 'none';
+
+	if (this.onexit != undefined) {
+		this.onexit();
+	}
 };

@@ -4,7 +4,14 @@ document.addEventListener(
 		console.log('Loading item buttons for raw_materials_selection');
 
 		var mainElement = document.getElementById('raw_materials_selection');
-		content.addPage('raw_materials_selection', new Page(mainElement));
+		content.addPage('raw_materials_selection', new Page(
+			mainElement,
+			undefined,
+			function() {
+				app.preferences.inherit();
+				app.preferences.save();
+			})
+		);
 		var buttonContainer = document.getElementById('raw_materials_selection-item_buttons');
 
 		app.factorioEnvironment.addItemListener(
