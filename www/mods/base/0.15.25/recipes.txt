@@ -154,6 +154,7 @@ Wooden Chest
 # Chemical Plant
 Battery
 Explosives
+Flamethrower Ammo
 Lubricant
 Plastic Bar
 Sulfur
