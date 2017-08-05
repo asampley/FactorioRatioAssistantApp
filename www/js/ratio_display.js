@@ -27,7 +27,10 @@ document.addEventListener(
 				var childrenElement = treeNode.getElementsByClassName('tree-node-children')[0];
 
 				treeNode.classList.remove('hidden');
-				treeNode.getElementsByClassName('tree-node-item-pre-icon-text')[0].textContent = "(" + outputCountPerSec;
+				outputInt = outputCountPerSec.toIntegerQuotient();
+				outputFrac = outputCountPerSec.toAbsRemainderFraction();
+				treeNode.getElementsByClassName('tree-node-item-pre-icon-int')[0].textContent = "(" + (outputInt == 0 ? "" : outputInt);
+				treeNode.getElementsByClassName('tree-node-item-pre-icon-frac')[0].textContent = (outputFrac.num == 0 ? "" : outputFrac);
 				treeNode.getElementsByClassName('tree-node-item-post-icon-text')[0].textContent = " / s)";
 				var treeNodeIcon = treeNode.getElementsByClassName('tree-node-item-icon')[0];
 				treeNodeIcon.onerror = function() {this.onerror = null; this.src = 'img/default.png'};
@@ -36,7 +39,10 @@ document.addEventListener(
 					var treeNodeMachineIcon = treeNode.getElementsByClassName('tree-node-machine-icon')[0];
 					treeNodeMachineIcon.onerror = function() {this.onerror = null; this.src = 'img/default.png'};
 					treeNodeMachineIcon.src = machineIconPath;
-					treeNode.getElementsByClassName('tree-node-machine-count')[0].textContent = machineCount;
+					machineInt = machineCount.toIntegerQuotient();
+					machineFrac = machineCount.toAbsRemainderFraction();
+					treeNode.getElementsByClassName('tree-node-machine-int')[0].textContent = (machineInt == 0 ? "" : machineInt);
+					treeNode.getElementsByClassName('tree-node-machine-frac')[0].textContent = (machineFrac.num == 0 ? "" : machineFrac);
 				}
 				treeNodeIcon.src = outputIconPath;
 				var treeNodeButton = treeNode.getElementsByClassName('tree-node-button')[0];

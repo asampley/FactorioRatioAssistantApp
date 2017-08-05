@@ -100,3 +100,18 @@ Fraction.parse = function(string, radix = 10) {
 Fraction.prototype.toString = function() {
 	return this.num + (this.den != 1 ? "/" + this.den : "");
 }
+
+Fraction.prototype.toIntegerQuotient = function() {
+	return Math.floor(this.num / this.den);
+}
+
+Fraction.prototype.toAbsRemainderFraction = function() {
+	return new Fraction(Math.abs(this.num % this.den), this.den);
+}
+
+Fraction.prototype.toMixedString = function() {
+	var whole = this.toIntegerQuotient();
+	var remainder = this.toAbsRemainderFraction();
+	return (whole == 0 ? "" : whole + " ")
+	 + (remainder.num == 0 ? "" : " " + remainder); 
+}
