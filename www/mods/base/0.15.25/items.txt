@@ -148,7 +148,7 @@ Rail Chain Signal
 Locomotive
 Cargo Wagon
 Pipe
-Pipe to Ground
+Pipe To Ground
 Offshore Pump
 Storage Tank
 Oil Refinery

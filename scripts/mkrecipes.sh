@@ -7,6 +7,11 @@ lsPlus() {
 
 for modPath in "${baseDir}"/*; do
 	for path in "${modPath}"/*; do
+		version=$(basename "${path}")
+		if [ ${version} == "img" ]; then
+			continue;
+		fi
+		echo "Version: ${version}"
 		recipeList="${path}/recipes.txt"
 		rm "${recipeList}"
 		touch "${recipeList}"

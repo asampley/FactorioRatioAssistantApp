@@ -89,9 +89,8 @@ Personal Roboport
 Piercing Rounds Magazine
 Piercing Shotgun Shells
 Pipe
-Pipe to Ground
+Pipe To Ground
 Pistol
-Plastic Bar
 Poison Capsule
 Portable Fusion Reactor
 Portable Solar Panel
@@ -156,6 +155,7 @@ Wooden Chest
 Battery
 Explosives
 Lubricant
+Plastic Bar
 Sulfur
 Sulfuric Acid
 # Furnace
