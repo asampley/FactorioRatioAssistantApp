@@ -157,7 +157,7 @@ factorio.RatioSolver.prototype.addSetRawListener = function(fRaw, fUnraw) {
 	this._unrawListeners.push(fUnraw);
 
 	for (item in this.raw) {
-		if (isRaw(item)) {
+		if (this.isRaw(item)) {
 			fRaw(item);
 		} else {
 			fUnraw(item);

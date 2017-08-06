@@ -71,7 +71,9 @@ factorio.Environment.prototype.addItemListener = function(fAdd) {
 	this._addItemListeners.push(fAdd);
 
 	for (var i = 0; i < this.items.length; ++i) {
-		fAdd(this.items[i]);
+		var item = this.items[i];
+		var imgPath = this.itemImgPaths[item];
+		fAdd(this.items[i], imgPath);
 	}
 }
 

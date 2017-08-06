@@ -36,6 +36,7 @@ var app = {
 
 	onModsLoaded: function() {
 		this.preferences.apply();
+		cordova.fireDocumentEvent('modsloaded');
 		console.log("Applied preferences");
 	},
 
