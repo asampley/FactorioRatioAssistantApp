@@ -91,7 +91,7 @@ ModLoader.prototype.loadItemsFromMod = function(modName, modVersion) {
 		},
 		function(error) {
 			console.log(error);
-			self.modStatus[modName].items = -1;
+			self.modStatus[modName].items = 2;
 			self.updateModStatusAndContinue(modName, modVersion);
 		}
 	);
@@ -133,7 +133,7 @@ ModLoader.prototype.loadMachineClassesFromMod = function(modName, modVersion) {
 		},
 		function(error) {
 			console.log(error);
-			self.modStatus[modName].machines.status = -1;
+			self.modStatus[modName].machines.status = 2;
 			self.updateModStatusAndContinue(modName, modVersion);
 		}
 	);
@@ -223,7 +223,7 @@ ModLoader.prototype.loadRecipesFromMod = function(modName, modVersion) {
 		},
 		function(error) {
 			console.log(error);
-			self.modStatus[modName].recipes.status = -1;
+			self.modStatus[modName].recipes.status = 2;
 			self.updateModStatusAndContinue(modName, modVersion);
 		}
 	);
