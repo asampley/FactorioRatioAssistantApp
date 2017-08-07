@@ -5,12 +5,19 @@ lsPlus() {
 	ls -Q --color='never' -1 $1
 }
 
+modsList="${baseDir}/mods.txt"
+rm "${modsList}"
+touch "${modsList}"
+
 for modPath in "${baseDir}"/*; do
 	if [ ! -d "${modPath}" ]; then
 		continue;
 	fi
 	
-	echo "Mod: ${modPath}"
+	mod=$(basename "${modPath}")
+	echo "Mod: ${mod}"
+	echo "${mod}" >> "${modsList}"
+	
 
 	versionsList="${modPath}/versions.txt"
 	rm "${versionsList}"
@@ -32,11 +39,20 @@ for modPath in "${baseDir}"/*; do
 		rm "${machineList}"
 		touch "${machineList}"
 		
+		machinesPath="${path}/machine/"
+		for machinePath in "${machinesPath}"/*; do
+			machine=$(basename "${machinePath}")
+			if [ "${machine}" == '*' ]; then
+				continue;
+			fi
+			
+			echo "${machine}" >> "${machineList}"
+		done
+
 		recipePath="${path}/recipes/"
 		for machinePath in "${recipePath}"/*; do
 			machine=$(basename "${machinePath}")
 			
-			echo "${machine}" >> "${machineList}"	
 			echo "# ${machine}"
 			echo "# ${machine}" >> "${recipeList}"
 			for recipePath in "${machinePath}"/*; do
