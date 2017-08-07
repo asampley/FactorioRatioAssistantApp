@@ -3,7 +3,6 @@ document.addEventListener(
 	function() {
 		var mainElement = document.getElementById('machine_level_selection');
 		var treeTemplate = document.getElementById('template-tree-node-machine');
-		var rootTreeNode = null;
 
 		var mcButtons = {};
 		var machineButtons = {};
@@ -11,9 +10,9 @@ document.addEventListener(
 		document.addEventListener(
 			'modsunloaded',
 			function() {
-				var childElement = machineSelector.getElementsByClassName('tree-node-children')[0];
-				childElementEmpty = childElement.cloneNode(false);
-				childElement.parentNode.replaceChild(childElementEmpty, childElement);
+				for (var machineClass in machineButtons) {
+					mainElement.removeChild(machineButtons[machineClass]);
+				}
 			}
 		);
 

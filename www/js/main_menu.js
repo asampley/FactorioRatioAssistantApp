@@ -17,6 +17,10 @@ document.addEventListener(
                 machineLevelsButton.onclick = function () {
                 	content.switchToPage('machine_level_selection');
                 }
+                var modVersionsButton = document.getElementById('main_menu-button-mods');
+                modVersionsButton.onclick = function () {
+                        content.switchToPage('mod_selection');
+                }
 	},
 	false
 );

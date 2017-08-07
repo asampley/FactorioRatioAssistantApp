@@ -1,12 +1,18 @@
-var ModLoader = function(environment, mods, onModsLoaded = function(){}) {
-	this.environment = environment;
+var ModLoader = function(mods, onModsLoaded = function(){}) {
 	this.mods = mods;
 	this.modStatus = {};
 
 	this.onModsLoaded = onModsLoaded;
 
-	for (var i = 0; i < mods.length; ++i) {
-		this.modStatus[mods[i].name] = {
+	this.reset();
+}
+
+ModLoader.prototype.reset = function() {
+	this._environment = new factorio.Environment();
+	this.modStatus = {};
+
+	for (var modName in this.mods) {
+		this.modStatus[modName] = {
 			overall: 0,
 			items: 0,
 			machines: 0,
@@ -15,39 +21,39 @@ var ModLoader = function(environment, mods, onModsLoaded = function(){}) {
 	}
 }
 
+ModLoader.prototype.environment = function() { return this._environment }
+
 ModLoader.prototype.loadMods = function() {
-	for (var i = 0; i < this.mods.length; ++i) {
-		var mod = this.mods[i];
-
-		this.loadMod(mod);
+	for (var modName in this.mods) {
+		this.loadMod(modName, this.mods[modName]);
 	}
 }
 
-ModLoader.prototype.loadMod = function(mod) {
-	this.updateModStatusAndContinue(mod);
+ModLoader.prototype.loadMod = function(modName, modVersion) {
+	this.updateModStatusAndContinue(modName, modVersion);
 }
 
-ModLoader.prototype.updateModStatusAndContinue = function(mod) {
-	var modString = mod.name + ' ' + mod.version;
+ModLoader.prototype.updateModStatusAndContinue = function(modName, modVersion) {
+	var modString = modName + ' ' + modVersion;
 
-	if (this.modStatus[mod.name].items == 0) {
+	if (this.modStatus[modName].items == 0) {
 		console.log('Loading items from ' + modString);
-		this.loadItemsFromMod(mod);
+		this.loadItemsFromMod(modName, modVersion);
 	}
-	if (this.modStatus[mod.name].machines == 0) {
+	if (this.modStatus[modName].machines == 0) {
 		console.log('Loading machines from ' + modString);
-		this.loadMachineClassesFromMod(mod);
+		this.loadMachineClassesFromMod(modName, modVersion);
 	}
-	if (this.modStatus[mod.name].recipes.status == 0 
-		&& this.modStatus[mod.name].items == 2 
-		&& this.modStatus[mod.name].machines == 2) {
+	if (this.modStatus[modName].recipes.status == 0 
+		&& this.modStatus[modName].items == 2 
+		&& this.modStatus[modName].machines == 2) {
 		console.log('Loading recipes from ' + modString);
-		this.loadRecipesFromMod(mod);
+		this.loadRecipesFromMod(modName, modVersion);
 	}
-	if (this.modStatus[mod.name].recipes.status == 2
-		&& this.modStatus[mod.name].items == 2 
-		&& this.modStatus[mod.name].machines == 2) {
-		this.modStatus[mod.name].overall = 2;
+	if (this.modStatus[modName].recipes.status == 2
+		&& this.modStatus[modName].items == 2 
+		&& this.modStatus[modName].machines == 2) {
+		this.modStatus[modName].overall = 2;
 		console.log('Done loading mod ' + modString);
 
 		var done = true;
@@ -64,40 +70,40 @@ ModLoader.prototype.updateModStatusAndContinue = function(mod) {
 	}
 }
 
-ModLoader.prototype.loadItemsFromMod = function(mod) {
+ModLoader.prototype.loadItemsFromMod = function(modName, modVersion) {
 	var self = this;
 	
-	self.modStatus[mod.name].items = 1;
-	self.updateModStatusAndContinue(mod);
+	self.modStatus[modName].items = 1;
+	self.updateModStatusAndContinue(modName, modVersion);
 
 	fileutil.readTextAppWWW(
-		'mods/' + mod.name + '/' + mod.version + '/items.txt', 
+		'mods/' + modName + '/' + modVersion + '/items.txt', 
 		function(text) {
 			var lines = text.split('\n');
 			for (var i = 0; i < lines.length; ++i) {
 				var item = lines[i].trim();
 				if (item.length == 0) continue;
-				self.environment.addItem(item, 'mods/' + mod.name + '/img/' + item + '.png');
+				self._environment.addItem(item, 'mods/' + modName + '/img/' + item + '.png');
 			}
 
-			self.modStatus[mod.name].items = 2;
-			self.updateModStatusAndContinue(mod);
+			self.modStatus[modName].items = 2;
+			self.updateModStatusAndContinue(modName, modVersion);
 		},
 		function(error) {
 			console.log(error);
-			self.modStatus[mod.name].items = -1;
-			self.updateModStatusAndContinue(mod);
+			self.modStatus[modName].items = -1;
+			self.updateModStatusAndContinue(modName, modVersion);
 		}
 	);
 }
 
-ModLoader.prototype.loadMachineClassesFromMod = function(mod) {
+ModLoader.prototype.loadMachineClassesFromMod = function(modName, modVersion) {
 	var self = this;
-	self.modStatus[mod.name].machines = 1;
-	self.updateModStatusAndContinue(mod);
+	self.modStatus[modName].machines = 1;
+	self.updateModStatusAndContinue(modName, modVersion);
 
 	fileutil.readTextAppWWW(
-		'mods/' + mod.name + '/' + mod.version + '/machines.txt',
+		'mods/' + modName + '/' + modVersion + '/machines.txt',
 		function(text) {
 			var lines = text.split('\n');
 
@@ -109,23 +115,23 @@ ModLoader.prototype.loadMachineClassesFromMod = function(mod) {
 
 				++nMachines;
 
-				self.loadMachineClassFromMod(mod, line);
+				self.loadMachineClassFromMod(modName, modVersion, line);
 			}
 
-			self.modStatus[mod.name].machines.done = 0;
-			self.modStatus[mod.name].machines.total = nMachines;
+			self.modStatus[modName].machines.done = 0;
+			self.modStatus[modName].machines.total = nMachines;
 		},
 		function(error) {
 			console.log(error);
-			self.modStatus[mod.name].machines = -1;
-			self.updateModStatusAndContinue(mod);
+			self.modStatus[modName].machines = -1;
+			self.updateModStatusAndContinue(modName, modVersion);
 		}
 	);
 }
 
-ModLoader.prototype.loadMachineClassFromMod = function(mod, machineName) {
+ModLoader.prototype.loadMachineClassFromMod = function(modName, modVersion, machineName) {
 	var self = this;
-	var machineClassPath = 'mods/' + mod.name + '/' + mod.version + '/machine/' + machineName;
+	var machineClassPath = 'mods/' + modName + '/' + modVersion + '/machine/' + machineName;
 	fileutil.readTextAppWWW(
 		machineClassPath,
 		function(text) {
@@ -146,12 +152,12 @@ ModLoader.prototype.loadMachineClassFromMod = function(mod, machineName) {
 			}
 
 			var machineClass = new factorio.MachineClass(machineName, names, speeds);
-			self.environment.addMachineClass(machineClass);
+			self._environment.addMachineClass(machineClass);
 
-			++self.modStatus[mod.name].machines.done;
-			if (self.modStatus[mod.name].machines.total == self.modStatus[mod.name].machines.done){
-				self.modStatus[mod.name].machines = 2;
-				self.updateModStatusAndContinue(mod);
+			++self.modStatus[modName].machines.done;
+			if (self.modStatus[modName].machines.total == self.modStatus[modName].machines.done){
+				self.modStatus[modName].machines = 2;
+				self.updateModStatusAndContinue(modName, modVersion);
 			}
 		},
 		function(error) {
@@ -160,11 +166,11 @@ ModLoader.prototype.loadMachineClassFromMod = function(mod, machineName) {
 	);
 }
 
-ModLoader.prototype.loadRecipesFromMod = function(mod) {
+ModLoader.prototype.loadRecipesFromMod = function(modName, modVersion) {
 	var self = this;
-	var recipesPath = 'mods/' + mod.name + '/' + mod.version + '/recipes.txt';
-	self.modStatus[mod.name].recipes.status = 1;
-	self.updateModStatusAndContinue(mod);
+	var recipesPath = 'mods/' + modName + '/' + modVersion + '/recipes.txt';
+	self.modStatus[modName].recipes.status = 1;
+	self.updateModStatusAndContinue(modName, modVersion);
 
 	fileutil.readTextAppWWW(
 		recipesPath,
@@ -182,7 +188,7 @@ ModLoader.prototype.loadRecipesFromMod = function(mod) {
 
 				if (line.startsWith('#')) {
 					machineName = line.substring(1).trim();
-					assert(self.environment.hasMachineClass(machineName), "Invalid machine name: " + machineName + " in " + recipesPath);
+					assert(self._environment.hasMachineClass(machineName), "Invalid machine name: " + machineName + " in " + recipesPath);
 					continue;
 				}
 
@@ -190,11 +196,11 @@ ModLoader.prototype.loadRecipesFromMod = function(mod) {
 
 				++nRecipes;
 
-				recipeDef.push([mod, machineName, line]);
+				recipeDef.push([modName, modVersion, machineName, line]);
 			}
 
-			self.modStatus[mod.name].recipes.done = 0;
-			self.modStatus[mod.name].recipes.total = nRecipes;
+			self.modStatus[modName].recipes.done = 0;
+			self.modStatus[modName].recipes.total = nRecipes;
 
 			for (var i = 0; i < recipeDef.length; ++i) {
 				self.loadRecipeFromMod.apply(self, recipeDef[i]);
@@ -202,15 +208,15 @@ ModLoader.prototype.loadRecipesFromMod = function(mod) {
 		},
 		function(error) {
 			console.log(error);
-			self.modStatus[mod.name].recipes.status = -1;
-			self.updateModStatusAndContinue(mod);
+			self.modStatus[modName].recipes.status = -1;
+			self.updateModStatusAndContinue(modName, modVersion);
 		}
 	);
 }
 
-ModLoader.prototype.loadRecipeFromMod = function(mod, machineName, outputName) {
+ModLoader.prototype.loadRecipeFromMod = function(modName, modVersion, machineName, outputName) {
 	var self = this;
-	var path = 'mods/' + mod.name + '/' + mod.version + '/recipes/' + machineName + '/' + outputName;
+	var path = 'mods/' + modName + '/' + modVersion + '/recipes/' + machineName + '/' + outputName;
 	fileutil.readTextAppWWW(
 		path,
 		function(text) {
@@ -237,9 +243,9 @@ ModLoader.prototype.loadRecipeFromMod = function(mod, machineName, outputName) {
 			}
 
 			try {
-				self.environment.addRecipe(
+				self._environment.addRecipe(
 					new factorio.Recipe(
-						self.environment.getMachineClass(machineName),
+						self._environment.getMachineClass(machineName),
 						outputItem,
 						outputCount,
 						time,
@@ -251,10 +257,10 @@ ModLoader.prototype.loadRecipeFromMod = function(mod, machineName, outputName) {
 				console.error("Error in '" + path + "': " + error);
 			}
 
-			++self.modStatus[mod.name].recipes.done;
-			if (self.modStatus[mod.name].recipes.done == self.modStatus[mod.name].recipes.total) {
-				self.modStatus[mod.name].recipes.status = 2;
-				self.updateModStatusAndContinue(mod);
+			++self.modStatus[modName].recipes.done;
+			if (self.modStatus[modName].recipes.done == self.modStatus[modName].recipes.total) {
+				self.modStatus[modName].recipes.status = 2;
+				self.updateModStatusAndContinue(modName, modVersion);
 			}
 		},
 		function(error) {

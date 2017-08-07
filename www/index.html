@@ -82,6 +82,10 @@
                         <img class="icon" src="img/main_menu/button-machine_levels.png"/>
                         Machine Levels
                     </button>
+                    <button id="main_menu-button-mods" class="button-menu">
+                        <img class="icon" src="img/main_menu/button-machine_levels.png"/>
+                        Mod Versions
+                    </button>
                 </div>
 
                 <div id="ratio_selection" class="hidden">
@@ -128,6 +132,23 @@
 
                     </div>
                 </div>
+
+                <div id="mod_selection" class="hidden">
+                    <div id="template-tree-node-mod" class="hidden">
+                        <button class="tree-node-button">
+                            <img class="icon tree-node-mod-icon"></img>
+                            <span class="tree-node-mod-name"></span>
+                        </button>
+                        <div class="hidden tree-node-children">
+                        </div> 
+                    </div>
+
+
+                    <button id="template-button-mod-version" class="hidden">
+                        <img class="icon tree-node-mod-version-icon"></img>
+                        <span class="tree-node-mod-version-name"></span>
+                    </button>
+                </div>
             </div>
         </div>
         <script type="text/javascript" src="cordova.js"></script>
@@ -155,6 +176,7 @@
         <script type="text/javascript" src="js/ratio_display.js"></script>
         <script type="text/javascript" src="js/raw_materials_selection.js"></script>
         <script type="text/javascript" src="js/machine_level_selection.js"></script>
+        <script type="text/javascript" src="js/mod_selection.js"></script>
         <script type="text/javascript" src="js/overrides.js"></script>
 
     </body>

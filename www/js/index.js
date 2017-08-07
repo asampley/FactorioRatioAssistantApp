@@ -19,11 +19,19 @@
 var app = {
 	// Application Constructor
 	initialize: function() {
-		this.factorioEnvironment = new factorio.Environment();
-		this.modLoader = new ModLoader(this.factorioEnvironment, [{name: 'base', version: '0.15.25'}], this.onModsLoaded.bind(this));
+		this.modLoader = new ModLoader({base: '0.15.25'}, this.onModsLoaded.bind(this));
+		this.factorioEnvironment = this.modLoader.environment();
 		this.ratioSolver = new factorio.RatioSolver(this.factorioEnvironment);
 		document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
 		document.addEventListener('fileutilready', this.onFileUtilReady.bind(this), false)
+	},
+
+	reloadMods: function() {
+		this.modLoader.reset();
+		this.factorioEnvironment = this.modLoader.environment();
+		this.ratioSolver = new factorio.RatioSolver(this.factorioEnvironment);
+		cordova.fireDocumentEvent('modsunloaded');
+		this.modLoader.loadMods();
 	},
 
 	// deviceready Event Handler
