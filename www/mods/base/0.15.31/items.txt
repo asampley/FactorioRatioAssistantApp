@@ -169,6 +169,7 @@ Rocket Control Unit
 Rocket Fuel
 Rocket Part
 Satellite
+Crude Oil
 Petroleum Gas
 Light Oil
 Heavy Oil
