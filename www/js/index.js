@@ -19,7 +19,7 @@
 var app = {
 	// Application Constructor
 	initialize: function() {
-		this.modLoader = new ModLoader({base: '0.15.25'}, this.onModsLoaded.bind(this));
+		this.modLoader = new ModLoader({base: '0.15.31'}, this.onModsLoaded.bind(this));
 		this.factorioEnvironment = this.modLoader.environment();
 		this.ratioSolver = new factorio.RatioSolver(this.factorioEnvironment);
 		document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);

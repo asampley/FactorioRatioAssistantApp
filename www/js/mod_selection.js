@@ -19,6 +19,63 @@ document.addEventListener(
 				}
 			}
 
+			var childTemplate = document.getElementById('template-button-mod-version');
+
+			var createChildren = function(modName, parent) {
+					return function(text) {
+						var modVersions = [];
+
+						var lines = text.split('\n');
+						for (var i = 0; i < lines.length; ++i) {
+							var modVersion = lines[i].trim();
+							if (modVersion.length != 0) {
+								modVersions.push(modVersion);
+							}
+						}
+
+						console.log('Found mod "' + modName + '" with versions ' + modVersions);
+
+						for (var i = 0; i < modVersions.length; ++i) {
+							var modVersion = modVersions[i];
+
+							var modVersionButton = childTemplate.cloneNode(true);
+							modVersionButton.classList.remove('hidden');
+
+							var modVersionIcon = modVersionButton.getElementsByClassName('tree-node-mod-version-icon')[0];
+							modVersionIcon.onerror = function() {this.onerror = null; this.src = 'img/default.png'};
+							//modVersionIcon.src = app.factorioEnvironment.itemImgPaths[machineClass.name(i)];
+							modVersionButton.getElementsByClassName('tree-node-mod-version-name')[0].textContent = modVersion;
+
+							versionButtons[modName].push(modVersionButton);
+
+							if (app.modLoader.mods[modName] == modVersion) {
+								modVersionButton.style.backgroundColor = "var(--color-button-selected)";
+							}
+
+							function createButtonClick(modName, modVersion) {
+								return function() {
+									app.modLoader.mods[modName] = modVersion;
+									console.log('Set "' + modName + '" to ' + modVersion);
+
+									for (var i = 0; i < versionButtons[modName].length; ++i) {
+										versionButtons[modName][i].style.backgroundColor = "";
+									}
+
+									this.style.backgroundColor = "var(--color-button-selected)";
+								}
+							}
+
+							modVersionButton.onclick = createButtonClick(modName, modVersion);
+
+							parent.appendChild(modVersionButton);
+
+							//if (app.ratioSolver.getMachineLevel(machineClass.className) == i) {
+							//	machineLevelButton.style.backgroundColor = "var(--color-button-selected)";
+							//}
+						}
+					}
+				}
+
 			for (var i = 0; i < modNames.length; ++i) {
 				var modName = modNames[i];
 
@@ -33,66 +90,16 @@ document.addEventListener(
 				modButtons[modName] = modSelector;
 
 				var childElement = modSelector.getElementsByClassName('tree-node-children')[0];
-				var childTemplate = document.getElementById('template-button-mod-version');
 
-				modSelector.getElementsByClassName('tree-node-button')[0].onclick = function() {
-					childElement.classList.toggle('hidden');
-				}
+				modSelector.getElementsByClassName('tree-node-button')[0].onclick = (function(childElement) {
+					return function() {
+						childElement.classList.toggle('hidden');
+					}
+				})(childElement);
 
 				versionButtons[modName] = [];
 
-				fileutil.readTextAppWWW('mods/' + modName + '/versions.txt', function(text) {
-					var modVersions = [];
-
-					var lines = text.split('\n');
-					for (var i = 0; i < lines.length; ++i) {
-						var modVersion = lines[i].trim();
-						if (modVersion.length != 0) {
-							modVersions.push(modVersion);
-						}
-					}
-
-					console.log('Found mod "' + modName + '" with versions ' + modVersions);
-
-					for (var i = 0; i < modVersions.length; ++i) {
-						var modVersion = modVersions[i];
-
-						var modVersionButton = childTemplate.cloneNode(true);
-						modVersionButton.classList.remove('hidden');
-
-						var modVersionIcon = modVersionButton.getElementsByClassName('tree-node-mod-version-icon')[0];
-						modVersionIcon.onerror = function() {this.onerror = null; this.src = 'img/default.png'};
-						//modVersionIcon.src = app.factorioEnvironment.itemImgPaths[machineClass.name(i)];
-						modVersionButton.getElementsByClassName('tree-node-mod-version-name')[0].textContent = modVersion;
-
-						versionButtons[modName].push(modVersionButton);
-
-						if (app.modLoader.mods[modName] == modVersion) {
-							modVersionButton.style.backgroundColor = "var(--color-button-selected)";
-						}
-
-						function createButtonClick(modName, modVersion) {
-							return function() {
-								app.modLoader.mods[modName] = modVersion;
-								console.log('Set "' + modName + '" to ' + modVersion);
-
-								for (var i = 0; i < versionButtons[modName].length; ++i) {
-									versionButtons[modName][i].style.backgroundColor = "";
-								}
-
-								this.style.backgroundColor = "var(--color-button-selected)";
-							}
-						}
-
-						modVersionButton.onclick = createButtonClick(modName, modVersion);
-
-						childElement.appendChild(modVersionButton);
-
-						//if (app.ratioSolver.getMachineLevel(machineClass.className) == i) {
-						//	machineLevelButton.style.backgroundColor = "var(--color-button-selected)";
-						//}
-					}
-				});
+				fileutil.readTextAppWWW('mods/' + modName + '/versions.txt', createChildren(modName, childElement));
 			}
 		});
 

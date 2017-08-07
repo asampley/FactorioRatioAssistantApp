@@ -13,6 +13,8 @@ document.addEventListener(
 				for (var machineClass in machineButtons) {
 					mainElement.removeChild(machineButtons[machineClass]);
 				}
+				machineButtons = {};
+				mcButtons = {};
 			}
 		);
 
