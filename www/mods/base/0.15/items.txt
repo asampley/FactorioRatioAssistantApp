@@ -12,6 +12,8 @@ Steel Plate
 Stone Brick
 Uranium 238
 Uranium 235
+Uranium Fuel Cell
+Used Up Uranium Fuel Cell
 Concrete
 Sulfur
 Plastic Bar
