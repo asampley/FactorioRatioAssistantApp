@@ -58,7 +58,7 @@ document.addEventListener(
 
 							versionButtons[modName].push(modVersionButton);
 
-							if (app.modLoader.mods[modName] == modVersion) {
+							if (app.modLoader.mods[modName].version == modVersion) {
 								modVersionButton.style.backgroundColor = "var(--color-button-selected)";
 							}
 
