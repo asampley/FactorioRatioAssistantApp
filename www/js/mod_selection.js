@@ -35,6 +35,8 @@ document.addEventListener(
 					
 					console.log('Found mod "' + modName + '" with versions ' + modVersions);
 
+					modVersions.unshift('none');
+
 					fileutil.readTextAppWWW('mods/' + modName + '/dependencies.txt', function(text) {
 						var dependencies = [];
 
@@ -73,6 +75,8 @@ document.addEventListener(
 									}
 
 									this.style.backgroundColor = "var(--color-button-selected)";
+
+									modButtons[modName].getElementsByClassName('tree-node-mod-version-name')[0].textContent = modVersion;
 								}
 							}
 
@@ -99,6 +103,10 @@ document.addEventListener(
 				modIcon.onerror = function() {this.onerror = null; this.src = 'img/default.png'};
 				//machineIcon.src = app.factorioEnvironment.itemImgPaths[machineClass.name(0)];
 				modSelector.getElementsByClassName('tree-node-mod-name')[0].textContent = modName;
+				if (modName in app.modLoader.mods) {
+					var modVersion = app.modLoader.mods[modName].version;
+					modSelector.getElementsByClassName('tree-node-mod-version-name')[0].textContent = modVersion;
+				}
 				modButtons[modName] = modSelector;
 
 				var childElement = modSelector.getElementsByClassName('tree-node-children')[0];

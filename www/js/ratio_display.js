@@ -29,9 +29,9 @@ document.addEventListener(
 				treeNode.classList.remove('hidden');
 				outputInt = outputCountPerSec.toIntegerQuotient();
 				outputFrac = outputCountPerSec.toAbsRemainderFraction();
-				treeNode.getElementsByClassName('tree-node-item-pre-icon-int')[0].textContent = "(" + (outputInt == 0 ? "" : outputInt);
+				treeNode.getElementsByClassName('tree-node-item-pre-icon-int')[0].textContent = (outputInt == 0 ? "" : outputInt);
 				treeNode.getElementsByClassName('tree-node-item-pre-icon-frac')[0].textContent = (outputFrac.num == 0 ? "" : outputFrac);
-				treeNode.getElementsByClassName('tree-node-item-post-icon-text')[0].textContent = " / s)";
+				treeNode.getElementsByClassName('tree-node-item-post-icon-text')[0].textContent = " / s";
 				var treeNodeIcon = treeNode.getElementsByClassName('tree-node-item-icon')[0];
 				treeNodeIcon.onerror = function() {this.onerror = null; this.src = 'img/default.png'};
 				if (machine != null) {

@@ -51,6 +51,15 @@ ModLoader.prototype.updateModStatusAndContinue = function() {
 		var modVersion = this.mods[modName].version;
 		var modString = modName + ' ' + modVersion;
 
+		if (modVersion == 'none'
+			&& this.modStatus[modName].overall != 2) {
+			console.log('Skipping mod ' + modName + ' with version ' + modVersion);
+			this.modStatus[modName].items = 2;
+			this.modStatus[modName].machines.status = 2;
+			this.modStatus[modName].recipes.status = 2;
+			this.modStatus[modName].overall = 2;
+		}
+
 		if (this.modStatus[modName].items == 0
 			&& this.dependenciesLoaded(modName)) {
 			console.log('Loading items from ' + modString);
