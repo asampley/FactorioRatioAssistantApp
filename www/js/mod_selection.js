@@ -22,18 +22,28 @@ document.addEventListener(
 			var childTemplate = document.getElementById('template-button-mod-version');
 
 			var createChildren = function(modName, parent) {
-					return function(text) {
-						var modVersions = [];
+				return function(text) {
+					var modVersions = [];
+
+					var lines = text.split('\n');
+					for (var i = 0; i < lines.length; ++i) {
+						var modVersion = lines[i].trim();
+						if (modVersion.length != 0) {
+							modVersions.push(modVersion);
+						}
+					}
+					
+					console.log('Found mod "' + modName + '" with versions ' + modVersions);
+
+					fileutil.readTextAppWWW('mods/' + modName + '/dependencies.txt', function(text) {
+						var dependencies = [];
 
 						var lines = text.split('\n');
 						for (var i = 0; i < lines.length; ++i) {
-							var modVersion = lines[i].trim();
-							if (modVersion.length != 0) {
-								modVersions.push(modVersion);
-							}
+							var dependency = lines[i].trim();
+							if (dependency.length == 0) continue;
+							dependencies.push(dependency);
 						}
-
-						console.log('Found mod "' + modName + '" with versions ' + modVersions);
 
 						for (var i = 0; i < modVersions.length; ++i) {
 							var modVersion = modVersions[i];
@@ -54,7 +64,7 @@ document.addEventListener(
 
 							function createButtonClick(modName, modVersion) {
 								return function() {
-									app.modLoader.mods[modName] = modVersion;
+									app.modLoader.mods[modName] = {version: modVersion, dependencies: dependencies};
 									console.log('Set "' + modName + '" to ' + modVersion);
 
 									for (var i = 0; i < versionButtons[modName].length; ++i) {
@@ -73,8 +83,9 @@ document.addEventListener(
 							//	machineLevelButton.style.backgroundColor = "var(--color-button-selected)";
 							//}
 						}
-					}
+					});
 				}
+			}
 
 			for (var i = 0; i < modNames.length; ++i) {
 				var modName = modNames[i];
@@ -108,6 +119,7 @@ document.addEventListener(
 			undefined,
 			function() {
 				app.reloadMods();
+				app.preferences.save();
 			})
 		);
 	},

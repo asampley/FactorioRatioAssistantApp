@@ -2,6 +2,7 @@ Preferences = function(ratioSolver, fileName, raw = {}, machineLevels = {}) {
 	this.ratioSolver = ratioSolver;
 	this.raw = raw;
 	this.machineLevels = machineLevels;
+	this.mods = {};
 	this.fileName = fileName;
 }
 
@@ -29,6 +30,7 @@ Preferences.prototype.save = function() {
 	obj = {}
 	obj.raw = this.raw;
 	obj.machineLevels = this.machineLevels;
+	obj.mods = this.mods;
 
 	fileutil.writeTextPersistent(
 		this.fileName,
@@ -42,15 +44,22 @@ Preferences.prototype.inherit = function() {
 }
 
 Preferences.prototype.apply = function() {
-	for (item in this.raw) {
-		if (this.raw[item]) {
-			this.ratioSolver.setRaw(item, true);
-		} else {
-			this.ratioSolver.setRaw(item, false);
-		}
-	}
+		for (item in this.raw) {
+			var raw = this.raw[item] ? true : false;
 
-	for (machine in this.machineLevels) {
-		this.ratioSolver.setMachineLevel(machine, this.machineLevels[machine]);
-	}
+			try {
+				this.ratioSolver.setRaw(item, raw);
+			} catch (err) {
+				console.warn(err);
+			}
+		}
+
+		for (machine in this.machineLevels) {
+			try {
+				this.ratioSolver.setMachineLevel(machine, this.machineLevels[machine]);
+			} catch (err) {
+				console.warn(err);
+			}
+		}
+
 }

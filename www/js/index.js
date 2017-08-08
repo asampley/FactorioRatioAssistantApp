@@ -19,7 +19,7 @@
 var app = {
 	// Application Constructor
 	initialize: function() {
-		this.modLoader = new ModLoader({base: '0.15'}, this.onModsLoaded.bind(this));
+		this.modLoader = new ModLoader({base: {version: '0.15', dependencies: []}}, this.onModsLoaded.bind(this));
 		this.factorioEnvironment = this.modLoader.environment();
 		this.ratioSolver = new factorio.RatioSolver(this.factorioEnvironment);
 		document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
@@ -30,6 +30,8 @@ var app = {
 		this.modLoader.reset();
 		this.factorioEnvironment = this.modLoader.environment();
 		this.ratioSolver = new factorio.RatioSolver(this.factorioEnvironment);
+		this.preferences.ratioSolver = this.ratioSolver;
+		this.preferences.mods = this.modLoader.mods;
 		cordova.fireDocumentEvent('modsunloaded');
 		this.modLoader.loadMods();
 	},
@@ -43,8 +45,8 @@ var app = {
 	},
 
 	onModsLoaded: function() {
-		this.preferences.apply();
 		cordova.fireDocumentEvent('modsloaded');
+		this.preferences.apply();
 		console.log("Applied preferences");
 	},
 
@@ -53,14 +55,22 @@ var app = {
 		Preferences.fromJSON(this.ratioSolver, "preferences.json",
 			function(pref) {
 				self.preferences = pref;
+				self.modLoader.mods = pref.mods;
+				self.modLoader.reset();
+				self.factorioEnvironment = self.modLoader.environment();
+				self.ratioSolver = new factorio.RatioSolver(self.factorioEnvironment);
+				self.preferences.ratioSolver = self.ratioSolver;
 				console.log("Loaded preferences " + self.preferences);
+				self.modLoader.loadMods();
 			},
 			function(error) {
 				console.error("Could not access preferences.json: " + error);
 				self.preferences = new Preferences(self.ratioSolver, "preferences.json");
+				self.preferences.mods = self.modLoader.mods;
+				self.preferences.ratioSolver = self.ratioSolver;
+				self.modLoader.loadMods();
 			}
 		);
-		this.modLoader.loadMods();
 	},
 
 	// Update DOM on a Received Event
