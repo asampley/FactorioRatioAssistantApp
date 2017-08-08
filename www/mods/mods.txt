@@ -1,2 +1,3 @@
 base
 base oil
+base solid fuel
