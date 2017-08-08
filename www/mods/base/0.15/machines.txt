@@ -1,3 +1,4 @@
 Assembling Machine
+Centrifuge
 Chemical Plant
 Furnace

@@ -148,6 +148,7 @@ Train Stop
 Transport Belt
 Underground Belt
 Uranium Cannon Shell
+Uranium Fuel Cell
 Uranium Rounds Magazine
 Wood
 Wooden Chest
