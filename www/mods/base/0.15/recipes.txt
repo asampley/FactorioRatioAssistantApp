@@ -17,6 +17,7 @@ Burner Mining Drill
 Cannon Shell
 Car
 Cargo Wagon
+Centrifuge
 Chemical Plant
 Cluster Grenade
 Combat Shotgun
@@ -61,6 +62,8 @@ Gate
 Green Wire
 Grenade
 Gun Turret
+Heat Exchanger
+Heat Pipe
 Heavy Armor
 High Tech Science Pack
 Inserter
@@ -81,6 +84,7 @@ Medium Electric Pole
 Military Science Pack
 Modular Armor
 Nightvision
+Nuclear Reactor
 Offshore Pump
 Oil Refinery
 Passive Provider Chest
@@ -134,6 +138,7 @@ Splitter
 Stack Filter Inserter
 Stack Inserter
 Steam Engine
+Steam Turbine
 Steel Axe
 Steel Chest
 Steel Furnace

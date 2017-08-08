@@ -123,6 +123,7 @@ Electric Furnace
 Assembling Machine 1
 Assembling Machine 2
 Assembling Machine 3
+Centrifuge
 Lab
 Beacon
 Radar
@@ -140,8 +141,11 @@ Medium Electric Pole
 Big Electric Pole
 Substation
 Boiler
+Heat Exchanger
 Steam Engine
+Steam Turbine
 Solar Panel
+Nuclear Reactor
 Accumulator
 Rail
 Train Stop
@@ -149,6 +153,7 @@ Rail Signal
 Rail Chain Signal
 Locomotive
 Cargo Wagon
+Heat Pipe
 Pipe
 Pipe To Ground
 Offshore Pump
