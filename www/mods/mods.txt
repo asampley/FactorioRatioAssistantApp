@@ -1,3 +1,4 @@
 base
 base oil
 base solid fuel
+base uranium
