@@ -56,19 +56,13 @@ var app = {
 			function(pref) {
 				self.preferences = pref;
 				self.modLoader.mods = pref.mods;
-				self.modLoader.reset();
-				self.factorioEnvironment = self.modLoader.environment();
-				self.ratioSolver = new factorio.RatioSolver(self.factorioEnvironment);
-				self.preferences.ratioSolver = self.ratioSolver;
 				console.log("Loaded preferences " + self.preferences);
-				self.modLoader.loadMods();
+				self.reloadMods();
 			},
 			function(error) {
 				console.error("Could not access preferences.json: " + error);
 				self.preferences = new Preferences(self.ratioSolver, "preferences.json");
-				self.preferences.mods = self.modLoader.mods;
-				self.preferences.ratioSolver = self.ratioSolver;
-				self.modLoader.loadMods();
+				self.reloadMods();
 			}
 		);
 	},
