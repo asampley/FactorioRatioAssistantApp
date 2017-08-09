@@ -2,3 +2,4 @@ Assembling Machine
 Centrifuge
 Chemical Plant
 Furnace
+Oil Refinery
