@@ -33,6 +33,7 @@ Science Pack 3
 High Tech Science Pack
 Military Science Pack
 Production Science Pack
+Space Science Pack
 Empty Barrel
 Explosives
 Iron Axe
