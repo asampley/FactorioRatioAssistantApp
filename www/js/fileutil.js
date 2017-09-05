@@ -1,15 +1,22 @@
 var fileutil = {
 	appWWW: {valueOf: function() {return cordova.file.applicationDirectory + 'www/'}},
-	persistent: {},
+	persistent: undefined,
 
 
 	init: function() {
 		self = this;
-		window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fs) {
-			console.log("Opened file system: " + fs.name);
-			self.persistent = fs;
-			cordova.fireDocumentEvent('fileutilready');
-		})
+		window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, 
+			function(fs) {
+				console.log("Opened file system: " + fs.name);
+				self.persistent = fs;
+				cordova.fireDocumentEvent('fileutilready');
+				console.log('fileutil ready');
+			},
+			function(event) {
+				cordova.fireDocumentEvent('fileutilready');
+				console.log('fileutil unable to open persistent file system');
+			}
+		);
 	},
 
 	readText: function(path, fText, eText) {
@@ -33,6 +40,11 @@ var fileutil = {
 		eText = function(error) {console.error(error)}, 
 		eFile = function(error) {console.error(error)})
 	{
+		if (this.persistent === undefined) {
+			eFile("Persistent file system could not be accessed");
+			return;
+		}
+
 		this.persistent.root.getFile(relPath, {create: false, exclusive: false}, 
 			function(fileEntry) {
 				fileEntry.file(function(file) {
@@ -62,6 +74,11 @@ var fileutil = {
 		onWriteError = function(error) {console.error(error)}, 
 		onFileError = function(error) {console.error(error)}
 	) {
+		if (this.persistent === undefined) {
+			onFileError("Persistent file system could not be accessed");
+			return;
+		}
+		
 		this.persistent.root.getFile(relPath, {create: true}, 
 			function(fileEntry) {
 				fileEntry.createWriter(function(writer) {
