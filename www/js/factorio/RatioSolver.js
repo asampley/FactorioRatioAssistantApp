@@ -9,6 +9,7 @@ factorio.RatioSolver = function(environment) {
 	this._rawListeners = [];
 	this._unrawListeners = [];
 	this._machineLevelListeners = [];
+	this._beltLevelListeners = [];
 
 	var self = this;
 	this.environment.addItemListener(function(item) {
@@ -32,6 +33,18 @@ factorio.RatioSolver.prototype.setMachineLevel = function(machineClassName, leve
 
 factorio.RatioSolver.prototype.getMachineLevel = function(machineClassName) {
 	return this.machineLevels[machineClassName];
+}
+
+factorio.RatioSolver.prototype.setBeltLevel = function(level) {
+	this.beltLevel = level;
+
+	for (var i = 0; i < this._beltLevelListeners.length; ++i) {
+		this._beltLevelListeners[i](level);
+	}
+}
+
+factorio.RatioSolver.prototype.getBeltLevel = function() {
+	return this.beltLevel;
 }
 
 factorio.RatioSolver.prototype.solve = function(item) {
@@ -186,4 +199,10 @@ factorio.RatioSolver.prototype.addMachineLevelListener = function(f) {
 	for (mcName in this.machineLevels) {
 		f(this.environment.machineClasses[mcName], this.machineLevels[mcName]);
 	}
+}
+
+factorio.RatioSolver.prototype.addBeltLevelListener = function(f) {
+	this._beltLevelListeners.push(f);
+
+	f(this.beltLevel);
 }

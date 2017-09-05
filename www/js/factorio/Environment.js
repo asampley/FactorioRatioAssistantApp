@@ -72,6 +72,10 @@ factorio.Environment.prototype.addBelt = function(belt) {
 	}
 }
 
+factorio.Environment.prototype.getBelt = function(level) {
+	return this.belts[level];
+}
+
 /* 
  * Add listener that is notified when a new item is added.
  * fAdd is a function that takes the item name as an argument.

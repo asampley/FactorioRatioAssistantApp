@@ -321,6 +321,9 @@ ModLoader.prototype.loadRecipeFromMod = function(modName, modVersion, machineNam
 ModLoader.prototype.loadBeltsFromMod = function(modName, modVersion) {
 	var self = this;
 	var beltsFile = 'mods/' + modName + '/' + modVersion + '/belts.txt';
+
+	self.modStatus[modName].belts.status = 1;
+
 	fileutil.readTextAppWWW(
 		beltsFile,
 		function(text) {
