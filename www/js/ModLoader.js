@@ -16,7 +16,8 @@ ModLoader.prototype.reset = function() {
 			overall: 0,
 			items: 0,
 			machines: {status : 0},
-			recipes: {status : 0}
+			recipes: {status : 0},
+			belts: {status : 0}
 		}
 	}
 }
@@ -57,6 +58,7 @@ ModLoader.prototype.updateModStatusAndContinue = function() {
 			this.modStatus[modName].items = 2;
 			this.modStatus[modName].machines.status = 2;
 			this.modStatus[modName].recipes.status = 2;
+			this.modStatus[modName].belts.status = 2;
 			this.modStatus[modName].overall = 2;
 		}
 
@@ -75,6 +77,10 @@ ModLoader.prototype.updateModStatusAndContinue = function() {
 			&& this.modStatus[modName].machines.status == 2) {
 			console.log('Loading recipes from ' + modString);
 			this.loadRecipesFromMod(modName, modVersion);
+		}
+		if (this.modStatus[modName].belts.status == 0) {
+			console.log('Loading belts from ' + modString);
+			this.loadBeltsFromMod(modName, modVersion);
 		}
 		if (this.modStatus[modName].recipes.status == 2
 			&& this.modStatus[modName].items == 2 
@@ -308,6 +314,41 @@ ModLoader.prototype.loadRecipeFromMod = function(modName, modVersion, machineNam
 		},
 		function(error) {
 			console.log(error);
+		}
+	);
+}
+
+ModLoader.prototype.loadBeltsFromMod = function(modName, modVersion) {
+	var self = this;
+	var beltsFile = 'mods/' + modName + '/' + modVersion + '/belts.txt';
+	fileutil.readTextAppWWW(
+		beltsFile,
+		function(text) {
+			var lines = text.split('\n');
+
+			var names = [];
+			var itemsPerSec = [];
+
+			for (var i = 0; i < lines.length; ++i) {
+				var line = lines[i].trim();
+				if (line.length == 0) continue;
+
+				var split = line.split(':');
+				assert(split.length == 2, "Invalid Syntax: No ':' on line " + i + " of " + beltsFile);
+
+				name = split[0].trim();
+				itemsPerSec = Fraction.parse(split[1].trim());
+
+				var belt = new factorio.Belt(name, itemsPerSec);
+				self.environment().addBelt(belt);
+			}
+
+			self.modStatus[modName].belts.status = 2;
+			self.updateModStatusAndContinue();
+		},
+		function(error) {
+			self.modStatus[modName].belts.status = 2;
+			self.updateModStatusAndContinue();
 		}
 	);
 }

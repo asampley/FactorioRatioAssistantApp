@@ -3,9 +3,11 @@ factorio.Environment = function() {
 	this.itemImgPaths = {};
 	this.recipes = {};
 	this.machineClasses = {};
+	this.belts = [];
 	this._addItemListeners = [];
 	this._addRecipeListeners = [];
 	this._addMachineClassListeners = [];
+	this._addBeltListeners = [];
 }
 
 factorio.Environment.prototype.addRecipe = function(recipe) {
@@ -62,6 +64,14 @@ factorio.Environment.prototype.getMachineClass = function(machineClassName) {
 	return this.machineClasses[machineClassName];
 };
 
+factorio.Environment.prototype.addBelt = function(belt) {
+	this.belts.push(belt);
+
+	for (var i = 0; i < this._addBeltListeners.length; ++i) {
+		this._addBeltListeners[i](belt);
+	}
+}
+
 /* 
  * Add listener that is notified when a new item is added.
  * fAdd is a function that takes the item name as an argument.
@@ -90,5 +100,13 @@ factorio.Environment.prototype.addMachineClassListener = function(fAdd) {
 
 	for (var key in this.machineClasses) {
 		fAdd(this.machineClasses[key]);
+	}
+}
+
+factorio.Environment.prototype.addBeltListener = function(fAdd) {
+	this._addBeltListeners.push(fAdd);
+
+	for (var i = 0; i < this.belts.length; ++i) {
+		fAdd(this.belts[i]);
 	}
 }

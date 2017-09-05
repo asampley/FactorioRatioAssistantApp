@@ -20,6 +20,8 @@ document.addEventListener(
 				var outputItem = treeRoot.item;
 				var outputCountPerSec = treeRoot.itemPerSec;
 				var outputIconPath = app.factorioEnvironment.itemImgPaths[outputItem];
+				var belt = tree.belt;
+				var beltCount = tree.beltCount;
 
 				var treeNode = treeTemplate.cloneNode(true);
 				parent.appendChild(treeNode);
@@ -43,6 +45,16 @@ document.addEventListener(
 					machineFrac = machineCount.toAbsRemainderFraction();
 					treeNode.getElementsByClassName('tree-node-machine-int')[0].textContent = (machineInt == 0 ? "" : machineInt);
 					treeNode.getElementsByClassName('tree-node-machine-frac')[0].textContent = (machineFrac.num == 0 ? "" : machineFrac);
+				}
+				if (belt != null) {
+					var beltIconPath = app.factorioEnvironment.itemImgPaths[belt.name];
+					var treeNodeBeltIcon = treeNode.getElementsByClassName('tree-node-belt-icon')[0];
+					treeNodeBeltIcon.onerror = function() {this.onerror = null; this.src = 'img/default.png'};
+					treeNodeBeltIcon.src = beltIconPath;
+					beltInt = beltCount.toIntegerQuotient();
+					beltFrac = beltCount.toAbsRemainderFraction();
+					treeNode.getElementsByClassName('tree-node-belt-int')[0].textContent = (beltInt == 0 ? "" : beltInt);
+					treeNode.getElementsByClassName('tree-node-belt-frac')[0].textContent = (beltFrac.num == 0 ? "" : beltFrac);
 				}
 				treeNodeIcon.src = outputIconPath;
 				var treeNodeButton = treeNode.getElementsByClassName('tree-node-button')[0];
