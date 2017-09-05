@@ -47,6 +47,10 @@ document.addEventListener(
 							dependencies.push(dependency);
 						}
 
+						if (!(modName in app.modLoader.mods)) {
+							app.modLoader.mods[modName] = {version: 'none', dependencies: dependencies};
+						}
+
 						for (var i = 0; i < modVersions.length; ++i) {
 							var modVersion = modVersions[i];
 
@@ -60,8 +64,8 @@ document.addEventListener(
 
 							versionButtons[modName].push(modVersionButton);
 
-							if (modName in app.modLoader.mods
-								&& app.modLoader.mods[modName].version == modVersion) {
+							if (app.modLoader.mods[modName].version == modVersion) {
+								modButtons[modName].getElementsByClassName('tree-node-mod-version-name')[0].textContent = modVersion;
 								modVersionButton.style.backgroundColor = "var(--color-button-selected)";
 							}
 
@@ -103,10 +107,6 @@ document.addEventListener(
 				modIcon.onerror = function() {this.onerror = null; this.src = 'img/default.png'};
 				//machineIcon.src = app.factorioEnvironment.itemImgPaths[machineClass.name(0)];
 				modSelector.getElementsByClassName('tree-node-mod-name')[0].textContent = modName;
-				if (modName in app.modLoader.mods) {
-					var modVersion = app.modLoader.mods[modName].version;
-					modSelector.getElementsByClassName('tree-node-mod-version-name')[0].textContent = modVersion;
-				}
 				modButtons[modName] = modSelector;
 
 				var childElement = modSelector.getElementsByClassName('tree-node-children')[0];
