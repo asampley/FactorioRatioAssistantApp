@@ -1,0 +1,186 @@
+Raw Wood
+Coal
+Iron Ore
+Copper Ore
+Uranium Ore
+Stone
+Raw Fish
+Wood
+Iron Plate
+Copper Plate
+Steel Plate
+Stone Brick
+Uranium 238
+Uranium 235
+Uranium Fuel Cell
+Used Up Uranium Fuel Cell
+Concrete
+Sulfur
+Plastic Bar
+Battery
+Iron Stick
+Iron Gear Wheel
+Copper Cable
+Electronic Circuit
+Advanced Circuit
+Processing Unit
+Engine Unit
+Electric Engine Unit
+Flying Robot Frame
+Science Pack 1
+Science Pack 2
+Science Pack 3
+High Tech Science Pack
+Military Science Pack
+Production Science Pack
+Space Science Pack
+Empty Barrel
+Explosives
+Iron Axe
+Steel Axe
+Pistol
+Submachine Gun
+Shotgun
+Combat Shotgun
+Rocket Launcher
+Flamethrower
+Land Mine
+Grenade
+Cluster Grenade
+Defender Capsule
+Poison Capsule
+Slowdown Capsule
+Distractor Capsule
+Destroyer Capsule
+Discharge Defense Remote
+Car
+Tank
+Firearm Magazine
+Piercing Rounds Magazine
+Uranium Rounds Magazine
+Shotgun Shells
+Piercing Shotgun Shells
+Rocket
+Explosive Rocket
+Atomic Bomb
+Flamethrower Ammo
+Cannon Shell
+Explosive Cannon Shell
+Uranium Cannon Shell
+Explosive Uranium Cannon Shell
+Light Armor
+Heavy Armor
+Modular Armor
+Power Armor
+Power Armor MK2
+Nightvision
+Battery MK1
+Battery MK2
+Energy Shield
+Energy Shield MK2
+Portable Solar Panel
+Portable Fusion Reactor
+Personal Laser Defense
+Discharge Defense
+Exoskeleton
+Personal Roboport
+Logistic Robot
+Construction Robot
+Roboport
+Solid Fuel
+Transport Belt
+Underground Belt
+Splitter
+Fast Transport Belt
+Fast Underground Belt
+Fast Splitter
+Express Transport Belt
+Express Underground Belt
+Express Splitter
+Burner Inserter
+Inserter
+Long Handed Inserter
+Fast Inserter
+Filter Inserter
+Stack Inserter
+Stack Filter Inserter
+Wooden Chest
+Iron Chest
+Steel Chest
+Active Provider Chest
+Passive Provider Chest
+Storage Chest
+Requester Chest
+Stone Wall
+Gate
+Gun Turret
+Laser Turret
+Flamethrower Turret
+Burner Mining Drill
+Electric Mining Drill
+Stone Furnace
+Steel Furnace
+Electric Furnace
+Assembling Machine 1
+Assembling Machine 2
+Assembling Machine 3
+Centrifuge
+Lab
+Beacon
+Radar
+Speed Module
+Speed Module 2
+Speed Module 3
+Productivity Module
+Productivity Module 2
+Productivity Module 3
+Efficiency Module
+Efficiency Module 2
+Efficiency Module 3
+Small Electric Pole
+Medium Electric Pole
+Big Electric Pole
+Substation
+Boiler
+Heat Exchanger
+Steam Engine
+Steam Turbine
+Solar Panel
+Nuclear Reactor
+Accumulator
+Rail
+Train Stop
+Rail Signal
+Rail Chain Signal
+Locomotive
+Cargo Wagon
+Heat Pipe
+Pipe
+Pipe To Ground
+Offshore Pump
+Storage Tank
+Oil Refinery
+Chemical Plant
+Pumpjack
+Pump
+Lamp
+Red Wire
+Green Wire
+Arithmetic Combinator
+Decider Combinator
+Constant Combinator
+Power Switch
+Programmable Speaker
+Rocket Silo
+Low Density Structure
+Rocket Control Unit
+Rocket Fuel
+Rocket Part
+Satellite
+Crude Oil
+Petroleum Gas
+Light Oil
+Heavy Oil
+Sulfuric Acid
+Water
+Lubricant

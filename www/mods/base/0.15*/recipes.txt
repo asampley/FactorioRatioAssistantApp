@@ -1,0 +1,174 @@
+# Assembling Machine
+Accumulator
+Active Provider Chest
+Advanced Circuit
+Arithmetic Combinator
+Assembling Machine 1
+Assembling Machine 2
+Assembling Machine 3
+Atomic Bomb
+Battery MK1
+Battery MK2
+Beacon
+Big Electric Pole
+Boiler
+Burner Inserter
+Burner Mining Drill
+Cannon Shell
+Car
+Cargo Wagon
+Centrifuge
+Chemical Plant
+Cluster Grenade
+Combat Shotgun
+Concrete
+Constant Combinator
+Construction Robot
+Copper Cable
+Decider Combinator
+Defender Capsule
+Destroyer Capsule
+Discharge Defense
+Discharge Defense Remote
+Distractor Capsule
+Efficiency Module
+Efficiency Module 2
+Efficiency Module 3
+Electric Engine Unit
+Electric Furnace
+Electric Mining Drill
+Electronic Circuit
+Empty Barrel
+Energy Shield
+Energy Shield MK2
+Engine Unit
+Exoskeleton
+Explosive Cannon Shell
+Explosive Rocket
+Explosive Uranium Cannon Shell
+Express Splitter
+Express Transport Belt
+Express Underground Belt
+Fast Inserter
+Fast Splitter
+Fast Transport Belt
+Fast Underground Belt
+Filter Inserter
+Firearm Magazine
+Flamethrower
+Flamethrower Turret
+Flying Robot Frame
+Gate
+Green Wire
+Grenade
+Gun Turret
+Heat Exchanger
+Heat Pipe
+Heavy Armor
+High Tech Science Pack
+Inserter
+Iron Axe
+Iron Chest
+Iron Gear Wheel
+Iron Stick
+Lab
+Lamp
+Land Mine
+Laser Turret
+Light Armor
+Locomotive
+Logistic Robot
+Long Handed Inserter
+Low Density Structure
+Medium Electric Pole
+Military Science Pack
+Modular Armor
+Nightvision
+Nuclear Reactor
+Offshore Pump
+Oil Refinery
+Passive Provider Chest
+Personal Laser Defense
+Personal Roboport
+Piercing Rounds Magazine
+Piercing Shotgun Shells
+Pipe
+Pipe To Ground
+Pistol
+Poison Capsule
+Portable Fusion Reactor
+Portable Solar Panel
+Power Armor
+Power Armor MK2
+Power Switch
+Processing Unit
+Production Science Pack
+Productivity Module
+Productivity Module 2
+Productivity Module 3
+Programmable Speaker
+Pump
+Pumpjack
+Radar
+Rail
+Rail Chain Signal
+Rail Signal
+Red Wire
+Requester Chest
+Roboport
+Rocket
+Rocket Control Unit
+Rocket Fuel
+Rocket Launcher
+Rocket Silo
+Satellite
+Science Pack 1
+Science Pack 2
+Science Pack 3
+Shotgun
+Shotgun Shells
+Slowdown Capsule
+Small Electric Pole
+Solar Panel
+Speed Module
+Speed Module 2
+Speed Module 3
+Splitter
+Stack Filter Inserter
+Stack Inserter
+Steam Engine
+Steam Turbine
+Steel Axe
+Steel Chest
+Steel Furnace
+Stone Furnace
+Stone Wall
+Storage Chest
+Storage Tank
+Submachine Gun
+Substation
+Tank
+Train Stop
+Transport Belt
+Underground Belt
+Uranium Cannon Shell
+Uranium Fuel Cell
+Uranium Rounds Magazine
+Wood
+Wooden Chest
+# Chemical Plant
+Battery
+Explosives
+Flamethrower Ammo
+Lubricant
+Plastic Bar
+Sulfur
+Sulfuric Acid
+# Furnace
+Copper Plate
+Iron Plate
+Steel Plate
+Stone Brick
+# Rocket Silo
+Rocket Part
+Space Science Pack

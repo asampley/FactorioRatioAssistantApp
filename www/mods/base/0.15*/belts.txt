@@ -1,0 +1,3 @@
+Transport Belt : 40 / 3
+Fast Transport Belt : 80 / 3
+Express Transport Belt : 120 / 3
