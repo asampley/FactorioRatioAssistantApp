@@ -52,6 +52,16 @@ ModLoader.prototype.updateModStatusAndContinue = function() {
 		var modVersion = this.mods[modName].version;
 		var modString = modName + ' ' + modVersion;
 
+		if (!(modName in this.modStatus)) {
+			this.modStatus[modName] = {
+				overall: 0,
+				items: 0,
+				machines: {status : 0},
+				recipes: {status : 0},
+				belts: {status : 0}
+			}
+		}
+
 		if (modVersion == 'none'
 			&& this.modStatus[modName].overall != 2) {
 			console.log('Skipping mod ' + modName + ' with version ' + modVersion);
@@ -85,6 +95,7 @@ ModLoader.prototype.updateModStatusAndContinue = function() {
 		if (this.modStatus[modName].recipes.status == 2
 			&& this.modStatus[modName].items == 2 
 			&& this.modStatus[modName].machines.status == 2
+			&& this.modStatus[modName].belts.status == 2
 			&& this.modStatus[modName].overall != 2) {
 			this.modStatus[modName].overall = 2;
 			console.log('Done loading mod ' + modString);
