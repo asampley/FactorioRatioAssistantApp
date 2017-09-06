@@ -1,4 +1,4 @@
-button {
+button, .button {
 	box-sizing: border-box;
 	background-color: var(--color-button);
 	color: white;
@@ -16,25 +16,25 @@ button {
     white-space: nowrap;
 }
 
-button:hover {
+button:hover, .button:hover {
     -webkit-transition-duration: 0.2s; /* Safari */
     transition-duration: 0.2s;
 	background-color: var(--color-button-hover);
 	color: black;
 }
 
-button:active {
+button:active, .button:active {
     -webkit-transition-duration: 0.1s; /* Safari */
     transition-duration: 0.1s;
 	background-color: var(--color-button-active);
 	color: white;
 }
 
-button:disabled {
+button:disabled, .button:disabled {
     opacity: 0.5;
 }
 
-button:disabled * {
+button:disabled *, .button:disabled * {
     opacity: 0.5;
 }
 
@@ -43,7 +43,7 @@ button:disabled * {
 	height: 1em;
 }
 
-button:hover .icon {
+button:hover .icon, .button:hover .icon {
 	animation: grow 1.5s infinite;
 }
 

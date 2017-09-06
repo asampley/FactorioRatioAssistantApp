@@ -57,7 +57,7 @@ factorio.RatioSolver.prototype.isRaw = function(item) {
 }
 
 factorio.RatioSolver.prototype.setRaw = function(item, isRaw = true) {
-	if (!this.hasRecipe(item) && !isRaw) {
+	if (!this.canSetUnraw(item) && !isRaw) {
 		throw "Cannot make an ingredient unraw without a recipe";
 	}
 
@@ -68,6 +68,10 @@ factorio.RatioSolver.prototype.setRaw = function(item, isRaw = true) {
 	for (var i = 0; i < listeners.length; ++i) {
 		listeners[i](item);
 	}
+}
+
+factorio.RatioSolver.prototype.canSetUnraw = function(item) {
+	return this.hasRecipe(item);
 }
 
 factorio.RatioSolver.prototype.toggleRaw = function(item) {

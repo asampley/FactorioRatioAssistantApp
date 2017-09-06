@@ -57,11 +57,18 @@ var content = {
 	}
 };
 
-Page = function(view, onenter, onexit) {
+Page = function(view, onenter, onexit, onrefresh) {
 	this.view = view;
 	this.onenter = onenter;
 	this.onexit = onexit;
+	this.onrefresh = onrefresh;
 };
+
+Page.prototype.refresh = function() {
+	if (this.onrefresh != undefined) {
+		this.onrefresh();
+	}
+}
 
 Page.prototype.show = function(arguments) {
 	this.view.style.display = 'block';

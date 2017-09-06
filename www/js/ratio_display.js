@@ -1,18 +1,60 @@
+pages.ratio_display = {
+	item: null,
+	rootTreeNode: null,
+	setRawButtons: {}
+}
+
+document.addEventListener(
+	'modsloaded',
+	function() {
+		app.ratioSolver.addSetRawListener(
+			function(item) {
+				if (item in pages.ratio_display.setRawButtons) {
+					for (var i = 0; i < pages.ratio_display.setRawButtons[item].length; ++i) {
+						pages.ratio_display.setRawButtons[item][i].style.backgroundColor = "";
+					}
+				}
+			},
+			function(item) {
+				if (item in pages.ratio_display.setRawButtons) {
+					for (var i = 0; i < pages.ratio_display.setRawButtons[item].length; ++i) {
+						pages.ratio_display.setRawButtons[item][i].style.backgroundColor = "var(--color-button-raw)";
+					}
+				}
+			}
+		);
+	},
+	false
+);
+
 document.addEventListener(
 	'deviceready', 
 	function() {
 		var mainElement = document.getElementById('ratio_display');
 		var treeTemplate = document.getElementById('template-tree-node-ratio');
-		var rootTreeNode = null;
 
-		function showTree(item) {
-			// clear area
-			if (rootTreeNode != null) {
-				mainElement.removeChild(rootTreeNode);
-				rootTreeNode = null;
+		var page = new Page(
+			mainElement,
+			function(item) {
+				pages.ratio_display.item = item;
+				showTree(item);
+			},
+			function() {},
+			function() {
+				showTree(pages.ratio_display.item, false);
+			}
+		)
+
+		content.addPage('ratio_display', page);
+
+		function showTree(item, newTree=true) {
+			if (newTree && pages.ratio_display.rootTreeNode != null) { // clear area
+				mainElement.removeChild(pages.ratio_display.rootTreeNode);
+				pages.ratio_display.rootTreeNode = null;
+				pages.ratio_display.setRawButtons = {};
 			}
 
-			function constructTree(parent, tree) {
+			function constructTree(parent, tree, oldNode=undefined) {
 
 				var treeRoot = tree.rootValue();
 				var machine = treeRoot.machine;
@@ -23,8 +65,16 @@ document.addEventListener(
 				var belt = tree.belt;
 				var beltCount = tree.beltCount;
 
-				var treeNode = treeTemplate.cloneNode(true);
-				parent.appendChild(treeNode);
+				if (oldNode == undefined) {
+					var treeNode = treeTemplate.cloneNode(true);
+					if (!(outputItem in pages.ratio_display.setRawButtons)) {
+						pages.ratio_display.setRawButtons[outputItem] = [];
+					}
+					pages.ratio_display.setRawButtons[outputItem].push(treeNode.getElementsByClassName('tree-node-raw-toggle')[0]);
+					parent.appendChild(treeNode);
+				} else {
+					var treeNode = oldNode;
+				}
 
 				var childrenElement = treeNode.getElementsByClassName('tree-node-children')[0];
 
@@ -56,12 +106,25 @@ document.addEventListener(
 					treeNode.getElementsByClassName('tree-node-belt-int')[0].textContent = (beltInt == 0 ? "" : beltInt);
 					treeNode.getElementsByClassName('tree-node-belt-frac')[0].textContent = (beltFrac.num == 0 ? "" : beltFrac);
 				}
+				if (app.ratioSolver.canSetUnraw(outputItem)) {
+					var treeNodeRawToggle = treeNode.getElementsByClassName('tree-node-raw-toggle')[0];
+					treeNodeRawToggle.classList.remove('hidden');
+					treeNodeRawToggle.onclick = function(event) {
+						event.stopPropagation(); // don't let the click propogate to parents
+
+						app.ratioSolver.toggleRaw(outputItem);
+						page.refresh();
+					}
+
+					if (!app.ratioSolver.isRaw(outputItem)) {
+						treeNodeRawToggle.style.backgroundColor = "var(--color-button-raw)";
+					}
+				}
 				treeNodeIcon.src = outputIconPath;
 				var treeNodeButton = treeNode.getElementsByClassName('tree-node-button')[0];
 
 				if (app.ratioSolver.isRaw(outputItem)) {
 					treeNodeButton.style.backgroundColor = "var(--color-button-raw)";
-					childrenElement.classList.add('hidden');
 
 				} else {
 					treeNodeButton.style.backgroundColor = "";
@@ -72,23 +135,25 @@ document.addEventListener(
 				}
 
 				for (var i = 0; i < tree.children.length; ++i) {
-					constructTree(childrenElement, tree.getChild(i));
+					if (childrenElement.children.length > i) { // save old child objects where we can
+						constructTree(childrenElement, tree.getChild(i), childrenElement.children[i]);
+					} else {
+						constructTree(childrenElement, tree.getChild(i));
+					}
 				}
 
 				return treeNode;
 			}
 
 			var tree = app.ratioSolver.solve(item);
-			rootTreeNode = constructTree(mainElement, tree);
-			rootTreeNode.getElementsByClassName('tree-node-children')[0].classList.remove('hidden');
-		}
 
-		content.addPage('ratio_display', new Page(
-			mainElement, 
-			function(item) {
-				showTree(item);
+			if (newTree) {
+				pages.ratio_display.rootTreeNode = constructTree(mainElement, tree);
+				pages.ratio_display.rootTreeNode.getElementsByClassName('tree-node-children')[0].classList.remove('hidden');
+			} else {
+				pages.ratio_display.rootTreeNode = constructTree(mainElement, tree, pages.ratio_display.rootTreeNode);
 			}
-		));
+		}
 	},
 	false
 );
