@@ -3,12 +3,11 @@ button, .button {
 	background-color: var(--color-button);
 	color: white;
     border: none;
-    padding: 4px;
     margin: 2px;
+    padding: 4px;
     text-align: left;
     text-decoration: none;
     display: inline-block;
-    font-size: 1em;
     width: calc(100% - 4px); /* full width minux margin */
     cursor: pointer;
     -webkit-transition-duration: 0.4s; /* Safari */
