@@ -5,26 +5,25 @@
 	color: #0000000;
 	width: 100%;
 	height: 100%;
-	padding: 72px 4px 4px 4px; /* leave room for 64px buttons at top with 4px padding around */
+	padding: 4px 4px 4px 4px; /* leave room for 64px buttons at top with 4px padding around */
 }
 
-.border .button-back {
-	position: absolute;
-	top: 4px;
-	left: 4px;
+.border-top-bar {
+	display: inline-flex;
+	width: 100%;
+	height: 64px;
+	margin-bottom: 4px;
 }
 
 .border .tabs {
-	position: absolute;
-	top: 4px;
-	left: 72px;
-	width: calc(100% - 76px);
+	display: inline-flex;
 	height: 64px;
 	font-size: 48px;
 }
 
 .border .tab {
 	background-color: inherit;
+	flex-grow: 1;
 }
 
 .button-settings {
