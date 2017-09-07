@@ -9,8 +9,7 @@
 
 .tree-node-raw-toggle {
 	box-sizing: content-box;
-	float: right;
 	width: 1em;
 	height: 1em;
-	margin: 0px;
+	margin: 0px 0px 0px auto;
 }
