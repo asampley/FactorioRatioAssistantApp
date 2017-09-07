@@ -3,6 +3,18 @@
 	align-items: center;
 }
 
+.tree-node-button > * {
+	margin: 2px;
+}
+
+.tree-node-button:first-child {
+	margin-left: 0px;
+}
+
+.tree-node-button:last-child {
+	margin-left: 0px;
+}
+
 .flex-spacer {
 	flex-grow: 1;
 }
