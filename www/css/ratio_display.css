@@ -1,3 +1,12 @@
+.tree-node-button {
+	display: inline-flex;
+	align-items: center;
+}
+
+.flex-spacer {
+	flex-grow: 1;
+}
+
 .tree-node-raw-toggle {
 	float: right;
 	width: auto;
