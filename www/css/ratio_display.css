@@ -8,6 +8,9 @@
 }
 
 .tree-node-raw-toggle {
+	box-sizing: content-box;
 	float: right;
-	width: auto;
+	width: 1em;
+	height: 1em;
+	margin: 0px;
 }
