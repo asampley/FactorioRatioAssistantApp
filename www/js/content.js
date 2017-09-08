@@ -54,6 +54,27 @@ var content = {
 		if (immediateUpdate) {
 			listener(this.currentPageName);
 		}
+	},
+
+	setHelpContent: function(page) {
+		// get the content from the page by the help class, or default if none exists
+		var helpContent = page.view.getElementsByClassName('help');
+		if (helpContent.length == 0) {
+			helpContent = document.getElementById('help_popup-content_default');
+		} else {
+			helpContent = helpContent[0];
+		}
+		helpContent = helpContent.cloneNode(true);
+		helpContent.classList.remove('hidden');
+
+		// clear old help content
+		var helpPopupContentOld = document.getElementById('help_popup-content');
+		var helpPopupContent = helpPopupContentOld.cloneNode(false);
+		var helpPopup = helpPopupContentOld.parentNode;
+		helpPopup.replaceChild(helpPopupContent, helpPopupContentOld);
+
+		// apply new content
+		helpPopupContent.appendChild(helpContent);
 	}
 };
 
@@ -72,6 +93,7 @@ Page.prototype.refresh = function() {
 
 Page.prototype.show = function(arguments) {
 	this.view.style.display = 'block';
+	content.setHelpContent(this);
 
 	if (this.onenter != undefined) {
 		this.onenter(arguments);

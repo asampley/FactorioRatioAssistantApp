@@ -36,6 +36,7 @@
         <link rel="stylesheet" type="text/css" href="css/colors.css">
         <link rel="stylesheet" type="text/css" href="css/index.css">
         <link rel="stylesheet" type="text/css" href="css/button.css">
+        <link rel="stylesheet" type="text/css" href="css/popup.css">
         <link rel="stylesheet" type="text/css" href="css/border.css">
         <link rel="stylesheet" type="text/css" href="css/content.css">
         <link rel="stylesheet" type="text/css" href="css/main_menu.css">
@@ -70,6 +71,26 @@
                         <img class="icon" src="img/main_menu/button-machine_levels.png"/>
                     </button>
                 </li>
+
+                <button id="button-help" class="button-back">
+                    <img class="icon" src="img/help.svg"/>
+                </button>
+            </div>
+
+            <div id="help_popup" class="popup hidden">
+
+                <div>
+                    <div id="help_popup-content">
+
+                    </div>
+                    <div id="help_popup-content_default" class="help hidden">
+                        This is the default help text. Sorry that this isn't very
+                        helpful. Hopfully this will be remedied in the near future.
+                    </div>
+                    <button id="help_popup-button_close">
+                        Close
+                    </button>
+                </div>
             </div>
 
             <div class="content">
@@ -90,11 +111,53 @@
                         <img class="icon" src="img/main_menu/button-mod_versions.png"/>
                         Mod Versions
                     </button>
+
+                    <div class="help hidden">
+                        <p>
+                            Welcome to the Factorio Ratio Assistant. This is the main menu.
+                            From here, you can calculate a crafting ratio (
+                            <img class="icon" src="img/main_menu/button-ratio.png"/>
+                            ), change some ingredients to be ignored by the ratio calculation, 
+                            a.k.a. "raw" (
+                            <img class="icon" src="img/main_menu/button-raw_materials.png"/>
+                            ), change the levels of machines used for the calculations (
+                            <img class="icon" src="img/main_menu/button-machine_levels.png"/>
+                            ), or change what mod versions you are using (
+                            <img class="icon" src="img/main_menu/button-mod_versions.png"/>
+                            ).
+                        </p>
+                        <p>
+                            For more information on what each of these sections does,
+                            click the help button (
+                            <img class="icon" src="img/help.svg"/>
+                            ) in each of the sections.
+                        </p>
+                    </div>
                 </div>
 
                 <div id="ratio_selection" class="hidden">
                     <div id="ratio_selection-item_buttons" class="grid">
 
+                    </div>
+
+                    <div class="help hidden">
+                        <p>
+                            From this page you can select what item you wish to see a crafting
+                            ratio for.
+                        </p>
+                        <p>
+                            Press any icon to see the crafting ratio for that item. It will tell
+                            you how many machines it will take to make them, and each of their
+                            components, and the components of those componets, etc.
+                        </p>
+                        <p>
+                            The calculation is done exactly using fractions. Any items that are
+                            not considered "raw" will have the lowest whole number of machines
+                            possible. For more information about "raw" items, look at the raw
+                            materials page (
+                            <img class="icon" src="img/main_menu/button-raw_materials.png"/>
+                            )
+                        </p>
                     </div>
                 </div>
 
@@ -122,6 +185,29 @@
                         <div class="tree-node-children hidden">
                         </div>
                     </div>
+
+                    <div class="help hidden">
+                        <p>
+                            On this page you can see the ratio for how many machines are needed for
+                            each component, and their components, etc. It also shows how many items
+                            will be produced per second by that number of machines, and the number
+                            of belts required to transport them.
+                        </p>
+                        <p>
+                            Press any row to show or hide the components of that item. You can also
+                            press the (
+                            <img class="icon" src="img/main_menu/button-raw_materials.png"/>
+                            ) button to quickly switch that item to "raw".
+                        </p>
+                        <p>
+                            The calculation is done exactly using fractions. Any items that are
+                            not considered "raw" will have the lowest whole number of machines
+                            possible. For more information about "raw" items, look at the raw
+                            materials page (
+                            <img class="icon" src="img/main_menu/button-raw_materials.png"/>
+                            ) by pressing the tab at the top.
+                        </p>
+                    </div>
                 </div>
                 
                 <div id="machine_level_selection" class="hidden">
@@ -134,16 +220,51 @@
                         </div> 
                     </div>
 
-
                     <button id="template-button-machine-level" class="hidden">
                         <img class="icon tree-node-machine-icon"></img>
                         <span class="tree-node-machine-name"></span>
                     </button>
+
+                    <div class="help hidden">
+                        <p>
+                            This page allows you to change what levels of machines you are using.
+                            It also has belt levels.
+                        </p>
+                        <p>
+                            Press any row to show or hide the available levels of that type of machine.
+                            Press any of the levels to select that level. The selected level appears
+                            in green.
+                        </p>
+                        <p>
+                            The different speeds of the machines affect the ratio calculation. For
+                            more information on the ratio calculation, go to the (
+                            <img class="icon" src="img/main_menu/button-ratio.png"/>
+                            ) tab.
+                        </p>
+                    </div>
                 </div>
 
                 <div id="raw_materials_selection" class="hidden">
                     <div id="raw_materials_selection-item_buttons" class="grid">
 
+                    </div>
+
+                    <div class="help hidden">
+                        <p>
+                            From this page you can select what items will be considered "raw" when
+                            calculating crafting ratios.
+                        </p>
+                        <p>
+                            Press any icon to toggle whether that item is "raw". The red buttons indicate
+                            raw ingredients. If an icon is semi-transparent, that indicates that there
+                            is no known crafting recipe for that item, and thus it must always be raw.
+                        </p>
+                        <p>
+                            Raw items do not need to have a whole number of machines making them for the
+                            ratio calculation. For more information on the ratio calculation, press the (
+                            <img class="icon" src="img/main_menu/button-ratio.png"/>
+                            ) tab.
+                        </p>
                     </div>
                 </div>
 
@@ -160,11 +281,28 @@
                         </div> 
                     </div>
 
-
                     <button id="template-button-mod-version" class="hidden">
                         <img class="icon tree-node-mod-version-icon"></img>
                         <span class="tree-node-mod-version-name"></span>
                     </button>
+
+                    <div class="help hidden">
+                        <p>
+                            From this page you can select which mod versions to use. Be aware that some mods
+                            may have dependancies, and will not load if their dependency does not have a version
+                            selected.
+                        </p>
+                        <p>
+                            Press a mod name to get a list of available versions. Press a version to select
+                            that version. Selected versions will appear in green.
+                        </p>
+                        <p>
+                            Be aware that for the ratio calculation to work properly, only one recipe can exist
+                            for a given item. For that reason, the base version of this has separated oil processing,
+                            uranium processing, and solid fuel crafting into their own pseudo-mods. This allows you
+                            to select which recipes for those specific items will be used.
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -188,6 +326,7 @@
 
         <script type="text/javascript" src="js/index.js"></script>
         <script type="text/javascript" src="js/border.js"></script>
+        <script type="text/javascript" src="js/help_popup.js"></script>
         <script type="text/javascript" src="js/content.js"></script>
         <script type="text/javascript" src="js/pages/pages.js"></script>
         <script type="text/javascript" src="js/main_menu.js"></script>

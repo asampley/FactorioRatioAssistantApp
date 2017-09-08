@@ -5,6 +5,11 @@ document.addEventListener(
 			cordova.fireDocumentEvent('backbutton');
 		}
 
+        document.getElementById('button-help').onclick = function() {
+            var helpPanel = document.getElementById('help_popup');
+            helpPanel.classList.remove('hidden');
+        }
+
 		var ratioButton = document.getElementById('tab-ratio');
         ratioButton.onclick = function() {
         	content.switchToPage('ratio_selection');
