@@ -77,19 +77,21 @@
                 </button>
             </div>
 
-            <div id="help_popup" class="popup hidden">
+            <div id="popup_overlay" class="overlay hidden">
+                <div id="help_popup" class="popup hidden">
 
-                <div>
-                    <div id="help_popup-content">
+                    <div>
+                        <div class="popup-content" id="help_popup-content">
 
+                        </div>
+                        <div id="help_popup-content_default" class="help hidden">
+                            This is the default help text. Sorry that this isn't very
+                            helpful. Hopfully this will be remedied in the near future.
+                        </div>
+                        <button id="help_popup-button_close">
+                            Close
+                        </button>
                     </div>
-                    <div id="help_popup-content_default" class="help hidden">
-                        This is the default help text. Sorry that this isn't very
-                        helpful. Hopfully this will be remedied in the near future.
-                    </div>
-                    <button id="help_popup-button_close">
-                        Close
-                    </button>
                 </div>
             </div>
 

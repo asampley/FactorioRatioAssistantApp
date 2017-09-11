@@ -7,7 +7,9 @@ document.addEventListener(
 
         document.getElementById('button-help').onclick = function() {
             var helpPanel = document.getElementById('help_popup');
+            var helpOverlay = document.getElementById('popup_overlay');
             helpPanel.classList.remove('hidden');
+            helpOverlay.classList.remove('hidden');
         }
 
 		var ratioButton = document.getElementById('tab-ratio');
