@@ -1,6 +1,8 @@
 .border {
 	box-sizing: border-box;
 	position: relative;
+	display: flex;
+	flex-direction: column;
 	background-color: var(--color-border);
 	color: #0000000;
 	width: 100%;

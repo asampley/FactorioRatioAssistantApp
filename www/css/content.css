@@ -4,13 +4,11 @@
 
 	box-sizing: border-box;
 	background-color: var(--color-background);
-	min-width: 100%;
-	width: auto;
-	height: 100%;
 	margin: 0px;
 	padding: 2px;
 
 	overflow: auto;
+	flex-grow: 1;
 }
 
 .hidden {
