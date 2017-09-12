@@ -11,6 +11,8 @@
 }
 
 .border-top-bar {
+	flex-grow: 0;
+	flex-shrink: 0;
 	box-sizing: border-box;
 	display: inline-flex;
 	width: 100%;
