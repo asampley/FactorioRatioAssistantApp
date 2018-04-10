@@ -1,2 +1,2 @@
 cordova build browser &&
-sudo rsync -r platforms/browser/www/ /var/www
+sudo rsync -r platforms/browser/www/ /var/www/factorio/
