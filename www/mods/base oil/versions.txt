@@ -1,4 +1,0 @@
-advanced 0.15
-basic 0.15
-cracking 0.15
-liquifaction 0.15

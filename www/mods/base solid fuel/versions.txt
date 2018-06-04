@@ -1,3 +1,0 @@
-heavy oil 0.15
-light oil 0.15
-petroleum gas 0.15

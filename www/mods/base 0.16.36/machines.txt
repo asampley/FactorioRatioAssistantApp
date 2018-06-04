@@ -1,0 +1,13 @@
+{
+	"assembling-machine-1": { "crafting_categories": [ "crafting" ] },
+	"assembling-machine-2": { "crafting_categories": [ "crafting", "advanced-crafting", "crafting-with-fluid" ] },
+	"assembling-machine-3": { "crafting_categories": [ "crafting", "advanced-crafting", "crafting-with-fluid" ] },
+	"centrifuge": { "crafting_categories": [ "centrifuging" ] },
+	"chemical-plant": { "crafting_categories": [ "chemistry" ] },
+	"electric-furnace": { "crafting_categories": [ "smelting" ] },
+	"oil-refinery": { "crafting_categories": [ "oil-processing" ] },
+	"player": { "crafting_categories": [ "crafting" ] },
+	"rocket-silo": { "crafting_categories": [ "rocket-building" ] },
+	"steel-furnace": { "crafting_categories": [ "smelting" ] },
+	"stone-furnace": { "crafting_categories": [ "smelting" ] }
+}

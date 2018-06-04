@@ -1,4 +1,1 @@
-base
-base oil
-base solid fuel
-base uranium
+base 0.16.36
