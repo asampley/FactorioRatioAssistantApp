@@ -1,6 +1,5 @@
 /silent-command
 write_table = function (file_name, table_to_write)
-	table.sort(table_to_write)
 	output = "{\r\n\t" .. table.concat(table_to_write, ",\r\n\t") .. "\r\n}\r\n"
 	game.write_file(file_name, output)
 end
