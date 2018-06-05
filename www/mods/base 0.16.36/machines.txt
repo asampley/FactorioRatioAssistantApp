@@ -1,13 +1,13 @@
 {
-	"assembling-machine-1": { "crafting_categories": [ "crafting" ] },
-	"assembling-machine-2": { "crafting_categories": [ "crafting", "advanced-crafting", "crafting-with-fluid" ] },
-	"assembling-machine-3": { "crafting_categories": [ "crafting", "advanced-crafting", "crafting-with-fluid" ] },
-	"centrifuge": { "crafting_categories": [ "centrifuging" ] },
-	"chemical-plant": { "crafting_categories": [ "chemistry" ] },
-	"electric-furnace": { "crafting_categories": [ "smelting" ] },
-	"oil-refinery": { "crafting_categories": [ "oil-processing" ] },
-	"player": { "crafting_categories": [ "crafting" ] },
-	"rocket-silo": { "crafting_categories": [ "rocket-building" ] },
-	"steel-furnace": { "crafting_categories": [ "smelting" ] },
-	"stone-furnace": { "crafting_categories": [ "smelting" ] }
+	"assembling-machine-1": { "speed":0.5, "crafting_categories": [ "crafting" ] },
+	"assembling-machine-2": { "speed":0.75, "crafting_categories": [ "crafting", "advanced-crafting", "crafting-with-fluid" ] },
+	"assembling-machine-3": { "speed":1.25, "crafting_categories": [ "crafting", "advanced-crafting", "crafting-with-fluid" ] },
+	"centrifuge": { "speed":0.75, "crafting_categories": [ "centrifuging" ] },
+	"chemical-plant": { "speed":1.25, "crafting_categories": [ "chemistry" ] },
+	"electric-furnace": { "speed":2, "crafting_categories": [ "smelting" ] },
+	"oil-refinery": { "speed":1, "crafting_categories": [ "oil-processing" ] },
+	"player": { "speed":1, "crafting_categories": [ "crafting" ] },
+	"rocket-silo": { "speed":1, "crafting_categories": [ "rocket-building" ] },
+	"steel-furnace": { "speed":2, "crafting_categories": [ "smelting" ] },
+	"stone-furnace": { "speed":1, "crafting_categories": [ "smelting" ] }
 }

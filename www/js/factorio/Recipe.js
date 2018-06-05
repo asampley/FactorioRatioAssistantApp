@@ -1,14 +1,9 @@
-factorio.Recipe = function(machineClass, outputItemName, outputAmount, time, inputItemsNames, inputAmounts) {
-	this.machineClass = machineClass; /* MachineClass */
-	this.output = {}; /* Item Name: Fraction */
-	this.output[outputItemName] = outputAmount;
-	this.time = time; /* Fraction */
-	this.inputs = {}; /* Item Name: Fraction */
-
-	assert(inputItemsNames.length == inputAmounts.length, "Number of inputs and amounts do not add up");
-	for (var i = 0; i < inputItemsNames.length; ++i) {
-		this.inputs[inputItemsNames[i]] = inputAmounts[i];
-	}
+factorio.Recipe = function(json) {
+	this.category = json.category; /* MachineClass */
+	assert(json.products.length == 1, "Only recipes with one output are currently supported")
+	this.output = json.products[0]; /* { name : amount (fraction) } */
+	this.energy = new Fraction(json.energy); /* Fraction */
+	this.inputs = json.ingredients; /* [ { name : amount (fraction) }, ... ] */
 }
 
 factorio.Recipe.prototype.toString = function() {
@@ -29,5 +24,5 @@ factorio.Recipe.prototype.outputCountPerSec = function() {
 }
 
 factorio.Recipe.prototype.inputItems = function() {
-	return Object.keys(this.inputs);
+	return this.inputs.map( input => Object.keys(input)[0] );
 }

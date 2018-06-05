@@ -14,7 +14,7 @@ factorio.Environment.prototype.addRecipe = function(recipe) {
 	outputItem = recipe.outputItem();
 	inputItems = recipe.inputItems();
 
-	assert(this.hasItem(outputItem), "No such item: " + outputItem);
+	assert(this.hasItem(outputItem), "No such item: \"" + outputItem + "\"");
 	for (var i = 0; i < inputItems.length; ++i) {
 		assert(this.hasItem(inputItems[i]), "No such item: " + inputItems[i]);
 	}

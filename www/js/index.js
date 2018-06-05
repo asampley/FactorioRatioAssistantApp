@@ -19,21 +19,22 @@
 var app = {
 	// Application Constructor
 	initialize: function() {
-		this.modLoader = new ModLoader({base: {version: '0.15', dependencies: []}}, this.onModsLoaded.bind(this));
+		this.modLoader = new ModLoader('base 0.16.36', this.onModLoaded.bind(this));
 		this.factorioEnvironment = this.modLoader.environment();
 		this.ratioSolver = new factorio.RatioSolver(this.factorioEnvironment);
 		document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
 		document.addEventListener('fileutilready', this.onFileUtilReady.bind(this), false)
 	},
 
-	reloadMods: function() {
+	reloadMod: function() {
 		this.modLoader.reset();
 		this.factorioEnvironment = this.modLoader.environment();
 		this.ratioSolver = new factorio.RatioSolver(this.factorioEnvironment);
 		this.preferences.ratioSolver = this.ratioSolver;
-		this.preferences.mods = this.modLoader.mods;
+		this.preferences.mod = this.modLoader.mod;
+		console.log('Firing "modsunloaded" event');
 		cordova.fireDocumentEvent('modsunloaded');
-		this.modLoader.loadMods();
+		this.modLoader.loadMod();
 	},
 
 	// deviceready Event Handler
@@ -41,10 +42,12 @@ var app = {
 	// Bind any cordova events here. Common events are:
 	// 'pause', 'resume', etc.
 	onDeviceReady: function() {
+		console.log('Recieved "deviceready" event');
 		this.receivedEvent('deviceready');
 	},
 
-	onModsLoaded: function() {
+	onModLoaded: function() {
+		console.log('Firing "modsloaded" event');
 		cordova.fireDocumentEvent('modsloaded');
 		this.preferences.apply();
 		console.log("Applied preferences");
@@ -57,12 +60,12 @@ var app = {
 				self.preferences = pref;
 				self.modLoader.mods = pref.mods;
 				console.log("Loaded preferences " + self.preferences);
-				self.reloadMods();
+				self.reloadMod();
 			},
 			function(error) {
-				console.error("Could not access preferences.json: " + error);
+				console.warn("Could not access preferences.json: " + error);
 				self.preferences = new Preferences(self.ratioSolver, "preferences.json");
-				self.reloadMods();
+				self.reloadMod();
 			}
 		);
 	},

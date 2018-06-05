@@ -19,7 +19,10 @@ var fileutil = {
 		);
 	},
 
-	readText: function(path, fText, eText) {
+	readText: function(path, 
+		fText = function(text) {console.log(text)}, 
+		eText = function(error) {console.log(error)}) 
+	{
 		var request = new XMLHttpRequest();
 		request.open("GET", path, true);
 		request.onreadystatechange = function() {

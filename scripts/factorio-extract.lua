@@ -46,13 +46,17 @@ write_table("fluids.txt", list_fluids)
 list_machines = {}
 for a, b in pairs(game.entity_prototypes) do
 	if b.crafting_categories then
-		machine = "\"" .. b.name .. "\": { "
+		speed = b.crafting_speed
+		if not speed then
+			speed = 1
+		end
+		machine = "\"" .. b.name .. "\": { \"speed\":" .. speed
 
 		list_categories = {}
 		for c,d in pairs(b.crafting_categories) do
 			table.insert(list_categories, c)
 		end
-		machine = machine .. "\"crafting_categories\": [ \"" .. table.concat(list_categories, "\", \"") .. "\" ] }"
+		machine = machine .. ", \"crafting_categories\": [ \"" .. table.concat(list_categories, "\", \"") .. "\" ] }"
 
 		table.insert(list_machines, machine)
 	end

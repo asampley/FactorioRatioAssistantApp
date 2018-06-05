@@ -1,8 +1,8 @@
-var ModLoader = function(mods, onModsLoaded = function(){}) {
-	this.mods = mods;
+var ModLoader = function(mod, onModLoaded = function(){}) {
+	this.mod = mod;
 	this.modStatus = {};
 
-	this.onModsLoaded = onModsLoaded;
+	this.onModLoaded = onModLoaded;
 
 	this.reset();
 }
@@ -11,333 +11,189 @@ ModLoader.prototype.reset = function() {
 	this._environment = new factorio.Environment();
 	this.modStatus = {};
 
-	for (var modName in this.mods) {
-		this.modStatus[modName] = {
-			overall: 0,
-			items: 0,
-			machines: {status : 0},
-			recipes: {status : 0},
-			belts: {status : 0}
-		}
+	this.modStatus = {
+		overall: 0,
+		items: 0,
+		fluids: 0,
+		machines: 0,
+		recipes: 0,
+		belts: 0
 	}
 }
 
 ModLoader.prototype.environment = function() { return this._environment }
 
-ModLoader.prototype.loadMods = function() {
-	for (var modName in this.mods) {
-		this.loadMod(modName, this.mods[modName]);
-	}
-}
-
-ModLoader.prototype.loadMod = function(modName) {
+ModLoader.prototype.loadMod = function() {
 	this.updateModStatusAndContinue();
 }
 
-ModLoader.prototype.dependenciesLoaded = function(modName) {
-	var dependencies = this.mods[modName].dependencies;
-	for (var i = 0; i < dependencies.length; ++i) {
-		var dependency = dependencies[i];
-		if (!(dependency in this.mods)
-			|| this.modStatus[dependency].overall != 2
-		) {
-			return false;
-		}
-	}
-	return true;
-}
-
 ModLoader.prototype.updateModStatusAndContinue = function() {
-	for (var modName in this.mods) {
-		var modVersion = this.mods[modName].version;
-		var modString = modName + ' ' + modVersion;
+	if (this.modStatus.items == 0) {
+		console.log('Loading items from ' + this.mod);
+		this.loadItems();
+	}
+	if (this.modStatus.fluids == 0) {
+		console.log('Loading fluids from ' + this.mod);
+		this.loadFluids();
+	}
+	if (this.modStatus.machines == 0) {
+		console.log('Loading machines from ' + this.mod);
+		this.loadMachines();
+	}
+	if (this.modStatus.recipes == 0 
+		&& this.modStatus.items == 2
+	        && this.modStatus.fluids == 2	
+		&& this.modStatus.machines == 2) {
+		console.log('Loading recipes from ' + this.mod);
+		this.loadRecipes();
+	}
+	if (this.modStatus.belts == 0) {
+		console.log('Loading belts from ' + this.mod);
+		this.loadBelts();
+	}
+	if (this.modStatus.recipes == 2
+		&& this.modStatus.items == 2 
+		&& this.modStatus.fluids == 2
+		&& this.modStatus.machines == 2
+		&& this.modStatus.belts == 2
+		&& this.modStatus.overall != 2) {
+		this.modStatus.overall = 2;
+		console.log('Done loading mod ' + this.mod);
 
-		if (!(modName in this.modStatus)) {
-			this.modStatus[modName] = {
-				overall: 0,
-				items: 0,
-				machines: {status : 0},
-				recipes: {status : 0},
-				belts: {status : 0}
-			}
-		}
-
-		if (modVersion == 'none'
-			&& this.modStatus[modName].overall != 2) {
-			console.log('Skipping mod ' + modName + ' with version ' + modVersion);
-			this.modStatus[modName].items = 2;
-			this.modStatus[modName].machines.status = 2;
-			this.modStatus[modName].recipes.status = 2;
-			this.modStatus[modName].belts.status = 2;
-			this.modStatus[modName].overall = 2;
-		}
-
-		if (this.modStatus[modName].items == 0
-			&& this.dependenciesLoaded(modName)) {
-			console.log('Loading items from ' + modString);
-			this.loadItemsFromMod(modName, modVersion);
-		}
-		if (this.modStatus[modName].machines.status == 0
-			&& this.dependenciesLoaded(modName)) {
-			console.log('Loading machines from ' + modString);
-			this.loadMachineClassesFromMod(modName, modVersion);
-		}
-		if (this.modStatus[modName].recipes.status == 0 
-			&& this.modStatus[modName].items == 2 
-			&& this.modStatus[modName].machines.status == 2) {
-			console.log('Loading recipes from ' + modString);
-			this.loadRecipesFromMod(modName, modVersion);
-		}
-		if (this.modStatus[modName].belts.status == 0) {
-			console.log('Loading belts from ' + modString);
-			this.loadBeltsFromMod(modName, modVersion);
-		}
-		if (this.modStatus[modName].recipes.status == 2
-			&& this.modStatus[modName].items == 2 
-			&& this.modStatus[modName].machines.status == 2
-			&& this.modStatus[modName].belts.status == 2
-			&& this.modStatus[modName].overall != 2) {
-			this.modStatus[modName].overall = 2;
-			console.log('Done loading mod ' + modString);
-
-			var done = true;
-			for (var modName in this.modStatus) {
-				if (this.modStatus[modName].overall != 2) {
-					done = false;
-					break;
-				}
-			}
-
-			if (done) {
-				this.onModsLoaded();
-			}
-		}
-}
+		this.onModLoaded();
+	}
 }
 
-ModLoader.prototype.loadItemsFromMod = function(modName, modVersion) {
+ModLoader.prototype.loadItems = function() {
 	var self = this;
 	
-	self.modStatus[modName].items = 1;
+	self.modStatus.items = 1;
 	self.updateModStatusAndContinue();
 
 	fileutil.readTextAppWWW(
-		'mods/' + modName + '/' + modVersion + '/items.txt', 
+		'mods/' + self.mod + '/items.txt', 
 		function(text) {
-			var lines = text.split('\n');
-			for (var i = 0; i < lines.length; ++i) {
-				var item = lines[i].trim();
-				if (item.length == 0) continue;
-				self._environment.addItem(item, 'mods/' + modName + '/img/' + item + '.png');
+			var items = JSON.parse(text);
+			for (var item in items) {
+				self._environment.addItem(item, 'mods/' + self.mod + '/img/' + item + '.png');
 			}
 
-			self.modStatus[modName].items = 2;
+			self.modStatus.items = 2;
 			self.updateModStatusAndContinue();
 		},
 		function(error) {
 			console.log(error);
-			self.modStatus[modName].items = 2;
+			self.modStatus.items = 2;
 			self.updateModStatusAndContinue();
 		}
 	);
 }
 
-ModLoader.prototype.loadMachineClassesFromMod = function(modName, modVersion) {
+ModLoader.prototype.loadFluids = function() {
 	var self = this;
-	self.modStatus[modName].machines.status = 1;
+	
+	self.modStatus.fluids = 1;
 	self.updateModStatusAndContinue();
 
 	fileutil.readTextAppWWW(
-		'mods/' + modName + '/' + modVersion + '/machines.txt',
+		'mods/' + self.mod + '/fluids.txt', 
 		function(text) {
-			var lines = text.split('\n');
-
-			var nMachines = 0;
-			var machineDef = [];
-
-			for (var i = 0; i < lines.length; ++i) {
-				var line = lines[i].trim();
-				if (line.length == 0) continue;
-
-				++nMachines;
-
-				machineDef.push([modName, modVersion, line]);
+			var fluids = JSON.parse(text);
+			for (var fluid in fluids) {
+				self._environment.addItem(fluid, 'mods/' + self.mod + '/img/' + fluid + '.png');
 			}
 
-			self.modStatus[modName].machines.done = 0;
-			self.modStatus[modName].machines.total = nMachines;
+			self.modStatus.fluids = 2;
+			self.updateModStatusAndContinue();
+		},
+		function(error) {
+			console.log(error);
+			self.modStatus.fluids = 2;
+			self.updateModStatusAndContinue();
+		}
+	);
+}
 
-			if (nMachines == 0) {
-				self.modStatus[modName].machines.status = 2;
-				self.updateModStatusAndContinue();
-			} else {
-				for (var i = 0; i < machineDef.length; ++i) {
-					self.loadMachineClassFromMod.apply(self, machineDef[i]);
+ModLoader.prototype.loadMachines = function() {
+	var self = this;
+	self.modStatus.machines = 1;
+	self.updateModStatusAndContinue();
+
+	fileutil.readTextAppWWW(
+		'mods/' + self.mod + '/machines.txt',
+		function(text) {
+			var machines = JSON.parse(text);
+
+			category_machines = {}
+			for (var mname in machines) {
+				for (var categoryi in machines[mname].crafting_categories) {
+					category = machines[mname].crafting_categories[categoryi]
+					if (!(category in category_machines)) {
+						category_machines[category] = { names: [], speeds: [] };
+					}
+					category_machines[category].names.push(mname);
+					category_machines[category].speeds.push(machines[mname].speed);
 				}
 			}
+
+
+			for (var category in category_machines) {
+				var machineClass = new factorio.MachineClass(category, category_machines[category].names, category_machines[category].speeds);
+				self._environment.addMachineClass(machineClass)
+			}
+
+			self.modStatus.machines = 2;
+			self.updateModStatusAndContinue();
 		},
 		function(error) {
 			console.log(error);
-			self.modStatus[modName].machines.status = 2;
+			self.modStatus.machines = 2;
 			self.updateModStatusAndContinue();
 		}
 	);
 }
 
-ModLoader.prototype.loadMachineClassFromMod = function(modName, modVersion, machineName) {
+ModLoader.prototype.loadRecipes = function() {
 	var self = this;
-	var machineClassPath = 'mods/' + modName + '/' + modVersion + '/machine/' + machineName;
-	fileutil.readTextAppWWW(
-		machineClassPath,
-		function(text) {
-			var lines = text.split('\n');
-
-			var names = [];
-			var speeds = [];
-
-			for (var i = 0; i < lines.length; ++i) {
-				var line = lines[i].trim();
-				if (line.length == 0) continue;
-
-				var split = line.split(':');
-				assert(split.length == 2, "Invalid Syntax: No ':' on line " + i + " of " + machineClassPath);
-
-				names.push(split[0].trim());
-				speeds.push(Fraction.parse(split[1].trim()));
-			}
-
-			var machineClass = new factorio.MachineClass(machineName, names, speeds);
-			self._environment.addMachineClass(machineClass);
-
-			++self.modStatus[modName].machines.done;
-			if (self.modStatus[modName].machines.total == self.modStatus[modName].machines.done){
-				self.modStatus[modName].machines.status = 2;
-				self.updateModStatusAndContinue();
-			}
-		},
-		function(error) {
-			console.log(error);
-		}
-	);
-}
-
-ModLoader.prototype.loadRecipesFromMod = function(modName, modVersion) {
-	var self = this;
-	var recipesPath = 'mods/' + modName + '/' + modVersion + '/recipes.txt';
-	self.modStatus[modName].recipes.status = 1;
+	var recipesPath = 'mods/' + this.mod + '/recipes.txt';
+	self.modStatus.recipes = 1;
 	self.updateModStatusAndContinue();
 
 	fileutil.readTextAppWWW(
 		recipesPath,
 		function(text) {
-			var lines = text.split('\n');
+			var recipes = JSON.parse(text);
 
-			var machineName = null;
-
-			var nRecipes = 0;
-
-			recipeDef = [];
-			for (var i = 0; i < lines.length; ++i) {
-				var line = lines[i].trim();
-				if (line.length == 0) continue;
-
-				if (line.startsWith('#')) {
-					machineName = line.substring(1).trim();
-					assert(self._environment.hasMachineClass(machineName), "Invalid machine name: " + machineName + " in " + recipesPath);
+			for (var rname in recipes) {
+				if (recipes[rname].products.length != 1) {
 					continue;
 				}
-
-				assert(machineName != null, "Invalid Syntax in '" + recipesPath + "': No machine specified at start.");
-
-				++nRecipes;
-
-				recipeDef.push([modName, modVersion, machineName, line]);
+				self._environment.addRecipe( new factorio.Recipe(recipes[rname]) );
 			}
 
-			self.modStatus[modName].recipes.done = 0;
-			self.modStatus[modName].recipes.total = nRecipes;
-
-			if (nRecipes == 0) {
-				self.modStatus[modName].recipes.status = 2;
-				self.updateModStatusAndContinue();
-			} else {
-				for (var i = 0; i < recipeDef.length; ++i) {
-					self.loadRecipeFromMod.apply(self, recipeDef[i]);
-				}
-			}
+			self.modStatus.recipes = 2;
+			self.updateModStatusAndContinue();
 		},
 		function(error) {
 			console.log(error);
-			self.modStatus[modName].recipes.status = 2;
+			self.modStatus.recipes = 2;
 			self.updateModStatusAndContinue();
 		}
 	);
 }
 
-ModLoader.prototype.loadRecipeFromMod = function(modName, modVersion, machineName, outputName) {
+ModLoader.prototype.loadBelts = function() {
 	var self = this;
-	var path = 'mods/' + modName + '/' + modVersion + '/recipes/' + machineName + '/' + outputName;
-	fileutil.readTextAppWWW(
-		path,
-		function(text) {
-			var lines = text.split('\n');
-			var time = Fraction.parse(lines[0]);
+	var beltsFile = 'mods/' + this.mod + '/belts.txt';
 
-			var outputLineParts = lines[1].split(':');
-			assert(outputLineParts.length >= 2, "Invalid Syntax: No ':' found in " + path + " line 1");
-
-			var outputItem = outputLineParts[0].trim();
-			var outputCount = Fraction.parse(outputLineParts[1].trim());
-
-			var inputItems = [];
-			var inputAmounts = [];
-			for (var i = 2; i < lines.length; ++i) {
-				var line = lines[i].trim();
-				if (line.length == 0) continue;
-
-				var split = line.split(':');
-
-				assert(split.length >= 2, "Invalid Syntax: No ':' found in " + path + " line" + i);
-				inputItems.push(split[0].trim());
-				inputAmounts.push(Fraction.parse(split[1]));
-			}
-
-			try {
-				self._environment.addRecipe(
-					new factorio.Recipe(
-						self._environment.getMachineClass(machineName),
-						outputItem,
-						outputCount,
-						time,
-						inputItems,
-						inputAmounts
-					)
-				);
-			} catch (error) {
-				console.error("Error in '" + path + "': " + error);
-			}
-
-			++self.modStatus[modName].recipes.done;
-			if (self.modStatus[modName].recipes.done == self.modStatus[modName].recipes.total) {
-				self.modStatus[modName].recipes.status = 2;
-				self.updateModStatusAndContinue();
-			}
-		},
-		function(error) {
-			console.log(error);
-		}
-	);
-}
-
-ModLoader.prototype.loadBeltsFromMod = function(modName, modVersion) {
-	var self = this;
-	var beltsFile = 'mods/' + modName + '/' + modVersion + '/belts.txt';
-
-	self.modStatus[modName].belts.status = 1;
+	self.modStatus.belts = 1;
 
 	fileutil.readTextAppWWW(
 		beltsFile,
 		function(text) {
+			// TODO
+
+			/*
 			var lines = text.split('\n');
 
 			var names = [];
@@ -356,12 +212,13 @@ ModLoader.prototype.loadBeltsFromMod = function(modName, modVersion) {
 				var belt = new factorio.Belt(name, itemsPerSec);
 				self.environment().addBelt(belt);
 			}
+			*/
 
-			self.modStatus[modName].belts.status = 2;
+			self.modStatus.belts = 2;
 			self.updateModStatusAndContinue();
 		},
 		function(error) {
-			self.modStatus[modName].belts.status = 2;
+			self.modStatus.belts = 2;
 			self.updateModStatusAndContinue();
 		}
 	);

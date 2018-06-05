@@ -272,34 +272,25 @@
                         <button class="tree-node-button">
                             <img class="icon tree-node-mod-icon"></img>
                             <span class="tree-node-mod-name"></span>
-                            <span>(</span>
-                            <span class="tree-node-mod-version-name"></span>
-                            <span>)</span>
                         </button>
-                        <div class="hidden tree-node-children">
-                        </div> 
                     </div>
-
-                    <button id="template-button-mod-version" class="hidden">
-                        <img class="icon tree-node-mod-version-icon"></img>
-                        <span class="tree-node-mod-version-name"></span>
-                    </button>
 
                     <div class="help hidden">
                         <p>
-                            From this page you can select which mod versions to use. Be aware that some mods
-                            may have dependancies, and will not load if their dependency does not have a version
-                            selected.
+                            From this page you can select which mod to use. The term mod here is not exactly the
+			    same as the Factorio definition, but each is rather a collection of "Factorio mods".
                         </p>
                         <p>
-                            Press a mod name to get a list of available versions. Press a version to select
-                            that version. Selected versions will appear in green.
+                            Press a mod name to select that mod. Be aware that recipes with multiple outputs or
+			    multiple recipes that produce the same item will be ignored.
                         </p>
                         <p>
-                            Be aware that for the ratio calculation to work properly, only one recipe can exist
-                            for a given item. For that reason, the base version of this has separated oil processing,
-                            uranium processing, and solid fuel crafting into their own pseudo-mods. This allows you
-                            to select which recipes for those specific items will be used.
+			    To create a new mod, start a new game with your desired mod configuration, and then copy the script found
+			    at  
+			    <a href="https://github.com/asampley/FactorioRatioAssistantApp/blob/master/scripts/factorio-extract.lua">
+				https://github.com/asampley/FactorioRatioAssistantApp/blob/master/scripts/factorio-extract.lua
+			    </a>
+			    into the console.
                         </p>
                     </div>
                 </div>

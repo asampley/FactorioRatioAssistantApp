@@ -109,7 +109,7 @@ factorio.RatioSolver.prototype.solveRecurse = function(item, itemPerSec) {
 		}
 	} else {
 		var mc = recipe.machineClass;
-		var machine = new factorio.Machine(mc, this.machineLevels[mc.className], recipe);
+		var machine = new factorio.Machine(category, this.machineLevels[mc.className], recipe);
 		//var machine = new factorio.Machine(mc, 0, recipe);
 		var machineCount = itemPerSec.divide(machine.outputCountPerSec());
 		var tree = new Tree({

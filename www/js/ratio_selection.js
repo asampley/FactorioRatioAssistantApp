@@ -37,7 +37,10 @@ document.addEventListener(
 						buttonIcons = button.getElementsByClassName('icon');
 
 						for (var iconI = 0; iconI < buttonIcons.length; ++iconI) {
-							buttonIcons[iconI].onerror = function() {this.onerror = null; this.src = 'img/default.png'};
+							buttonIcons[iconI].onerror = function() {
+								console.warn('Unable to find ' + this.src);
+								this.onerror = null; 
+								this.src = 'img/default.png'};
 							buttonIcons[iconI].src = itemImgPath;
 						}
 

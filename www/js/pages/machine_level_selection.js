@@ -4,6 +4,7 @@ pages.machine_level_selection = {
 };
 
 pages.machine_level_selection.addMachineClassFunc = function(machineClass) {
+	console.log('Adding machine class button ' + machineClass);
 	if (machineClass instanceof factorio.MachineClass) {
 
 	} else if (machineClass instanceof factorio.Belt) {
