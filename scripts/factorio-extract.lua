@@ -12,16 +12,16 @@ for a, b in pairs(game.recipe_prototypes) do
 	list_products = {}
 	for c,d in pairs (b.products) do
 		if d.amount ~= nil then
-			table.insert(list_products, "{ \"" .. d.name .. "\":" .. d.amount .. " }")
+			table.insert(list_products, "\"" .. d.name .. "\":" .. d.amount)
 		end
 	end
-	recipe = recipe .. ", \"products\": [ " .. table.concat(list_products, ", ") .. " ]"
+	recipe = recipe .. ", \"products\": { " .. table.concat(list_products, ", ") .. " }"
 
 	list_ingredients = {}
 	for x,y in pairs (b.ingredients) do
-		table.insert(list_ingredients, "{ \"" .. y.name .. "\":" .. y.amount .. " }")
+		table.insert(list_ingredients, "\"" .. y.name .. "\":" .. y.amount)
 	end
-	recipe = recipe .. ", \"ingredients\": [ " .. table.concat(list_ingredients, ", ") .. " ] }"
+	recipe = recipe .. ", \"ingredients\": { " .. table.concat(list_ingredients, ", ") .. " } }"
 	table.insert(list_recipes, recipe)
 end
 write_table("recipes.txt", list_recipes)
