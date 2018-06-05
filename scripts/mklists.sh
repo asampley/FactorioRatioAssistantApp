@@ -18,3 +18,6 @@ for modPath in "${baseDir}"/*; do
 	echo "Mod: ${mod}"
 	echo "${mod}" >> "${modsList}"
 done
+
+# sort by name first, and then version
+sort -k1,1 -k2Vr ${modsList} -o ${modsList}
