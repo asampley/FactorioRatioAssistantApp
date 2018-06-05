@@ -7,6 +7,16 @@ var ModLoader = function(mod, onModLoaded = function(){}) {
 	this.reset();
 }
 
+ModLoader.prototype.JSONparse = function(json) {
+	return JSON.parse(json, function (k, v) {
+		if (typeof v === 'number') {
+			return new Fraction(v);
+		} else {
+			return v;
+		}
+	});
+}
+
 ModLoader.prototype.reset = function() {
 	this._environment = new factorio.Environment();
 	this.modStatus = {};
@@ -73,7 +83,7 @@ ModLoader.prototype.loadItems = function() {
 	fileutil.readTextAppWWW(
 		'mods/' + self.mod + '/items.txt', 
 		function(text) {
-			var items = JSON.parse(text);
+			var items = self.JSONparse(text);
 			for (var item in items) {
 				self._environment.addItem(item, 'mods/' + self.mod + '/img/' + item + '.png');
 			}
@@ -98,7 +108,7 @@ ModLoader.prototype.loadFluids = function() {
 	fileutil.readTextAppWWW(
 		'mods/' + self.mod + '/fluids.txt', 
 		function(text) {
-			var fluids = JSON.parse(text);
+			var fluids = self.JSONparse(text);
 			for (var fluid in fluids) {
 				self._environment.addItem(fluid, 'mods/' + self.mod + '/img/' + fluid + '.png');
 			}
@@ -122,7 +132,7 @@ ModLoader.prototype.loadMachines = function() {
 	fileutil.readTextAppWWW(
 		'mods/' + self.mod + '/machines.txt',
 		function(text) {
-			var machines = JSON.parse(text);
+			var machines = self.JSONparse(text);
 
 			category_machines = {}
 			for (var mname in machines) {
@@ -162,7 +172,7 @@ ModLoader.prototype.loadRecipes = function() {
 	fileutil.readTextAppWWW(
 		recipesPath,
 		function(text) {
-			var recipes = JSON.parse(text);
+			var recipes = self.JSONparse(text);
 
 			for (var rname in recipes) {
 				if (recipes[rname].products.length != 1) {

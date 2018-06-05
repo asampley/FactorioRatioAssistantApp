@@ -2,7 +2,7 @@ factorio.Recipe = function(json) {
 	this.category = json.category; /* MachineClass */
 	assert(json.products.length == 1, "Only recipes with one output are currently supported")
 	this.output = json.products[0]; /* { name : amount (fraction) } */
-	this.energy = new Fraction(json.energy); /* Fraction */
+	this.energy = json.energy; /* Fraction */
 	this.inputs = json.ingredients; /* [ { name : amount (fraction) }, ... ] */
 }
 
@@ -15,12 +15,12 @@ factorio.Recipe.prototype.outputItem = function() {
 }
 
 factorio.Recipe.prototype.outputCount = function() {
-	return this.output[this.outputItem()];
+	return new Fraction(Object.values(this.output)[0]);
 }
 
 /* This may need to be multiplied by a machine speed to be accurate */
 factorio.Recipe.prototype.outputCountPerSec = function() {
-	return this.outputCount().divide(this.time);
+	return this.outputCount().div(this.energy);
 }
 
 factorio.Recipe.prototype.inputItems = function() {

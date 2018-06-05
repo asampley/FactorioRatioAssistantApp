@@ -9,7 +9,7 @@ factorio.Machine.prototype.speed = function() {
 }
 
 factorio.Machine.prototype.time = function() {
-	return this.recipe.time.divide(this.speed());
+	return this.recipe.time.div(this.speed());
 }
 
 factorio.Machine.prototype.toString = function() {
@@ -17,7 +17,7 @@ factorio.Machine.prototype.toString = function() {
 }
 
 factorio.Machine.prototype.outputCountPerSec = function() {
-	return this.recipe.outputCountPerSec().multiply(this.speed());
+	return this.recipe.outputCountPerSec().mul(this.speed());
 }
 
 factorio.Machine.prototype.name = function() {

@@ -4,5 +4,5 @@ factorio.Belt = function(name, itemsPerSec) {
 }
 
 factorio.Belt.prototype.numRequired = function(itemsPerSec) {
-	return itemsPerSec.divide(this.itemsPerSec);
+	return itemsPerSec.div(this.itemsPerSec);
 };

@@ -79,10 +79,10 @@ document.addEventListener(
 				var childrenElement = treeNode.getElementsByClassName('tree-node-children')[0];
 
 				treeNode.classList.remove('hidden');
-				outputInt = outputCountPerSec.toIntegerQuotient();
-				outputFrac = outputCountPerSec.toAbsRemainderFraction();
+				outputInt = outputCountPerSec.s * ~~(outputCountPerSec.n / outputCountPerSec.d); // magic
+				outputFrac = new Fraction(outputCountPerSec.n % outputCountPerSec.d, outputCountPerSec.d);
 				treeNode.getElementsByClassName('tree-node-item-pre-icon-int')[0].textContent = (outputInt == 0 ? "" : outputInt);
-				treeNode.getElementsByClassName('tree-node-item-pre-icon-frac')[0].textContent = (outputFrac.num == 0 ? "" : outputFrac);
+				treeNode.getElementsByClassName('tree-node-item-pre-icon-frac')[0].textContent = (outputFrac.n == 0 ? "" : outputFrac.toFraction());
 				treeNode.getElementsByClassName('tree-node-item-post-icon-text')[0].textContent = " / s";
 				var treeNodeIcon = treeNode.getElementsByClassName('tree-node-item-icon')[0];
 				treeNodeIcon.onerror = function() {this.onerror = null; this.src = 'img/default.png'};
@@ -91,20 +91,21 @@ document.addEventListener(
 					var treeNodeMachineIcon = treeNode.getElementsByClassName('tree-node-machine-icon')[0];
 					treeNodeMachineIcon.onerror = function() {this.onerror = null; this.src = 'img/default.png'};
 					treeNodeMachineIcon.src = machineIconPath;
-					machineInt = machineCount.toIntegerQuotient();
-					machineFrac = machineCount.toAbsRemainderFraction();
+					machineInt = machineCount.s * ~~(machineCount.n / machineCount.d); // magic
+					machineFrac = new Fraction(machineCount.n % machineCount.d, machineCount.d);
 					treeNode.getElementsByClassName('tree-node-machine-int')[0].textContent = (machineInt == 0 ? "" : machineInt);
-					treeNode.getElementsByClassName('tree-node-machine-frac')[0].textContent = (machineFrac.num == 0 ? "" : machineFrac);
+					treeNode.getElementsByClassName('tree-node-machine-frac')[0].textContent = (machineFrac.n == 0 ? "" : machineFrac.toFraction());
 				}
 				if (belt != null) {
 					var beltIconPath = app.factorioEnvironment.itemImgPaths[belt.name];
 					var treeNodeBeltIcon = treeNode.getElementsByClassName('tree-node-belt-icon')[0];
 					treeNodeBeltIcon.onerror = function() {this.onerror = null; this.src = 'img/default.png'};
 					treeNodeBeltIcon.src = beltIconPath;
-					beltInt = beltCount.toIntegerQuotient();
-					beltFrac = beltCount.toAbsRemainderFraction();
+					// TODO
+					beltInt = 0;
+					beltFrac = new Fraction(0);
 					treeNode.getElementsByClassName('tree-node-belt-int')[0].textContent = (beltInt == 0 ? "" : beltInt);
-					treeNode.getElementsByClassName('tree-node-belt-frac')[0].textContent = (beltFrac.num == 0 ? "" : beltFrac);
+					treeNode.getElementsByClassName('tree-node-belt-frac')[0].textContent = (beltFrac.n == 0 ? "" : beltFrac.toFraction());
 				}
 				if (app.ratioSolver.canSetUnraw(outputItem)) {
 					var treeNodeRawToggle = treeNode.getElementsByClassName('tree-node-raw-toggle')[0];
