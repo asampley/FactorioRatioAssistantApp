@@ -68,7 +68,7 @@ ModLoader.prototype.updateModStatusAndContinue = function() {
 		&& this.modStatus.belts == 2
 		&& this.modStatus.overall != 2) {
 		this.modStatus.overall = 2;
-		console.log('Done loading mod ' + this.mod);
+		console.log('Loaded mod ' + this.mod);
 
 		this.onModLoaded();
 	}
@@ -175,7 +175,7 @@ ModLoader.prototype.loadRecipes = function() {
 			var recipes = self.JSONparse(text);
 
 			for (var rname in recipes) {
-				if (recipes[rname].products.length != 1) {
+				if (Object.keys(recipes[rname].products).length != 1) {
 					continue;
 				}
 				self._environment.addRecipe( new factorio.Recipe(recipes[rname]) );

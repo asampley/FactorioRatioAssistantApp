@@ -109,7 +109,6 @@ factorio.RatioSolver.prototype.solveRecurse = function(item, itemPerSec) {
 		}
 	} else {
 		var mc = this.environment.machineClasses[recipe.category];
-		console.log(mc);
 		var machine = new factorio.Machine(mc, this.machineLevels[mc.className], recipe);
 		//var machine = new factorio.Machine(mc, 0, recipe);
 		var machineCount = itemPerSec.div(machine.outputCountPerSec());
@@ -132,10 +131,8 @@ factorio.RatioSolver.prototype.solveRecurse = function(item, itemPerSec) {
 			machineCounts.put(machine, machineCount);
 		}*/
 		
-		for (var i in recipe.inputs) {
-			item = Object.keys(recipe.inputs[i])[0];
-			persec = Object.values(recipe.inputs[i])[0];
-			var child = this.solveRecurse(item, itemPerSec.mul(persec).div(recipe.outputCount()));
+		for (var item in recipe.inputs) {
+			var child = this.solveRecurse(item, itemPerSec.mul(recipe.inputs[item]).div(recipe.outputCount()));
 			if (child != null) {
 				tree.addChild(child);
 			}
@@ -172,12 +169,12 @@ factorio.RatioSolver.prototype.perSecForWhole = function(item) {
 		machines = itemPerSec.mul(multiple).div(machine.outputCountPerSec());
 		multiple *= machines.d;
 
-		for (item in recipe.inputs) {
+		for (var item in recipe.inputs) {
 			var nextRecipe = this.getRecipe(item);
 
 			if (nextRecipe == null || this.isRaw(item)) continue;
 
-			var nextMc = nextRecipe.machineClass;
+			var nextMc = this.environment.machineClasses[nextRecipe.category];
 			var nextMachine = new factorio.Machine(nextMc, this.machineLevels[nextMc.className], nextRecipe);
 			//var nextMachine = new factorio.Machine(nextMc, 0, nextRecipe);
 			machinesToGo.push([nextMachine, itemPerSec.mul(recipe.inputs[item]).div(recipe.outputCount())])
