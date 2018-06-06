@@ -1,12 +1,13 @@
+pages.mod_selection = {
+	modButtons: {}
+}
+
 document.addEventListener(
 	'deviceready', 
 	function() {
 		var mainElement = document.getElementById('mod_selection');
 		var treeTemplate = document.getElementById('template-tree-node-mod');
 		var rootTreeNode = null;
-
-		var modButtons = {};
-		var versionButtons = {};
 
 		fileutil.readTextAppWWW('mods/mods.txt', function(text) {
 			var modNames = [];
@@ -28,19 +29,24 @@ document.addEventListener(
 
 				var modIcon = modSelector.getElementsByClassName('tree-node-mod-icon')[0];
 				modIcon.onerror = function() {this.onerror = null; this.src = 'img/default.png'};
-				//machineIcon.src = app.factorioEnvironment.itemImgPaths[machineClass.name(0)];
 				modSelector.getElementsByClassName('tree-node-mod-name')[0].textContent = modName;
-				modButtons[modName] = modSelector;
+				pages.mod_selection.modButtons[modName] = modSelector.getElementsByClassName('tree-node-button')[0];
 
-				modSelector.getElementsByClassName('tree-node-button')[0].onclick = function() {
-					app.modLoader.mod = modName;
-					console.log('Set mod to "' + modName + '"');
-								
-					this.style.backgroundColor = "var(--color-button-selected)";
-				};
+				pages.mod_selection.modButtons[modName].onclick = function(mod) {
+					console.log('modname ' + mod);
+					return function() {
+						app.modLoader.mod = mod;
+						console.log('Set mod to "' + mod + '"');
+									
+						for (var modButtonName in pages.mod_selection.modButtons) {
+							pages.mod_selection.modButtons[modButtonName].style.backgroundColor = "";
+						}
+						this.style.backgroundColor = "var(--color-button-selected)";
+					}
+				}(modName);
 
 				if (app.modLoader.mod == modName) {
-					modSelector.style.backgroundColor = "var(--color-button-selected)";
+					pages.mod_selection.modButtons[modName].style.backgroundColor = "var(--color-button-selected)";
 				}
 			}
 		});
