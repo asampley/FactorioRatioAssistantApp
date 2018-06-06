@@ -44,22 +44,21 @@ Preferences.prototype.inherit = function() {
 }
 
 Preferences.prototype.apply = function() {
-		for (item in this.raw) {
-			var raw = this.raw[item] ? true : false;
+	for (item in this.raw) {
+		var raw = this.raw[item] ? true : false;
 
-			try {
-				this.ratioSolver.setRaw(item, raw);
-			} catch (err) {
-				console.warn(err);
-			}
+		try {
+			this.ratioSolver.setRaw(item, raw);
+		} catch (err) {
+			console.warn(err);
 		}
+	}
 
-		for (machine in this.machineLevels) {
-			try {
-				this.ratioSolver.setMachineLevel(machine, this.machineLevels[machine]);
-			} catch (err) {
-				console.warn(err);
-			}
+	for (machine in this.machineLevels) {
+		try {
+			this.ratioSolver.setMachineLevel(machine, this.machineLevels[machine]);
+		} catch (err) {
+			console.warn(err);
 		}
-
+	}
 }
