@@ -58,7 +58,7 @@ var app = {
 		Preferences.fromJSON(this.ratioSolver, "preferences.json",
 			function(pref) {
 				self.preferences = pref;
-				self.modLoader.mods = pref.mods;
+				self.modLoader.mod = pref.mod;
 				console.log("Loaded preferences " + self.preferences);
 				self.reloadMod();
 			},
