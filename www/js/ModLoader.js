@@ -1,10 +1,19 @@
 var ModLoader = function(mod, onModLoaded = function(){}) {
 	this.mod = mod;
 	this.modStatus = {};
+	this.blacklist = {};
 
 	this.onModLoaded = onModLoaded;
 
 	this.reset();
+}
+
+ModLoader.prototype.STATUS = {
+	NONE: 0,
+	BLACKLIST_PENDING: 1,
+	BLACKLIST_DONE: 2,
+	PRIMARY_PENDING: 3,
+	DONE: 4
 }
 
 ModLoader.prototype.JSONparse = function(json) {
@@ -29,6 +38,14 @@ ModLoader.prototype.reset = function() {
 		recipes: 0,
 		belts: 0
 	}
+
+	this.blacklist = {
+		items: {},
+		fluids: {},
+		machines: {},
+		recipes: {},
+		belts: {}
+	}
 }
 
 ModLoader.prototype.environment = function() { return this._environment }
@@ -38,46 +55,89 @@ ModLoader.prototype.loadMod = function() {
 }
 
 ModLoader.prototype.updateModStatusAndContinue = function() {
-	if (this.modStatus.items == 0) {
+	if (this.modStatus.items == this.STATUS.NONE) {
+		console.log('Loading items blacklist from ' + this.mod);
+		this.loadBlackList('items');
+	} else if (this.modStatus.items == this.STATUS.BLACKLIST_DONE) {
 		console.log('Loading items from ' + this.mod);
 		this.loadItems();
 	}
-	if (this.modStatus.fluids == 0) {
+
+	if (this.modStatus.fluids == this.STATUS.NONE) {
+		console.log('Loading fluids blacklist from ' + this.mod);
+		this.loadBlackList('fluids');
+	} else if (this.modStatus.fluids == this.STATUS.BLACKLIST_DONE) {
 		console.log('Loading fluids from ' + this.mod);
 		this.loadFluids();
 	}
-	if (this.modStatus.machines == 0) {
+
+	if (this.modStatus.machines == this.STATUS.NONE) {
+		console.log('Loading machines blacklist from ' + this.mod);
+		this.loadBlackList('machines');
+	} else if (this.modStatus.machines == this.STATUS.BLACKLIST_DONE) {
 		console.log('Loading machines from ' + this.mod);
 		this.loadMachines();
 	}
-	if (this.modStatus.recipes == 0 
-		&& this.modStatus.items == 2
-	        && this.modStatus.fluids == 2	
-		&& this.modStatus.machines == 2) {
-		console.log('Loading recipes from ' + this.mod);
-		this.loadRecipes();
+
+	if (this.modStatus.items == this.STATUS.DONE
+		&& this.modStatus.fluids == this.STATUS.DONE
+		&& this.modStatus.machines == this.STATUS.DONE) 
+	{
+		if (this.modStatus.recipes == this.STATUS.NONE) {
+			console.log('Loading recipes blacklist from ' + this.mod);
+			this.loadBlackList('recipes');
+		} else if (this.modStatus.recipes == this.STATUS.BLACKLIST_DONE) {
+			console.log('Loading recipes from ' + this.mod);
+			this.loadRecipes();
+		}
 	}
-	if (this.modStatus.belts == 0) {
+
+	if (this.modStatus.belts == this.STATUS.NONE) {
+		console.log('Loading belts blacklist from ' + this.mod);
+		this.loadBlackList('belts');
+	} else if (this.modStatus.belts == this.STATUS.BLACKLIST_DONE) {
 		console.log('Loading belts from ' + this.mod);
 		this.loadBelts();
 	}
-	if (this.modStatus.recipes == 2
-		&& this.modStatus.items == 2 
-		&& this.modStatus.fluids == 2
-		&& this.modStatus.machines == 2
-		&& this.modStatus.belts == 2
-		&& this.modStatus.overall != 2) {
-		this.modStatus.overall = 2;
+	if (this.modStatus.recipes == this.STATUS.DONE
+		&& this.modStatus.items == this.STATUS.DONE
+		&& this.modStatus.fluids == this.STATUS.DONE
+		&& this.modStatus.machines == this.STATUS.DONE
+		&& this.modStatus.belts == this.STATUS.DONE
+		&& this.modStatus.overall != this.STATUS.DONE) {
+		this.modStatus.overall = this.STATUS.DONE;
 		console.log('Loaded mod ' + this.mod);
 
 		this.onModLoaded();
 	}
 }
 
+ModLoader.prototype.loadBlackList = function(key) {
+	var self = this;
+
+	self.modStatus[key] = this.STATUS.BLACKLIST_PENDING;
+	self.updateModStatusAndContinue();
+
+	fileutil.readTextAppWWW(
+		'mods/' + self.mod + '/' + key + '-blacklist.txt',
+		function(text) {
+			var blacklist = self.JSONparse(text);
+			self.blacklist[key] = blacklist;
+			self.modStatus[key] = self.STATUS.BLACKLIST_DONE;
+			self.updateModStatusAndContinue();
+		},
+		function(error) {
+			console.log(error);
+			self.modStatus[key] = self.STATUS.BLACKLIST_DONE;
+			self.updateModStatusAndContinue();
+		}
+	);			
+}
+
 ModLoader.prototype.loadItems = function() {
 	var self = this;
 	
-	self.modStatus.items = 1;
+	self.modStatus.items = this.STATUS.PRIMARY_PENDING;
 	self.updateModStatusAndContinue();
 
 	fileutil.readTextAppWWW(
@@ -85,15 +145,16 @@ ModLoader.prototype.loadItems = function() {
 		function(text) {
 			var items = self.JSONparse(text);
 			for (var item in items) {
+				if (item in self.blacklist.items && self.blacklist.items[item]) continue;
 				self._environment.addItem(item, 'mods/' + self.mod + '/img/' + item + '.png');
 			}
 
-			self.modStatus.items = 2;
+			self.modStatus.items = self.STATUS.DONE;
 			self.updateModStatusAndContinue();
 		},
 		function(error) {
 			console.log(error);
-			self.modStatus.items = 2;
+			self.modStatus.items = self.STATUS.DONE;
 			self.updateModStatusAndContinue();
 		}
 	);
@@ -102,7 +163,7 @@ ModLoader.prototype.loadItems = function() {
 ModLoader.prototype.loadFluids = function() {
 	var self = this;
 	
-	self.modStatus.fluids = 1;
+	self.modStatus.fluids = this.STATUS.PRIMARY_PENDING;
 	self.updateModStatusAndContinue();
 
 	fileutil.readTextAppWWW(
@@ -110,15 +171,16 @@ ModLoader.prototype.loadFluids = function() {
 		function(text) {
 			var fluids = self.JSONparse(text);
 			for (var fluid in fluids) {
+				if (fluid in self.blacklist.fluids && self.blacklist.fluids[fluid]) continue;
 				self._environment.addItem(fluid, 'mods/' + self.mod + '/img/' + fluid + '.png');
 			}
 
-			self.modStatus.fluids = 2;
+			self.modStatus.fluids = self.STATUS.DONE;
 			self.updateModStatusAndContinue();
 		},
 		function(error) {
 			console.log(error);
-			self.modStatus.fluids = 2;
+			self.modStatus.fluids = self.STATUS.DONE;
 			self.updateModStatusAndContinue();
 		}
 	);
@@ -126,7 +188,7 @@ ModLoader.prototype.loadFluids = function() {
 
 ModLoader.prototype.loadMachines = function() {
 	var self = this;
-	self.modStatus.machines = 1;
+	self.modStatus.machines = this.STATUS.PRIMARY_PENDING;
 	self.updateModStatusAndContinue();
 
 	fileutil.readTextAppWWW(
@@ -136,6 +198,7 @@ ModLoader.prototype.loadMachines = function() {
 
 			category_machines = {}
 			for (var mname in machines) {
+				if (mname in self.blacklist.machines && self.blacklist.machines[mname]) continue;
 				for (var categoryi in machines[mname].crafting_categories) {
 					category = machines[mname].crafting_categories[categoryi]
 					if (!(category in category_machines)) {
@@ -152,12 +215,12 @@ ModLoader.prototype.loadMachines = function() {
 				self._environment.addMachineClass(machineClass)
 			}
 
-			self.modStatus.machines = 2;
+			self.modStatus.machines = self.STATUS.DONE;
 			self.updateModStatusAndContinue();
 		},
 		function(error) {
 			console.log(error);
-			self.modStatus.machines = 2;
+			self.modStatus.machines = self.STATUS.DONE;
 			self.updateModStatusAndContinue();
 		}
 	);
@@ -166,7 +229,7 @@ ModLoader.prototype.loadMachines = function() {
 ModLoader.prototype.loadRecipes = function() {
 	var self = this;
 	var recipesPath = 'mods/' + this.mod + '/recipes.txt';
-	self.modStatus.recipes = 1;
+	self.modStatus.recipes = this.STATUS.PRIMARY_PENDING;
 	self.updateModStatusAndContinue();
 
 	fileutil.readTextAppWWW(
@@ -175,18 +238,19 @@ ModLoader.prototype.loadRecipes = function() {
 			var recipes = self.JSONparse(text);
 
 			for (var rname in recipes) {
+				if (rname in self.blacklist.recipes && self.blacklist.recipes[rname]) continue;
 				if (Object.keys(recipes[rname].products).length != 1) {
 					continue;
 				}
 				self._environment.addRecipe( new factorio.Recipe(recipes[rname]) );
 			}
 
-			self.modStatus.recipes = 2;
+			self.modStatus.recipes = self.STATUS.DONE;
 			self.updateModStatusAndContinue();
 		},
 		function(error) {
 			console.log(error);
-			self.modStatus.recipes = 2;
+			self.modStatus.recipes = self.STATUS.DONE;
 			self.updateModStatusAndContinue();
 		}
 	);
@@ -196,7 +260,7 @@ ModLoader.prototype.loadBelts = function() {
 	var self = this;
 	var beltsFile = 'mods/' + this.mod + '/belts.txt';
 
-	self.modStatus.belts = 1;
+	self.modStatus.belts = this.STATUS.PRIMARY_PENDING;
 
 	fileutil.readTextAppWWW(
 		beltsFile,
@@ -224,11 +288,11 @@ ModLoader.prototype.loadBelts = function() {
 			}
 			*/
 
-			self.modStatus.belts = 2;
+			self.modStatus.belts = self.STATUS.DONE;
 			self.updateModStatusAndContinue();
 		},
 		function(error) {
-			self.modStatus.belts = 2;
+			self.modStatus.belts = self.STATUS.DONE;
 			self.updateModStatusAndContinue();
 		}
 	);
