@@ -13,7 +13,7 @@ pages.machine_level_selection.addMachineClassFunc = function(machineClass) {
 
 	if (belt) {
 		var imgSrc = app.factorioEnvironment.itemImgPaths[app.factorioEnvironment.belts[0].name];
-		var selectorText = 'Transportation';
+		var selectorText = 'belts';
 	} else {
 		var imgSrc = app.factorioEnvironment.itemImgPaths[machineClass.name(0)];
 		var selectorText = machineClass.className;
