@@ -59,11 +59,12 @@ var app = {
 			function(pref) {
 				self.preferences = pref;
 				self.modLoader.mod = pref.mod;
-				console.log("Loaded preferences " + self.preferences);
+				console.log("Loaded preferences:");
+				console.log(self.preferences);
 				self.reloadMod();
 			},
 			function(error) {
-				console.warn("Could not access preferences.json: " + error);
+				console.warn("Could not access preferences.json: FileError code " + error.code);
 				self.preferences = new Preferences(self.ratioSolver, "preferences.json");
 				self.reloadMod();
 			}

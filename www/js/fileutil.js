@@ -7,7 +7,7 @@ var fileutil = {
 		self = this;
 		window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, 
 			function(fs) {
-				console.log("Opened file system: " + fs.name);
+				console.log('Opened file system "' + fs.name + '" at ' + fs.root.toURL());
 				self.persistent = fs;
 				cordova.fireDocumentEvent('fileutilready');
 				console.log('fileutil ready');
@@ -81,28 +81,37 @@ var fileutil = {
 			onFileError("Persistent file system could not be accessed");
 			return;
 		}
-		
-		this.persistent.root.getFile(relPath, {create: true}, 
-			function(fileEntry) {
-				fileEntry.createWriter(function(writer) {
 
-					writer.onwriteend = function() {
-						writer.onwriteend = function() {
+		self = this;
+
+		write = function(relPath) {
+			self.persistent.root.getFile(relPath, {create: true},
+				function(fileEntry) {
+					fileEntry.createWriter(function(writer) {
+						writer.onwrite = function() {
 							onDone();
+						}
+
+						writer.onerror = function(e) {
+							onWriteError(e);
 						}
 
 						var blob = new Blob([text], {type: 'text/plain'});
 						writer.write(blob);
-					}
+					})
+				},
+				onFileError
+			)
+		}
 
-					writer.onerror = function(e) {
-						onWriteError(e);
-					}
-
-					writer.truncate(0);
-				})
-			}, 
-			onFileError
+		this.persistent.root.getFile(relPath, {create: false},
+			function(fileEntry) {
+				fileEntry.remove();
+				write(relPath);
+			},
+			function(error) {
+				write(relPath);
+			}
 		);
 	}
 }

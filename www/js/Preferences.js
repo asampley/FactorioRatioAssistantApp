@@ -2,7 +2,7 @@ Preferences = function(ratioSolver, fileName, raw = {}, machineLevels = {}) {
 	this.ratioSolver = ratioSolver;
 	this.raw = raw;
 	this.machineLevels = machineLevels;
-	this.mods = {};
+	this.mod = undefined;
 	this.fileName = fileName;
 }
 
@@ -30,7 +30,7 @@ Preferences.prototype.save = function() {
 	obj = {}
 	obj.raw = this.raw;
 	obj.machineLevels = this.machineLevels;
-	obj.mods = this.mods;
+	obj.mod = this.mod;
 
 	fileutil.writeTextPersistent(
 		this.fileName,
