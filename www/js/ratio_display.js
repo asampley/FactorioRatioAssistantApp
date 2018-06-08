@@ -101,9 +101,8 @@ document.addEventListener(
 					var treeNodeBeltIcon = treeNode.getElementsByClassName('tree-node-belt-icon')[0];
 					treeNodeBeltIcon.onerror = function() {this.onerror = null; this.src = 'img/default.png'};
 					treeNodeBeltIcon.src = beltIconPath;
-					// TODO
-					beltInt = 0;
-					beltFrac = new Fraction(0);
+					beltInt = beltCount.s * ~~(beltCount.n / beltCount.d);
+					beltFrac = new Fraction(beltCount.n % beltCount.d, beltCount.d);
 					treeNode.getElementsByClassName('tree-node-belt-int')[0].textContent = (beltInt == 0 ? "" : beltInt);
 					treeNode.getElementsByClassName('tree-node-belt-frac')[0].textContent = (beltFrac.n == 0 ? "" : beltFrac.toFraction());
 				}

@@ -265,33 +265,17 @@ ModLoader.prototype.loadBelts = function() {
 	fileutil.readTextAppWWW(
 		beltsFile,
 		function(text) {
-			// TODO
-
-			/*
-			var lines = text.split('\n');
-
-			var names = [];
-			var itemsPerSec = [];
-
-			for (var i = 0; i < lines.length; ++i) {
-				var line = lines[i].trim();
-				if (line.length == 0) continue;
-
-				var split = line.split(':');
-				assert(split.length == 2, "Invalid Syntax: No ':' on line " + i + " of " + beltsFile);
-
-				name = split[0].trim();
-				itemsPerSec = Fraction.parse(split[1].trim());
-
-				var belt = new factorio.Belt(name, itemsPerSec);
-				self.environment().addBelt(belt);
+			var belts = self.JSONparse(text);
+			for (var belt in belts) {
+				if (belt in self.blacklist.belts && self.blacklist.belts[belt]) continue;
+				self._environment.addBelt(new factorio.Belt(belt, belts[belt].speed));
 			}
-			*/
 
 			self.modStatus.belts = self.STATUS.DONE;
 			self.updateModStatusAndContinue();
 		},
 		function(error) {
+			console.log(error);
 			self.modStatus.belts = self.STATUS.DONE;
 			self.updateModStatusAndContinue();
 		}
