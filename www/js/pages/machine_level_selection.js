@@ -119,12 +119,12 @@ pages.machine_level_selection.machineLevelFunc = function(machineClass, level) {
 }
 
 pages.machine_level_selection.beltLevelFunc = function(level) {
-	if (!('Transportation' in pages.machine_level_selection.mcButtons)) return;
+	if (!('belts' in pages.machine_level_selection.mcButtons)) return;
 
 	var belt = app.factorioEnvironment.getBelt(level);
 	
-	var machineButton = pages.machine_level_selection.machineButtons['Transportation'];
-	var classButtons = pages.machine_level_selection.mcButtons['Transportation'];
+	var machineButton = pages.machine_level_selection.machineButtons['belts'];
+	var classButtons = pages.machine_level_selection.mcButtons['belts'];
 
 	var machineIcon = machineButton.getElementsByClassName('tree-node-machine-icon')[0];
 	machineIcon.onerror = function() {this.onerror = null; this.src = 'img/default.png'};
