@@ -19,9 +19,14 @@
 	flex-grow: 1;
 }
 
-.tree-node-raw-toggle {
+.tree-node-right-div {
+	box-sizing: content-box;
+	margin: 0px 0px 0px auto;
+}
+
+.tree-node-icon-button {
 	box-sizing: content-box;
 	width: 1em;
 	height: 1em;
-	margin: 0px 0px 0px auto;
+	margin: 0px 0px 0px 0px;
 }

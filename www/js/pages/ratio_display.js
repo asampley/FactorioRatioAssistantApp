@@ -1,7 +1,7 @@
 pages.ratio_display = {
 	item: null,
 	trees: [],
-	rootTreeNode: null,
+	trashButtons: {},
 	setRawButtons: {}
 }
 
@@ -33,6 +33,7 @@ document.addEventListener(
 	function() {
 		var mainElement = document.getElementById('ratio_display');
 		var treeTemplate = document.getElementById('template-tree-node-ratio');
+		var trashTemplate = document.getElementById('template-button-trash');
 
 		var page = new Page(
 			mainElement,
@@ -77,9 +78,26 @@ document.addEventListener(
 					}
 					pages.ratio_display.setRawButtons[outputItem].push(treeNode.getElementsByClassName('tree-node-raw-toggle')[0]);
 					parent.appendChild(treeNode);
+					
+					if (parent == mainElement) {
+						trashButton = trashTemplate.cloneNode(true);
+						trashButton.onclick = function(event) {
+							event.stopPropagation();
+
+							var index = pages.ratio_display.trees.indexOf(treeNode);
+							console.log('Removed ratio at index ' + index);
+							app.ratioSolver.solutions.splice(index, 1);
+							pages.ratio_display.trees.splice(index, 1);
+							mainElement.removeChild(treeNode);
+						}
+						trashButton.classList.remove('hidden');
+						var rightDiv = treeNode.getElementsByClassName('tree-node-right-div')[0];
+						rightDiv.insertBefore(trashButton, rightDiv.firstChild);
+					}
 				} else {
 					var treeNode = oldNode;
 				}
+
 
 				var childrenElement = treeNode.getElementsByClassName('tree-node-children')[0];
 
