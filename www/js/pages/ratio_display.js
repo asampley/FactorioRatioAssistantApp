@@ -70,9 +70,6 @@ document.addEventListener(
 				var belt = treeRoot.belt;
 				var beltCount = treeRoot.beltCount === null ? null : treeRoot.beltCount.mul(coeff);
 
-				console.log(belt);
-				console.log(beltCount);
-
 				if (oldNode == undefined) {
 					var treeNode = treeTemplate.cloneNode(true);
 					if (!(outputItem in pages.ratio_display.setRawButtons)) {
