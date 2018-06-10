@@ -1,7 +1,8 @@
-Preferences = function(ratioSolver, fileName, raw = {}, machineLevels = {}) {
+Preferences = function(ratioSolver, fileName, raw = {}, machineLevels = {}, beltLevel = 0) {
 	this.ratioSolver = ratioSolver;
 	this.raw = raw;
 	this.machineLevels = machineLevels;
+	this.beltLevel = beltLevel;
 	this.mod = undefined;
 	this.fileName = fileName;
 }
@@ -30,6 +31,7 @@ Preferences.prototype.save = function() {
 	obj = {}
 	obj.raw = this.raw;
 	obj.machineLevels = this.machineLevels;
+	obj.beltLevel = this.beltLevel;
 	obj.mod = this.mod;
 
 	fileutil.writeTextPersistent(
@@ -41,6 +43,7 @@ Preferences.prototype.save = function() {
 Preferences.prototype.inherit = function() {
 	this.raw = this.ratioSolver.raw;
 	this.machineLevels = this.ratioSolver.machineLevels;
+	this.beltLevel = this.ratioSolver.beltLevel;
 }
 
 Preferences.prototype.apply = function() {
@@ -61,4 +64,6 @@ Preferences.prototype.apply = function() {
 			console.warn(err);
 		}
 	}
+
+	this.ratioSolver.beltLevel = this.beltLevel;
 }
