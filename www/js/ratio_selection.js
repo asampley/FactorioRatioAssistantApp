@@ -45,7 +45,8 @@ document.addEventListener(
 						}
 
 						button.onclick = function() {
-							content.switchToPage('ratio_display', item);
+							app.ratioSolver.push(item);
+							content.switchToPage('ratio_display');
 						}
 
 						if (app.ratioSolver.isRaw(item)) {

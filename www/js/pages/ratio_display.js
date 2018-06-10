@@ -1,5 +1,6 @@
 pages.ratio_display = {
 	item: null,
+	trees: [],
 	rootTreeNode: null,
 	setRawButtons: {}
 }
@@ -35,35 +36,42 @@ document.addEventListener(
 
 		var page = new Page(
 			mainElement,
-			function(item) {
-				pages.ratio_display.item = item;
-				showTree(item);
+			function() {
+				for (var i = 0; i < app.ratioSolver.solutions.length; ++i) {
+					showTree(i);
+				}
 			},
 			function() {},
 			function() {
-				showTree(pages.ratio_display.item, false);
+				for (var i = 0; i < app.ratioSolver.solutions.length; ++i) {
+					showTree(i, false);
+				}
 			}
 		)
 
 		content.addPage('ratio_display', page);
 
-		function showTree(item, newTree=true) {
-			if (newTree && pages.ratio_display.rootTreeNode != null) { // clear area
-				mainElement.removeChild(pages.ratio_display.rootTreeNode);
-				pages.ratio_display.rootTreeNode = null;
+		function showTree(index, newTree=true) {
+			if (newTree && pages.ratio_display.trees.length > index) { // clear area
+				mainElement.removeChild(pages.ratio_display.trees[index]);
+				pages.ratio_display.trees[index] = null;
 				pages.ratio_display.setRawButtons = {};
 			}
 
-			function constructTree(parent, tree, oldNode=undefined) {
+			var item = app.ratioSolver.solutions[index].item;
 
+			function constructTree(parent, tree, coeff, oldNode=undefined) {
 				var treeRoot = tree.rootValue();
 				var machine = treeRoot.machine;
-				var machineCount = treeRoot.machineCount;
+				var machineCount = treeRoot.machineCount === null ? null : treeRoot.machineCount.mul(coeff);
 				var outputItem = treeRoot.item;
-				var outputCountPerSec = treeRoot.itemPerSec;
+				var outputCountPerSec = treeRoot.itemPerSec.mul(coeff);
 				var outputIconPath = app.factorioEnvironment.itemImgPaths[outputItem];
-				var belt = tree.belt;
-				var beltCount = tree.beltCount;
+				var belt = treeRoot.belt;
+				var beltCount = treeRoot.beltCount === null ? null : treeRoot.beltCount.mul(coeff);
+
+				console.log(belt);
+				console.log(beltCount);
 
 				if (oldNode == undefined) {
 					var treeNode = treeTemplate.cloneNode(true);
@@ -136,22 +144,23 @@ document.addEventListener(
 
 				for (var i = 0; i < tree.children.length; ++i) {
 					if (childrenElement.children.length > i) { // save old child objects where we can
-						constructTree(childrenElement, tree.getChild(i), childrenElement.children[i]);
+						constructTree(childrenElement, tree.getChild(i), coeff, childrenElement.children[i]);
 					} else {
-						constructTree(childrenElement, tree.getChild(i));
+						constructTree(childrenElement, tree.getChild(i), coeff);
 					}
 				}
 
 				return treeNode;
 			}
 
-			var tree = app.ratioSolver.solve(item);
+			var tree = app.ratioSolver.solve(index);
+			var coeff = app.ratioSolver.solutions[index].coeff;
 
 			if (newTree) {
-				pages.ratio_display.rootTreeNode = constructTree(mainElement, tree);
-				pages.ratio_display.rootTreeNode.getElementsByClassName('tree-node-children')[0].classList.remove('hidden');
+				pages.ratio_display.trees[index] = constructTree(mainElement, tree, coeff);
+				pages.ratio_display.trees[index].getElementsByClassName('tree-node-children')[0].classList.remove('hidden');
 			} else {
-				pages.ratio_display.rootTreeNode = constructTree(mainElement, tree, pages.ratio_display.rootTreeNode);
+				pages.ratio_display.trees[index] = constructTree(mainElement, tree, coeff, pages.ratio_display.trees[index]);
 			}
 		}
 	},

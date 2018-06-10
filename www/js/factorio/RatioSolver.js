@@ -1,9 +1,7 @@
 factorio.RatioSolver = function(environment) {
 	this.environment = environment;
 	this.raw = {};
-	this.solution = {}
-	this.solution.raw = {};
-	this.solution.tree = {};
+	this.solutions = []
 	this.machineLevels = {};
 	this.beltLevel = 0;
 	this._rawListeners = [];
@@ -47,9 +45,21 @@ factorio.RatioSolver.prototype.getBeltLevel = function() {
 	return this.beltLevel;
 }
 
-factorio.RatioSolver.prototype.solve = function(item) {
-	this.solution.tree = this.solveRecurse(item, this.perSecForWhole(item));
-	return this.solution.tree;
+factorio.RatioSolver.prototype.push = function(item) {
+	var solution = { item: item, coeff: new Fraction(1), raw: {}, tree: {} };
+	var index = this.solutions.push(solution) - 1;
+	return index;
+}
+
+factorio.RatioSolver.prototype.solve = function(index) {
+	if (!(index in this.solutions)) {
+		throw solutions + ' has no index: ' + index + '. Index should be the number returned from push(item)';
+	}
+	this.solutions[index].raw = {};
+	this.solutions[index].tree = this.solveRecurse(index, this.solutions[index].item, new Fraction(1));
+	this.solutions[index].coeff = this.perSecForWhole(this.solutions[index].item);
+
+	return this.solutions[index].tree;
 }
 
 factorio.RatioSolver.prototype.isRaw = function(item) {
@@ -86,44 +96,36 @@ factorio.RatioSolver.prototype.getRecipe = function(item) {
 	return this.environment.recipes[item];
 }
 
-factorio.RatioSolver.prototype.solveRecurse = function(item, itemPerSec) {
+factorio.RatioSolver.prototype.solveRecurse = function(index, item, itemPerSec) {
 	var recipe = this.getRecipe(item);
+	var tree = null;
 
 	if (recipe == null) {
-		if (item in this.solution.raw) {
-			this.solution.raw[item] += itemPerSec;
+		if (item in this.solutions[index].raw) {
+			this.solutions[index].raw[item] += itemPerSec;
 		} else {
-			this.solution.raw[item] = itemPerSec;
+			this.solutions[index].raw[item] = itemPerSec;
 		}
-		var tree = new Tree({
+		tree = new Tree({
 			machine: null,
 			machineCount: null,
 			itemPerSec: itemPerSec,
 			item: item,
 			belt: null,
-			beltCount: 0
+			beltCount: new Fraction(0)
 		});
-		if (this.environment.belts.length != 0) {
-			tree.belt = this.environment.belts[this.beltLevel];
-			tree.beltCount = this.environment.belts[this.beltLevel].numRequired(itemPerSec);
-		}
 	} else {
 		var mc = this.environment.machineClasses[recipe.category];
 		var machine = new factorio.Machine(mc, this.machineLevels[mc.className], recipe);
-		//var machine = new factorio.Machine(mc, 0, recipe);
 		var machineCount = itemPerSec.div(machine.outputCountPerSec());
-		var tree = new Tree({
+		tree = new Tree({
 			machine: machine, 
 			machineCount: machineCount,
 			itemPerSec: itemPerSec,
 			item: item,
 			belt: null,
-			beltCount: 0
+			beltCount: new Fraction(0)
 		});
-		if (this.environment.belts.length != 0) {
-			tree.belt = this.environment.belts[this.beltLevel];
-			tree.beltCount = this.environment.belts[this.beltLevel].numRequired(itemPerSec);
-		}
 		
 		/*if (machineCounts.contains(machine)) {
 			machineCounts.put(machine, machineCounts.get(machine).add(machineCount));
@@ -132,11 +134,16 @@ factorio.RatioSolver.prototype.solveRecurse = function(item, itemPerSec) {
 		}*/
 		
 		for (var item in recipe.inputs) {
-			var child = this.solveRecurse(item, itemPerSec.mul(recipe.inputs[item]).div(recipe.outputCount()));
+			var child = this.solveRecurse(index, item, itemPerSec.mul(recipe.inputs[item]).div(recipe.outputCount()));
 			if (child != null) {
 				tree.addChild(child);
 			}
 		}
+	}
+
+	if (this.environment.belts.length != 0) {
+		tree.rootValue().belt = this.environment.belts[this.beltLevel];
+		tree.rootValue().beltCount = this.environment.belts[this.beltLevel].numRequired(itemPerSec);
 	}
 	
 	return tree;
@@ -151,7 +158,6 @@ factorio.RatioSolver.prototype.perSecForWhole = function(item) {
 
 	var mc = this.environment.machineClasses[recipe.category];
 	var machine = new factorio.Machine(mc, this.machineLevels[mc.className], recipe);
-	//var machine = new factorio.Machine(mc, 0, recipe);
 	var topItemPerSec = machine.outputCountPerSec();
 	var itemPerSec = topItemPerSec;
 
@@ -176,7 +182,6 @@ factorio.RatioSolver.prototype.perSecForWhole = function(item) {
 
 			var nextMc = this.environment.machineClasses[nextRecipe.category];
 			var nextMachine = new factorio.Machine(nextMc, this.machineLevels[nextMc.className], nextRecipe);
-			//var nextMachine = new factorio.Machine(nextMc, 0, nextRecipe);
 			machinesToGo.push([nextMachine, itemPerSec.mul(recipe.inputs[item]).div(recipe.outputCount())])
 		}
 	}
