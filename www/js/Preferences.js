@@ -43,7 +43,7 @@ Preferences.prototype.save = function() {
 Preferences.prototype.inherit = function() {
 	this.raw = this.ratioSolver.raw;
 	this.machineLevels = this.ratioSolver.machineLevels;
-	this.beltLevel = this.ratioSolver.beltLevel;
+	this.beltLevel = this.ratioSolver.getBeltLevel();
 }
 
 Preferences.prototype.apply = function() {
@@ -65,5 +65,5 @@ Preferences.prototype.apply = function() {
 		}
 	}
 
-	this.ratioSolver.beltLevel = this.beltLevel;
+	this.ratioSolver.setBeltLevel(this.beltLevel);
 }

@@ -3,7 +3,7 @@ factorio.RatioSolver = function(environment) {
 	this.raw = {};
 	this.solutions = []
 	this.machineLevels = {};
-	this.beltLevel = 0;
+	this._beltLevel = 0;
 	this._rawListeners = [];
 	this._unrawListeners = [];
 	this._machineLevelListeners = [];
@@ -34,7 +34,7 @@ factorio.RatioSolver.prototype.getMachineLevel = function(machineClassName) {
 }
 
 factorio.RatioSolver.prototype.setBeltLevel = function(level) {
-	this.beltLevel = level;
+	this._beltLevel = level;
 
 	for (var i = 0; i < this._beltLevelListeners.length; ++i) {
 		this._beltLevelListeners[i](level);
@@ -42,7 +42,7 @@ factorio.RatioSolver.prototype.setBeltLevel = function(level) {
 }
 
 factorio.RatioSolver.prototype.getBeltLevel = function() {
-	return this.beltLevel;
+	return this._beltLevel;
 }
 
 factorio.RatioSolver.prototype.push = function(item) {
@@ -142,8 +142,8 @@ factorio.RatioSolver.prototype.solveRecurse = function(index, item, itemPerSec) 
 	}
 
 	if (this.environment.belts.length != 0) {
-		tree.rootValue().belt = this.environment.belts[this.beltLevel];
-		tree.rootValue().beltCount = this.environment.belts[this.beltLevel].numRequired(itemPerSec);
+		tree.rootValue().belt = this.environment.belts[this._beltLevel];
+		tree.rootValue().beltCount = this.environment.belts[this._beltLevel].numRequired(itemPerSec);
 	}
 	
 	return tree;
@@ -213,5 +213,5 @@ factorio.RatioSolver.prototype.addMachineLevelListener = function(f) {
 factorio.RatioSolver.prototype.addBeltLevelListener = function(f) {
 	this._beltLevelListeners.push(f);
 
-	f(this.beltLevel);
+	f(this._beltLevel);
 }

@@ -161,6 +161,7 @@ document.addEventListener(
 			function() {
 				app.factorioEnvironment.addMachineClassListener(pages.machine_level_selection.addMachineClassFunc);
 				app.ratioSolver.addMachineLevelListener(pages.machine_level_selection.machineLevelFunc);
+				app.ratioSolver.addBeltLevelListener(pages.machine_level_selection.beltLevelFunc);
 				app.factorioEnvironment.addBeltListener(pages.machine_level_selection.addMachineClassFunc);
 				app.ratioSolver.addBeltLevelListener(pages.machine_level_selection.beltLevelFunc);
 			}
