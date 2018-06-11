@@ -9,7 +9,9 @@
         },
         "release": {
             "keystore": "release.keystore",
+	    "storePassword": "factorio",
             "alias": "factorio",
+	    "password": "factorio",
             "keystoreType": ""
         }
     }
