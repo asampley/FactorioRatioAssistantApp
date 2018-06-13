@@ -109,6 +109,7 @@ document.addEventListener(
 				treeNode.getElementsByClassName('tree-node-item-post-icon-text')[0].textContent = " / s";
 				var treeNodeIcon = treeNode.getElementsByClassName('tree-node-item-icon')[0];
 				treeNodeIcon.onerror = function() {this.onerror = null; this.src = 'img/default.png'};
+				
 				if (machine != null) {
 					var machineIconPath = app.factorioEnvironment.imgPaths[machine.name()];
 					var treeNodeMachineIcon = treeNode.getElementsByClassName('tree-node-machine-icon')[0];
@@ -118,7 +119,10 @@ document.addEventListener(
 					machineFrac = new Fraction(machineCount.n % machineCount.d, machineCount.d);
 					treeNode.getElementsByClassName('tree-node-machine-int')[0].textContent = (machineInt == 0 ? "" : machineInt);
 					treeNode.getElementsByClassName('tree-node-machine-frac')[0].textContent = (machineFrac.n == 0 ? "" : machineFrac.toFraction());
+				} else {
+					treeNode.getElementsByClassName('tree-node-machine')[0].classList.add('hidden');
 				}
+
 				if (belt != null) {
 					var beltIconPath = app.factorioEnvironment.imgPaths[belt.name];
 					var treeNodeBeltIcon = treeNode.getElementsByClassName('tree-node-belt-icon')[0];
@@ -128,7 +132,10 @@ document.addEventListener(
 					beltFrac = new Fraction(beltCount.n % beltCount.d, beltCount.d);
 					treeNode.getElementsByClassName('tree-node-belt-int')[0].textContent = (beltInt == 0 ? "" : beltInt);
 					treeNode.getElementsByClassName('tree-node-belt-frac')[0].textContent = (beltFrac.n == 0 ? "" : beltFrac.toFraction());
+				} else {
+					treeNode.getElementsByClassName('tree-node-belt')[0].classList.add('hidden');
 				}
+
 				if (app.ratioSolver.canSetUnraw(outputItem)) {
 					var treeNodeRawToggle = treeNode.getElementsByClassName('tree-node-raw-toggle')[0];
 					treeNodeRawToggle.classList.remove('hidden');
@@ -143,6 +150,7 @@ document.addEventListener(
 						treeNodeRawToggle.style.backgroundColor = "var(--color-button-raw)";
 					}
 				}
+
 				treeNodeIcon.src = outputIconPath;
 				var treeNodeButton = treeNode.getElementsByClassName('tree-node-button')[0];
 
