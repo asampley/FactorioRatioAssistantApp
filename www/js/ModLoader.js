@@ -119,7 +119,7 @@ ModLoader.prototype.loadBlackList = function(key) {
 	self.updateModStatusAndContinue();
 
 	fileutil.readTextAppWWW(
-		'mods/' + self.mod + '/' + key + '-blacklist.txt',
+		'mods/' + self.mod + '/' + key + '-blacklist.json',
 		function(text) {
 			var blacklist = self.JSONparse(text);
 			self.blacklist[key] = blacklist;
@@ -141,12 +141,13 @@ ModLoader.prototype.loadItems = function() {
 	self.updateModStatusAndContinue();
 
 	fileutil.readTextAppWWW(
-		'mods/' + self.mod + '/items.txt', 
+		'mods/' + self.mod + '/items.json',
 		function(text) {
 			var items = self.JSONparse(text);
-			for (var item in items) {
-				if (item in self.blacklist.items && self.blacklist.items[item]) continue;
-				self._environment.addItem(item, 'mods/' + self.mod + '/img/' + item + '.png');
+			for (var i = 0; i < items.length; ++i) {
+				var item = items[i];
+				if (item.name in self.blacklist.items && self.blacklist.items[item.name]) continue;
+				self._environment.addItem(item.name, 'mods/' + self.mod + '/img/' + item.name + '.png');
 			}
 
 			self.modStatus.items = self.STATUS.DONE;
@@ -167,12 +168,13 @@ ModLoader.prototype.loadFluids = function() {
 	self.updateModStatusAndContinue();
 
 	fileutil.readTextAppWWW(
-		'mods/' + self.mod + '/fluids.txt', 
+		'mods/' + self.mod + '/fluids.json', 
 		function(text) {
 			var fluids = self.JSONparse(text);
-			for (var fluid in fluids) {
-				if (fluid in self.blacklist.fluids && self.blacklist.fluids[fluid]) continue;
-				self._environment.addItem(fluid, 'mods/' + self.mod + '/img/' + fluid + '.png');
+			for (var i = 0; i < fluids.length; ++i) {
+				var fluid = fluids[i];
+				if (fluid.name in self.blacklist.fluids && self.blacklist.fluids[fluid.name]) continue;
+				self._environment.addItem(fluid.name, 'mods/' + self.mod + '/img/' + fluid.name + '.png');
 			}
 
 			self.modStatus.fluids = self.STATUS.DONE;
@@ -192,20 +194,20 @@ ModLoader.prototype.loadMachines = function() {
 	self.updateModStatusAndContinue();
 
 	fileutil.readTextAppWWW(
-		'mods/' + self.mod + '/machines.txt',
+		'mods/' + self.mod + '/machines.json',
 		function(text) {
 			var machines = self.JSONparse(text);
 
 			category_machines = {}
-			for (var mname in machines) {
-				if (mname in self.blacklist.machines && self.blacklist.machines[mname]) continue;
-				for (var categoryi in machines[mname].crafting_categories) {
-					category = machines[mname].crafting_categories[categoryi]
+			for (var i = 0; i < machines.length; ++i) {
+				m = machines[i];
+				if (m.name in self.blacklist.machines && self.blacklist.machines[m.name]) continue;
+				for (var category in m.crafting_categories) {
 					if (!(category in category_machines)) {
 						category_machines[category] = { names: [], speeds: [] };
 					}
-					category_machines[category].names.push(mname);
-					category_machines[category].speeds.push(machines[mname].speed);
+					category_machines[category].names.push(m.name);
+					category_machines[category].speeds.push(m.crafting_speed);
 				}
 			}
 
@@ -228,7 +230,7 @@ ModLoader.prototype.loadMachines = function() {
 
 ModLoader.prototype.loadRecipes = function() {
 	var self = this;
-	var recipesPath = 'mods/' + this.mod + '/recipes.txt';
+	var recipesPath = 'mods/' + this.mod + '/recipes.json';
 	self.modStatus.recipes = this.STATUS.PRIMARY_PENDING;
 	self.updateModStatusAndContinue();
 
@@ -237,12 +239,20 @@ ModLoader.prototype.loadRecipes = function() {
 		function(text) {
 			var recipes = self.JSONparse(text);
 
-			for (var rname in recipes) {
-				if (rname in self.blacklist.recipes && self.blacklist.recipes[rname]) continue;
-				if (Object.keys(recipes[rname].products).length != 1) {
+			for (var i = 0; i < recipes.length; ++i) {
+				r = recipes[i];
+				if (r.name in self.blacklist.recipes && self.blacklist.recipes[r.name]) continue;
+				if (!('products' in r)) {
+					console.warn('Skipping recipe with no products.');
+					console.warn(r);
 					continue;
 				}
-				self._environment.addRecipe( new factorio.Recipe(recipes[rname]) );
+				if (r.products.length != 1) {
+					console.warn('Skipping recipe with more than one product.');
+					console.warn(r);
+					continue;
+				}
+				self._environment.addRecipe( new factorio.Recipe(r) );
 			}
 
 			self.modStatus.recipes = self.STATUS.DONE;
@@ -258,7 +268,7 @@ ModLoader.prototype.loadRecipes = function() {
 
 ModLoader.prototype.loadBelts = function() {
 	var self = this;
-	var beltsFile = 'mods/' + this.mod + '/belts.txt';
+	var beltsFile = 'mods/' + this.mod + '/belts.json';
 
 	self.modStatus.belts = this.STATUS.PRIMARY_PENDING;
 
@@ -266,9 +276,10 @@ ModLoader.prototype.loadBelts = function() {
 		beltsFile,
 		function(text) {
 			var belts = self.JSONparse(text);
-			for (var belt in belts) {
-				if (belt in self.blacklist.belts && self.blacklist.belts[belt]) continue;
-				self._environment.addBelt(new factorio.Belt(belt, belts[belt].speed));
+			for (var i = 0; i < belts.length; ++i) {
+				var b = belts[i];
+				if (b.name in self.blacklist.belts && self.blacklist.belts[b.name]) continue;
+				self._environment.addBelt(new factorio.Belt(b.name, b.belt_speed));
 			}
 
 			self.modStatus.belts = self.STATUS.DONE;
