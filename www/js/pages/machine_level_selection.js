@@ -12,10 +12,10 @@ pages.machine_level_selection.addMachineClassFunc = function(machineClass) {
 	}
 
 	if (belt) {
-		var imgSrc = app.factorioEnvironment.itemImgPaths[app.factorioEnvironment.belts[0].name];
+		var imgSrc = app.factorioEnvironment.imgPaths[app.factorioEnvironment.belts[0].name];
 		var selectorText = 'belts';
 	} else {
-		var imgSrc = app.factorioEnvironment.itemImgPaths[machineClass.name(0)];
+		var imgSrc = app.factorioEnvironment.imgPaths[machineClass.name(0)];
 		var selectorText = machineClass.className;
 	}
 
@@ -46,7 +46,7 @@ pages.machine_level_selection.addMachineClassFunc = function(machineClass) {
 
 		var machineLevelIcon = machineLevelButton.getElementsByClassName('tree-node-machine-icon')[0];
 		machineLevelIcon.onerror = function() {this.onerror = null; this.src = 'img/default.png'};
-		machineLevelIcon.src = app.factorioEnvironment.itemImgPaths[belt.name];
+		machineLevelIcon.src = app.factorioEnvironment.imgPaths[belt.name];
 		machineLevelButton.getElementsByClassName('tree-node-machine-name')[0].textContent = belt.name;
 
 		pages.machine_level_selection.mcButtons[selectorText].push(machineLevelButton);
@@ -76,7 +76,7 @@ pages.machine_level_selection.addMachineClassFunc = function(machineClass) {
 
 			var machineLevelIcon = machineLevelButton.getElementsByClassName('tree-node-machine-icon')[0];
 			machineLevelIcon.onerror = function() {this.onerror = null; this.src = 'img/default.png'};
-			machineLevelIcon.src = app.factorioEnvironment.itemImgPaths[machineClass.name(i)];
+			machineLevelIcon.src = app.factorioEnvironment.imgPaths[machineClass.name(i)];
 			machineLevelButton.getElementsByClassName('tree-node-machine-name')[0].textContent = machineClass.name(i);
 
 			pages.machine_level_selection.mcButtons[machineClass.className].push(machineLevelButton);
@@ -107,7 +107,7 @@ pages.machine_level_selection.machineLevelFunc = function(machineClass, level) {
 
 	var machineIcon = machineButton.getElementsByClassName('tree-node-machine-icon')[0];
 	machineIcon.onerror = function() {this.onerror = null; this.src = 'img/default.png'};
-	machineIcon.src = app.factorioEnvironment.itemImgPaths[machineClass.name(level)];
+	machineIcon.src = app.factorioEnvironment.imgPaths[machineClass.name(level)];
 
 	for (var i = 0; i < classButtons.length; ++i) {
 		classButtons[i].style.backgroundColor = "";
@@ -128,7 +128,7 @@ pages.machine_level_selection.beltLevelFunc = function(level) {
 
 	var machineIcon = machineButton.getElementsByClassName('tree-node-machine-icon')[0];
 	machineIcon.onerror = function() {this.onerror = null; this.src = 'img/default.png'};
-	machineIcon.src = app.factorioEnvironment.itemImgPaths[belt.name];
+	machineIcon.src = app.factorioEnvironment.imgPaths[belt.name];
 
 	for (var i = 0; i < classButtons.length; ++i) {
 		classButtons[i].style.backgroundColor = "";

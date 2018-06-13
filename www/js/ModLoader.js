@@ -174,7 +174,7 @@ ModLoader.prototype.loadFluids = function() {
 			for (var i = 0; i < fluids.length; ++i) {
 				var fluid = fluids[i];
 				if (fluid.name in self.blacklist.fluids && self.blacklist.fluids[fluid.name]) continue;
-				self._environment.addItem(fluid.name, 'mods/' + self.mod + '/img/' + fluid.name + '.png');
+				self._environment.addFluid(fluid.name, 'mods/' + self.mod + '/img/' + fluid.name + '.png');
 			}
 
 			self.modStatus.fluids = self.STATUS.DONE;

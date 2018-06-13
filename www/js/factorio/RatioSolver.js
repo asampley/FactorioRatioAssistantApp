@@ -142,7 +142,7 @@ factorio.RatioSolver.prototype.solveRecurse = function(index, item, itemPerSec) 
 		}
 	}
 
-	if (this.environment.belts.length != 0) {
+	if (this.environment.belts.length != 0 && this.environment.hasItem(item)) {
 		tree.rootValue().belt = this.environment.belts[this._beltLevel];
 		tree.rootValue().beltCount = this.environment.belts[this._beltLevel].numRequired(itemPerSec);
 	}

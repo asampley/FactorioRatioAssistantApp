@@ -29,7 +29,7 @@ document.addEventListener(
 );
 
 document.addEventListener(
-	'deviceready', 
+	'deviceready',
 	function() {
 		var mainElement = document.getElementById('ratio_display');
 		var treeTemplate = document.getElementById('template-tree-node-ratio');
@@ -67,7 +67,7 @@ document.addEventListener(
 				var machineCount = treeRoot.machineCount === null ? null : treeRoot.machineCount.mul(coeff);
 				var outputItem = treeRoot.item;
 				var outputCountPerSec = treeRoot.itemPerSec.mul(coeff);
-				var outputIconPath = app.factorioEnvironment.itemImgPaths[outputItem];
+				var outputIconPath = app.factorioEnvironment.imgPaths[outputItem];
 				var belt = treeRoot.belt;
 				var beltCount = treeRoot.beltCount === null ? null : treeRoot.beltCount.mul(coeff);
 
@@ -110,7 +110,7 @@ document.addEventListener(
 				var treeNodeIcon = treeNode.getElementsByClassName('tree-node-item-icon')[0];
 				treeNodeIcon.onerror = function() {this.onerror = null; this.src = 'img/default.png'};
 				if (machine != null) {
-					var machineIconPath = app.factorioEnvironment.itemImgPaths[machine.name()];
+					var machineIconPath = app.factorioEnvironment.imgPaths[machine.name()];
 					var treeNodeMachineIcon = treeNode.getElementsByClassName('tree-node-machine-icon')[0];
 					treeNodeMachineIcon.onerror = function() {this.onerror = null; this.src = 'img/default.png'};
 					treeNodeMachineIcon.src = machineIconPath;
@@ -120,7 +120,7 @@ document.addEventListener(
 					treeNode.getElementsByClassName('tree-node-machine-frac')[0].textContent = (machineFrac.n == 0 ? "" : machineFrac.toFraction());
 				}
 				if (belt != null) {
-					var beltIconPath = app.factorioEnvironment.itemImgPaths[belt.name];
+					var beltIconPath = app.factorioEnvironment.imgPaths[belt.name];
 					var treeNodeBeltIcon = treeNode.getElementsByClassName('tree-node-belt-icon')[0];
 					treeNodeBeltIcon.onerror = function() {this.onerror = null; this.src = 'img/default.png'};
 					treeNodeBeltIcon.src = beltIconPath;

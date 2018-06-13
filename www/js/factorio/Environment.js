@@ -1,29 +1,40 @@
 factorio.Environment = function() {
 	this.items = [];
-	this.itemImgPaths = {};
+	this.fluids = [];
+	this.imgPaths = {};
 	this.recipes = {};
 	this.machineClasses = {};
 	this.belts = [];
+	this._addFluidListeners = [];
 	this._addItemListeners = [];
 	this._addRecipeListeners = [];
 	this._addMachineClassListeners = [];
 	this._addBeltListeners = [];
 }
 
-factorio.Environment.prototype.addRecipe = function(recipe) {
-	outputItem = recipe.outputItem();
-	inputItems = recipe.inputItems();
+factorio.Environment._notify = function(listeners) {
+	const skipStart = 1;
+	var args = new Array(arguments.length - skipStart);
+	for (var i = 0; i < args.length; ++i) {
+		args[i] = arguments[i+skipStart];
+	}
+	for (var i = 0; i < listeners.length; ++i) {
+		listeners[i].apply(null, args);
+	}
+}
 
-	assert(this.hasItem(outputItem), "No such item: \"" + outputItem + "\"");
+factorio.Environment.prototype.addRecipe = function(recipe) {
+	var outputItem = recipe.outputItem();
+	var inputItems = recipe.inputItems();
+
+	assert(this.hasItem(outputItem) || this.hasFluid(outputItem), "No such item: \"" + outputItem + "\"");
 	for (var i = 0; i < inputItems.length; ++i) {
-		assert(this.hasItem(inputItems[i]), "No such item: " + inputItems[i]);
+		assert(this.hasItem(inputItems[i]) || this.hasFluid(inputItems[i]), "No such item: " + inputItems[i]);
 	}
 
 	this.recipes[outputItem] = recipe;
 
-	for (var i = 0; i < this._addRecipeListeners.length; ++i) {
-		this._addRecipeListeners[i](recipe);
-	}
+	factorio.Environment._notify(this._addRecipeListeners, recipe);
 }
 
 /*
@@ -31,29 +42,46 @@ factorio.Environment.prototype.addRecipe = function(recipe) {
  * If the item is already added, the function silently returns.
  * Items should not be added directly to the items object.
  */
-factorio.Environment.prototype.addItem = function(item, itemImgPath) {
+factorio.Environment.prototype.addItem = function(item, imgPath) {
 	if (this.hasItem(item)) {
 		return;
 	}
 
 	this.items.push(item);
-	this.itemImgPaths[item] = itemImgPath;
+	this.imgPaths[item] = imgPath;
 
-	for (var i = 0; i < this._addItemListeners.length; ++i) {
-		this._addItemListeners[i](item, itemImgPath);
+	factorio.Environment._notify(this._addItemListeners, item, imgPath);
+}
+
+factorio.Environment.prototype.addFluid = function(fluid, imgPath) {
+	if (this.hasFluid(fluid)) {
+		return;
 	}
+
+	this.fluids.push(fluid);
+	this.imgPaths[fluid] = imgPath;
+
+	factorio.Environment._notify(this._addFluidListeners, fluid, imgPath);
 }
 
 factorio.Environment.prototype.addMachineClass = function(machineClass) {
 	this.machineClasses[machineClass.className] = machineClass;
 
-	for (var i = 0; i < this._addMachineClassListeners.length; ++i) {
-		this._addMachineClassListeners[i](machineClass);
-	}
+	factorio.Environment._notify(this._addMachineClassListeners, machineClass);
+}
+
+factorio.Environment.prototype.addBelt = function(belt) {
+	this.belts.push(belt);
+
+	factorio.Environment._notify(this._addBeltListeners, belt);
 }
 
 factorio.Environment.prototype.hasItem = function(item) {
 	return this.items.indexOf(item) != -1;
+}
+
+factorio.Environment.prototype.hasFluid = function(fluid) {
+	return this.fluids.indexOf(fluid) != -1;
 }
 
 factorio.Environment.prototype.hasMachineClass = function(machineClassName) {
@@ -63,14 +91,6 @@ factorio.Environment.prototype.hasMachineClass = function(machineClassName) {
 factorio.Environment.prototype.getMachineClass = function(machineClassName) {
 	return this.machineClasses[machineClassName];
 };
-
-factorio.Environment.prototype.addBelt = function(belt) {
-	this.belts.push(belt);
-
-	for (var i = 0; i < this._addBeltListeners.length; ++i) {
-		this._addBeltListeners[i](belt);
-	}
-}
 
 factorio.Environment.prototype.getBelt = function(level) {
 	return this.belts[level];
@@ -86,8 +106,18 @@ factorio.Environment.prototype.addItemListener = function(fAdd) {
 
 	for (var i = 0; i < this.items.length; ++i) {
 		var item = this.items[i];
-		var imgPath = this.itemImgPaths[item];
-		fAdd(this.items[i], imgPath);
+		var imgPath = this.imgPaths[item];
+		fAdd(item, imgPath);
+	}
+}
+
+factorio.Environment.prototype.addFluidListener = function(fAdd) {
+	this._addFluidListeners.push(fAdd);
+
+	for (var i = 0; i < this.fluids.length; ++i) {
+		var fluid = this.fluids[i];
+		var imgPath = this.imgPaths[fluid];
+		fAdd(fluid, imgPath);
 	}
 }
 
