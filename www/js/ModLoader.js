@@ -127,7 +127,7 @@ ModLoader.prototype.loadBlackList = function(key) {
 			self.updateModStatusAndContinue();
 		},
 		function(error) {
-			console.log(error);
+			console.error(error);
 			self.modStatus[key] = self.STATUS.BLACKLIST_DONE;
 			self.updateModStatusAndContinue();
 		}

@@ -13,6 +13,9 @@ factorio.RatioSolver = function(environment) {
 	this.environment.addItemListener(function(item) {
 		self.setRaw(item, true)
 	});
+	this.environment.addFluidListener(function(fluid) {
+		self.setRaw(fluid, true);
+	});
 	this.environment.addRecipeListener(function(recipe) {
 		self.setRaw(recipe.outputItem(), false);
 	});
