@@ -181,7 +181,6 @@ document.addEventListener(
 
 			if (newTree) {
 				pages.ratio_display.trees[index] = constructTree(mainElement, tree, coeff);
-				pages.ratio_display.trees[index].getElementsByClassName('tree-node-children')[0].classList.remove('hidden');
 			} else {
 				pages.ratio_display.trees[index] = constructTree(mainElement, tree, coeff, pages.ratio_display.trees[index]);
 			}
