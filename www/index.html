@@ -289,19 +289,27 @@
                     <div class="help hidden">
                         <p>
                             From this page you can select which mod to use. The term mod here is not exactly the
-			    same as the Factorio definition, but each is rather a collection of "Factorio mods".
+							same as the Factorio definition, but each is rather a collection of "Factorio mods".
                         </p>
                         <p>
                             Press a mod name to select that mod. Be aware that recipes with multiple outputs or
-			    multiple recipes that produce the same item will be ignored.
+							multiple recipes that produce the same item will be ignored.
                         </p>
                         <p>
-			    To create a new mod, start a new game with your desired mod configuration, and then copy the script found
-			    at  
-			    <a href="https://github.com/asampley/FactorioRatioAssistantApp/blob/master/scripts/factorio-extract.lua">
-				https://github.com/asampley/FactorioRatioAssistantApp/blob/master/scripts/factorio-extract.lua
-			    </a>
-			    into the console.
+							To create a new mod, start a new game with your desired mod configuration, and then copy the script found
+							at  
+							<a href="https://github.com/asampley/FactorioRatioAssistantApp/blob/master/scripts/factorio-extract.lua">
+								https://github.com/asampley/FactorioRatioAssistantApp/blob/master/scripts/factorio-extract.lua
+							</a>
+							into the console. This will put several files into your factorio script output directory:
+							<ul>
+								<li>Windows: %appdata%\Factorio\script-output\</li>
+								<li>MacOSX: ~/Library/Application Support/factorio/script-output/</li>
+								<li>Linux: ~/.factorio/script-output</li>
+							</ul>
+							You can then place these in a folder in your www/mods directory. Add an img/ folder, and blacklist files
+							if necessary. For this device, the directory should be
+							<p class="data-mods"/>
                         </p>
                     </div>
                 </div>
@@ -313,6 +321,7 @@
         <script type="text/javascript" src="js/Tree.js"></script>
 
         <script type="text/javascript" src="js/fileutil.js"></script>
+		<script type="text/javascript" src="js/fill_data.js"></script>
 
         <script type="text/javascript" src="js/factorio/factorio.js"></script>
         <script type="text/javascript" src="js/factorio/Environment.js"></script>
@@ -331,7 +340,7 @@
         <script type="text/javascript" src="js/content.js"></script>
         <script type="text/javascript" src="js/pages/pages.js"></script>
 
-	<script type="text/javascript" src="js/pages/main_menu.js"></script>
+		<script type="text/javascript" src="js/pages/main_menu.js"></script>
         <script type="text/javascript" src="js/pages/ratio_selection.js"></script>
         <script type="text/javascript" src="js/pages/ratio_display.js"></script>
         <script type="text/javascript" src="js/pages/raw_materials_selection.js"></script>
