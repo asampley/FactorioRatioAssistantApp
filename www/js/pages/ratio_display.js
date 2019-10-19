@@ -104,9 +104,47 @@ document.addEventListener(
 				treeNode.classList.remove('hidden');
 				outputInt = outputCountPerSec.s * ~~(outputCountPerSec.n / outputCountPerSec.d); // magic
 				outputFrac = new Fraction(outputCountPerSec.n % outputCountPerSec.d, outputCountPerSec.d);
-				treeNode.getElementsByClassName('tree-node-item-pre-icon-int')[0].textContent = (outputInt == 0 ? "" : outputInt);
-				treeNode.getElementsByClassName('tree-node-item-pre-icon-frac')[0].textContent = (outputFrac.n == 0 ? "" : outputFrac.toFraction());
-				treeNode.getElementsByClassName('tree-node-item-post-icon-text')[0].textContent = " / s";
+				var treeNodeItemInt = treeNode.getElementsByClassName('tree-node-item-pre-icon-int')[0];
+				var treeNodeItemFrac = treeNode.getElementsByClassName('tree-node-item-pre-icon-frac')[0];
+				var treeNodeItemPost = treeNode.getElementsByClassName('tree-node-item-post-icon-text')[0];
+				var treeNodeItemInput = treeNode.getElementsByClassName('tree-node-item-input')[0];
+
+				treeNodeItemInt.textContent = (outputInt == 0 ? "" : outputInt);
+				treeNodeItemFrac.textContent = (outputFrac.n == 0 ? "" : outputFrac.toFraction());
+				treeNodeItemPost.textContent = " / s";
+				treeNodeItemInput.value =
+					(outputInt == 0 ? "" : outputInt)
+					+ (outputInt !== 0 || outputFrac.n !== 0 ? " " : "")
+					+ (outputFrac.n == 0 ? "" : outputFrac.toFraction());
+
+				// hide on click, and switch to input mode
+				var itemNumberClick = function(event) {
+					treeNodeItemInt.classList.add('hidden');
+					treeNodeItemFrac.classList.add('hidden');
+
+					treeNodeItemInput.classList.remove('hidden');
+				}
+				treeNodeItemInt.onclick = itemNumberClick;
+				treeNodeItemFrac.onclick = itemNumberClick;
+
+				// on input, change the coeff, and refresh the tree
+				treeNodeItemInput.onchange = function(event) {
+					treeNodeItemInput.classList.add('hidden');
+
+					try {
+						var fraction = new Fraction(treeNodeItemInput.value.trim());
+						app.ratioSolver.solutions[index].coeff = fraction.div(treeRoot.itemPerSec);
+						app.ratioSolver.solutions[index].coeffLock = true;
+					} catch (error) {
+						console.warn("Invalid fraction entered: \"" + treeNodeItemInput.value + "\"");
+					}
+
+					showTree(index, false);
+
+					treeNodeItemInt.classList.remove('hidden');
+					treeNodeItemFrac.classList.remove('hidden');
+				}
+
 				var treeNodeIcon = treeNode.getElementsByClassName('tree-node-item-icon')[0];
 				treeNodeIcon.onerror = function() {this.onerror = null; this.src = 'img/default.png'};
 				

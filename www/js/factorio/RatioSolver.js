@@ -49,7 +49,7 @@ factorio.RatioSolver.prototype.getBeltLevel = function() {
 }
 
 factorio.RatioSolver.prototype.push = function(item) {
-	var solution = { item: item, coeff: new Fraction(1), raw: {}, tree: {} };
+	var solution = { item: item, coeff: new Fraction(1), coeffLock: false, raw: {}, tree: {} };
 	var index = this.solutions.push(solution) - 1;
 	return index;
 }
@@ -60,7 +60,9 @@ factorio.RatioSolver.prototype.solve = function(index) {
 	}
 	this.solutions[index].raw = {};
 	this.solutions[index].tree = this.solveRecurse(index, this.solutions[index].item, new Fraction(1));
-	this.solutions[index].coeff = this.perSecForWhole(this.solutions[index].item);
+	if (!this.solutions[index].coeffLock) {
+		this.solutions[index].coeff = this.perSecForWhole(this.solutions[index].item);
+	}
 
 	return this.solutions[index].tree;
 }

@@ -1,301 +1,310 @@
 <!DOCTYPE html>
 <!--
-    Licensed to the Apache Software Foundation (ASF) under one
-    or more contributor license agreements.  See the NOTICE file
-    distributed with this work for additional information
-    regarding copyright ownership.  The ASF licenses this file
-    to you under the Apache License, Version 2.0 (the
-    "License"); you may not use this file except in compliance
-    with the License.  You may obtain a copy of the License at
+	Licensed to the Apache Software Foundation (ASF) under one
+	or more contributor license agreements.  See the NOTICE file
+	distributed with this work for additional information
+	regarding copyright ownership.  The ASF licenses this file
+	to you under the Apache License, Version 2.0 (the
+	"License"); you may not use this file except in compliance
+	with the License.  You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+	http://www.apache.org/licenses/LICENSE-2.0
 
-    Unless required by applicable law or agreed to in writing,
-    software distributed under the License is distributed on an
-    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-     KIND, either express or implied.  See the License for the
-    specific language governing permissions and limitations
-    under the License.
+	Unless required by applicable law or agreed to in writing,
+	software distributed under the License is distributed on an
+	"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+	 KIND, either express or implied.  See the License for the
+	specific language governing permissions and limitations
+	under the License.
 -->
 <html>
-    <head>
-        <!--
-        Customize this policy to fit your own app's needs. For more guidance, see:
-            https://github.com/apache/cordova-plugin-whitelist/blob/master/README.md#content-security-policy
-        Some notes:
-            * gap: is required only on iOS (when using UIWebView) and is needed for JS->native communication
-            * https://ssl.gstatic.com is required only on Android and is needed for TalkBack to function properly
-            * Disables use of inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
-                * Enable inline JS: add 'unsafe-inline' to default-src
-        -->
-        <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *; img-src 'self' data: content:;">
-        <meta name="format-detection" content="telephone=no">
-        <meta name="msapplication-tap-highlight" content="no">
-        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
-        <link rel="stylesheet" type="text/css" href="css/defaults.css">
-        <link rel="stylesheet" type="text/css" href="css/colors.css">
-        <link rel="stylesheet" type="text/css" href="css/index.css">
-        <link rel="stylesheet" type="text/css" href="css/button.css">
-        <link rel="stylesheet" type="text/css" href="css/popup.css">
-        <link rel="stylesheet" type="text/css" href="css/border.css">
-        <link rel="stylesheet" type="text/css" href="css/content.css">
-        <link rel="stylesheet" type="text/css" href="css/main_menu.css">
-        <link rel="stylesheet" type="text/css" href="css/ratio_display.css">
-        <link rel="stylesheet" type="text/css" href="css/grid.css">
-        <link rel="stylesheet" type="text/css" href="css/tree.css">
+	<head>
+		<!--
+		Customize this policy to fit your own app's needs. For more guidance, see:
+			https://github.com/apache/cordova-plugin-whitelist/blob/master/README.md#content-security-policy
+		Some notes:
+			* gap: is required only on iOS (when using UIWebView) and is needed for JS->native communication
+			* https://ssl.gstatic.com is required only on Android and is needed for TalkBack to function properly
+			* Disables use of inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
+				* Enable inline JS: add 'unsafe-inline' to default-src
+		-->
+		<meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *; img-src 'self' data: content:;">
+		<meta name="format-detection" content="telephone=no">
+		<meta name="msapplication-tap-highlight" content="no">
+		<meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+		<link rel="stylesheet" type="text/css" href="css/defaults.css">
+		<link rel="stylesheet" type="text/css" href="css/colors.css">
+		<link rel="stylesheet" type="text/css" href="css/index.css">
+		<link rel="stylesheet" type="text/css" href="css/button.css">
+		<link rel="stylesheet" type="text/css" href="css/popup.css">
+		<link rel="stylesheet" type="text/css" href="css/border.css">
+		<link rel="stylesheet" type="text/css" href="css/content.css">
+		<link rel="stylesheet" type="text/css" href="css/main_menu.css">
+		<link rel="stylesheet" type="text/css" href="css/ratio_display.css">
+		<link rel="stylesheet" type="text/css" href="css/grid.css">
+		<link rel="stylesheet" type="text/css" href="css/tree.css">
 
-        <title>Factorio Ratio Assistant</title>
-        <link rel="shortcut icon" href="img/icon.png"/>
-    </head>
-    <body>
-        <div id="templates" class="hidden">
-                <button id="template-item_button" class="hidden button-item">
-                    <img class="icon"/>
-                </button>
-        </div>
+		<title>Factorio Ratio Assistant</title>
+		<link rel="shortcut icon" href="img/icon.png"/>
+	</head>
+	<body>
+		<div id="templates" class="hidden">
+				<button id="template-item_button" class="hidden button-item">
+					<img class="icon"/>
+				</button>
+		</div>
 
-        <div class="border">
-            <div class="border-top-bar">
-                <button id="button-back" class="button-back">
-                    <img class="icon" src="img/back.svg"/>
-                </button>
+		<div class="border">
+			<div class="border-top-bar">
+				<button id="button-back" class="button-back">
+					<img class="icon" src="img/back.svg"/>
+				</button>
 
-                <li id="tabs" class="tabs">
-                    <button id="tab-ratio" class="button tab">
-                        <img class="icon" src="img/main_menu/button-ratio.png"/>
-                    </button>
-                    <button id="tab-raw_materials" class="button tab">
-                        <img class="icon" src="img/main_menu/button-raw_materials.png"/>
-                    </button>
-                    <button id="tab-machine_levels" class="button tab">
-                        <img class="icon" src="img/main_menu/button-machine_levels.png"/>
-                    </button>
-                </li>
+				<li id="tabs" class="tabs">
+					<button id="tab-ratio" class="button tab">
+						<img class="icon" src="img/main_menu/button-ratio.png"/>
+					</button>
+					<button id="tab-raw_materials" class="button tab">
+						<img class="icon" src="img/main_menu/button-raw_materials.png"/>
+					</button>
+					<button id="tab-machine_levels" class="button tab">
+						<img class="icon" src="img/main_menu/button-machine_levels.png"/>
+					</button>
+				</li>
 
-                <button id="button-help" class="button-back">
-                    <img class="icon" src="img/help.svg"/>
-                </button>
-            </div>
+				<button id="button-help" class="button-back">
+					<img class="icon" src="img/help.svg"/>
+				</button>
+			</div>
 
-            <div id="popup_overlay" class="overlay hidden">
-                <div id="help_popup" class="popup hidden">
-                    <div class="popup-content" id="help_popup-content">
+			<div id="popup_overlay" class="overlay hidden">
+				<div id="help_popup" class="popup hidden">
+					<div class="popup-content" id="help_popup-content">
 
-                    </div>
-                    <div id="help_popup-content_default" class="help hidden">
-                        This is the default help text. Sorry that this isn't very
-                        helpful. Hopfully this will be remedied in the near future.
-                    </div>
-                    <button id="help_popup-button_close">
-                        Close
-                    </button>
-                </div>
-            </div>
+					</div>
+					<div id="help_popup-content_default" class="help hidden">
+						This is the default help text. Sorry that this isn't very
+						helpful. Hopfully this will be remedied in the near future.
+					</div>
+					<button id="help_popup-button_close">
+						Close
+					</button>
+				</div>
+			</div>
 
-            <div class="content">
-                <div id="main_menu" class="hidden">
-                    <button id="main_menu-button-ratio" class="button-menu">
-                        <img class="icon" src="img/main_menu/button-ratio.png"/>
-                        Ratio
-                    </button>
-                    <button id="main_menu-button-raw_materials" class="button-menu">
-                        <img class="icon" src="img/main_menu/button-raw_materials.png"/>
-                        Raw Materials
-                    </button>
-                    <button id="main_menu-button-machine_levels" class="button-menu">
-                        <img class="icon" src="img/main_menu/button-machine_levels.png"/>
-                        Machine Levels
-                    </button>
-                    <button id="main_menu-button-mods" class="button-menu">
-                        <img class="icon" src="img/main_menu/button-mod_versions.png"/>
-                        Mod Versions
-                    </button>
+			<div class="content">
+				<div id="main_menu" class="hidden">
+					<button id="main_menu-button-ratio" class="button-menu">
+						<img class="icon" src="img/main_menu/button-ratio.png"/>
+						Ratio
+					</button>
+					<button id="main_menu-button-raw_materials" class="button-menu">
+						<img class="icon" src="img/main_menu/button-raw_materials.png"/>
+						Raw Materials
+					</button>
+					<button id="main_menu-button-machine_levels" class="button-menu">
+						<img class="icon" src="img/main_menu/button-machine_levels.png"/>
+						Machine Levels
+					</button>
+					<button id="main_menu-button-mods" class="button-menu">
+						<img class="icon" src="img/main_menu/button-mod_versions.png"/>
+						Mod Versions
+					</button>
 
-                    <div class="help hidden">
-                        <p>
-                            Welcome to the Factorio Ratio Assistant. This is the main menu.
-                            From here, you can calculate a crafting ratio (
-                            <img class="icon" src="img/main_menu/button-ratio.png"/>
-                            ), change some ingredients to be ignored by the ratio calculation, 
-                            a.k.a. "raw" (
-                            <img class="icon" src="img/main_menu/button-raw_materials.png"/>
-                            ), change the levels of machines used for the calculations (
-                            <img class="icon" src="img/main_menu/button-machine_levels.png"/>
-                            ), or change what mod versions you are using (
-                            <img class="icon" src="img/main_menu/button-mod_versions.png"/>
-                            ).
-                        </p>
-                        <p>
-                            For more information on what each of these sections does,
-                            click the help button (
-                            <img class="icon" src="img/help.svg"/>
-                            ) in each of the sections.
-                        </p>
-                    </div>
-                </div>
+					<div class="help hidden">
+						<p>
+							Welcome to the Factorio Ratio Assistant. This is the main menu.
+							From here, you can calculate a crafting ratio (
+							<img class="icon" src="img/main_menu/button-ratio.png"/>
+							), change some ingredients to be ignored by the ratio calculation, 
+							a.k.a. "raw" (
+							<img class="icon" src="img/main_menu/button-raw_materials.png"/>
+							), change the levels of machines used for the calculations (
+							<img class="icon" src="img/main_menu/button-machine_levels.png"/>
+							), or change what mod versions you are using (
+							<img class="icon" src="img/main_menu/button-mod_versions.png"/>
+							).
+						</p>
+						<p>
+							For more information on what each of these sections does,
+							click the help button (
+							<img class="icon" src="img/help.svg"/>
+							) in each of the sections.
+						</p>
+					</div>
+				</div>
 
-                <div id="ratio_selection" class="hidden">
-                    <div id="ratio_selection-item_buttons" class="grid">
+				<div id="ratio_selection" class="hidden">
+					<div id="ratio_selection-item_buttons" class="grid">
 
-                    </div>
+					</div>
 
-                    <div class="help hidden">
-                        <p>
-                            From this page you can select what item you wish to see a crafting
-                            ratio for.
-                        </p>
-                        <p>
-                            Press any icon to see the crafting ratio for that item. It will tell
-                            you how many machines it will take to make them, and each of their
-                            components, and the components of those componets, etc.
-                        </p>
-                        <p>
-                            The calculation is done exactly using fractions. Any items that are
-                            not considered "raw" will have the lowest whole number of machines
-                            possible. For more information about "raw" items, look at the raw
-                            materials page (
-                            <img class="icon" src="img/main_menu/button-raw_materials.png"/>
-                            )
-                        </p>
-                    </div>
-                </div>
+					<div class="help hidden">
+						<p>
+							From this page you can select what item you wish to see a crafting
+							ratio for.
+						</p>
+						<p>
+							Press any icon to see the crafting ratio for that item. It will tell
+							you how many machines it will take to make them, and each of their
+							components, and the components of those componets, etc.
+						</p>
+						<p>
+							The calculation is done exactly using fractions. Any items that are
+							not considered "raw" will have the lowest whole number of machines
+							possible. For more information about "raw" items, look at the raw
+							materials page (
+							<img class="icon" src="img/main_menu/button-raw_materials.png"/>
+							)
+						</p>
+						<p>
+							If you're looking for an exact number crafted per second, you will
+							be able to select that in the output page.
+						</p>
+					</div>
+				</div>
 
-                <div id="ratio_display" class="hidden">
-                    <button id="template-button-trash" class="hidden tree-node-icon-button">
-			    <img class="icon" src="img/button-trash.png"/>
-                    </button>
-                    <div id="template-tree-node-ratio" class="hidden">
-                        <div class="button tree-node-button">
-			    <div class="tree-node-machine">
-                                <span class="tree-node-text   tree-node-machine-int"></span>
-                                <span class="tree-node-text-2 tree-node-machine-frac"></span>
-                                <img class="icon tree-node-machine-icon"></img>
-			    </div>
-			    <div class="tree-node-item">
-                                <span>(</span>
-                                <span class="tree-node-text   tree-node-item-pre-icon-int"></span>
-                                <span class="tree-node-text-2 tree-node-item-pre-icon-frac"></span>
-                                <img class="icon tree-node-item-icon"></img>
-                                <span class="tree-node-item-post-icon-text"></span>
-                                <span>)</span>
-			    </div>
-			    <div class="tree-node-belt">
-                                <span>[</span>
-                                <span class="tree-node-text   tree-node-belt-int"></span>
-                                <span class="tree-node-text-2 tree-node-belt-frac"></span>
-                                <img class="icon tree-node-belt-icon"></img>
-                                <span>]</span>
-			    </div>
-			    <div class="tree-node-right-div">
-				    <button class="hidden tree-node-icon-button tree-node-raw-toggle">
-					<img class="icon" src="img/main_menu/button-raw_materials.png"/>
-				    </button>
-			    </div>
-                        </div>
-                        <div class="tree-node-children hidden">
-                        </div>
-                    </div>
+				<div id="ratio_display" class="hidden">
+					<button id="template-button-trash" class="hidden tree-node-icon-button">
+						<img class="icon" src="img/button-trash.png"/>
+					</button>
+					<div id="template-tree-node-ratio" class="hidden">
+						<div class="button tree-node-button">
+						<div class="tree-node-machine">
+							<span class="tree-node-text   tree-node-machine-int"></span>
+							<span class="tree-node-text-2 tree-node-machine-frac"></span>
+							<img class="icon tree-node-machine-icon"></img>
+						</div>
+						<div class="tree-node-item">
+							<span>(</span>
+							<input type="text" class="tree-node-text tree-node-item-input hidden"/>
+							<span class="tree-node-text   tree-node-item-pre-icon-int"></span>
+							<span class="tree-node-text-2 tree-node-item-pre-icon-frac"></span>
+							<img class="icon tree-node-item-icon"></img>
+							<span class="tree-node-item-post-icon-text"></span>
+							<span>)</span>
+						</div>
+						<div class="tree-node-belt">
+							<span>[</span>
+							<span class="tree-node-text   tree-node-belt-int"></span>
+							<span class="tree-node-text-2 tree-node-belt-frac"></span>
+							<img class="icon tree-node-belt-icon"></img>
+							<span>]</span>
+						</div>
+						<div class="tree-node-right-div">
+							<button class="hidden tree-node-icon-button tree-node-raw-toggle">
+							<img class="icon" src="img/main_menu/button-raw_materials.png"/>
+							</button>
+						</div>
+						</div>
+						<div class="tree-node-children hidden">
+						</div>
+					</div>
 
-                    <div class="help hidden">
-                        <p>
-                            On this page you can see the ratio for how many machines are needed for
-                            each component, and their components, etc. It also shows how many items
-                            will be produced per second by that number of machines, and the number
-                            of belts required to transport them.
-                        </p>
-                        <p>
-                            Press any row to show or hide the components of that item. You can also
-                            press the (
-                            <img class="icon" src="img/main_menu/button-raw_materials.png"/>
-                            ) button to quickly switch that item to "raw".
-                        </p>
-                        <p>
-                            The calculation is done exactly using fractions. Any items that are
-                            not considered "raw" will have the lowest whole number of machines
-                            possible. For more information about "raw" items, look at the raw
-                            materials page (
-                            <img class="icon" src="img/main_menu/button-raw_materials.png"/>
-                            ) by pressing the tab at the top.
-                        </p>
-                    </div>
-                </div>
-                
-                <div id="machine_level_selection" class="hidden">
-                    <div id="template-tree-node-machine" class="hidden">
-                        <button class="tree-node-button">
-                            <img class="icon tree-node-machine-icon"></img>
-                            <span class="tree-node-machine-name"></span>
-                        </button>
-                        <div class="hidden tree-node-children">
-                        </div> 
-                    </div>
+					<div class="help hidden">
+						<p>
+							On this page you can see the ratio for how many machines are needed for
+							each component, and their components, etc. It also shows how many items
+							will be produced per second by that number of machines, and the number
+							of belts required to transport them.
+						</p>
+						<p>
+							Press any row to show or hide the components of that item. You can also
+							press the (
+							<img class="icon" src="img/main_menu/button-raw_materials.png"/>
+							) button to quickly switch that item to "raw".
+						</p>
+						<p>
+							The calculation is done exactly using fractions. By default any items
+							that are not considered "raw" will have the lowest whole number of
+							machines possible. For more information about "raw" items, look at the
+							raw materials page (
+							<img class="icon" src="img/main_menu/button-raw_materials.png"/>
+							) by pressing the tab at the top.
+						</p>
+						<p>
+							If you click on the number of items per second, you can enter a custom
+							number of items per second.
+						</p>
+					</div>
+				</div>
+				
+				<div id="machine_level_selection" class="hidden">
+					<div id="template-tree-node-machine" class="hidden">
+						<button class="tree-node-button">
+							<img class="icon tree-node-machine-icon"></img>
+							<span class="tree-node-machine-name"></span>
+						</button>
+						<div class="hidden tree-node-children">
+						</div> 
+					</div>
 
-                    <button id="template-button-machine-level" class="hidden">
-                        <img class="icon tree-node-machine-icon"></img>
-                        <span class="tree-node-machine-name"></span>
-                    </button>
+					<button id="template-button-machine-level" class="hidden">
+						<img class="icon tree-node-machine-icon"></img>
+						<span class="tree-node-machine-name"></span>
+					</button>
 
-                    <div class="help hidden">
-                        <p>
-                            This page allows you to change what levels of machines you are using.
-                            It also has belt levels.
-                        </p>
-                        <p>
-                            Press any row to show or hide the available levels of that type of machine.
-                            Press any of the levels to select that level. The selected level appears
-                            in green.
-                        </p>
-                        <p>
-                            The different speeds of the machines affect the ratio calculation. For
-                            more information on the ratio calculation, go to the (
-                            <img class="icon" src="img/main_menu/button-ratio.png"/>
-                            ) tab.
-                        </p>
-                    </div>
-                </div>
+					<div class="help hidden">
+						<p>
+							This page allows you to change what levels of machines you are using.
+							It also has belt levels.
+						</p>
+						<p>
+							Press any row to show or hide the available levels of that type of machine.
+							Press any of the levels to select that level. The selected level appears
+							in green.
+						</p>
+						<p>
+							The different speeds of the machines affect the ratio calculation. For
+							more information on the ratio calculation, go to the (
+							<img class="icon" src="img/main_menu/button-ratio.png"/>
+							) tab.
+						</p>
+					</div>
+				</div>
 
-                <div id="raw_materials_selection" class="hidden">
-                    <div id="raw_materials_selection-item_buttons" class="grid">
+				<div id="raw_materials_selection" class="hidden">
+					<div id="raw_materials_selection-item_buttons" class="grid">
 
-                    </div>
+					</div>
 
-                    <div class="help hidden">
-                        <p>
-                            From this page you can select what items will be considered "raw" when
-                            calculating crafting ratios.
-                        </p>
-                        <p>
-                            Press any icon to toggle whether that item is "raw". The red buttons indicate
-                            raw ingredients. If an icon is semi-transparent, that indicates that there
-                            is no known crafting recipe for that item, and thus it must always be raw.
-                        </p>
-                        <p>
-                            Raw items do not need to have a whole number of machines making them for the
-                            ratio calculation. For more information on the ratio calculation, press the (
-                            <img class="icon" src="img/main_menu/button-ratio.png"/>
-                            ) tab.
-                        </p>
-                    </div>
-                </div>
+					<div class="help hidden">
+						<p>
+							From this page you can select what items will be considered "raw" when
+							calculating crafting ratios.
+						</p>
+						<p>
+							Press any icon to toggle whether that item is "raw". The red buttons indicate
+							raw ingredients. If an icon is semi-transparent, that indicates that there
+							is no known crafting recipe for that item, and thus it must always be raw.
+						</p>
+						<p>
+							Raw items do not need to have a whole number of machines making them for the
+							ratio calculation. For more information on the ratio calculation, press the (
+							<img class="icon" src="img/main_menu/button-ratio.png"/>
+							) tab.
+						</p>
+					</div>
+				</div>
 
-                <div id="mod_selection" class="hidden">
-                    <div id="template-tree-node-mod" class="hidden">
-                        <button class="tree-node-button">
-                            <img class="icon tree-node-mod-icon"></img>
-                            <span class="tree-node-mod-name"></span>
-                        </button>
-                    </div>
+				<div id="mod_selection" class="hidden">
+					<div id="template-tree-node-mod" class="hidden">
+						<button class="tree-node-button">
+							<img class="icon tree-node-mod-icon"></img>
+							<span class="tree-node-mod-name"></span>
+						</button>
+					</div>
 
-                    <div class="help hidden">
-                        <p>
-                            From this page you can select which mod to use. The term mod here is not exactly the
+					<div class="help hidden">
+						<p>
+							From this page you can select which mod to use. The term mod here is not exactly the
 							same as the Factorio definition, but each is rather a collection of "Factorio mods".
-                        </p>
-                        <p>
-                            Press a mod name to select that mod. Be aware that recipes with multiple outputs or
+						</p>
+						<p>
+							Press a mod name to select that mod. Be aware that recipes with multiple outputs or
 							multiple recipes that produce the same item will be ignored.
-                        </p>
-                        <p>
+						</p>
+						<p>
 							To create a new mod, start a new game with your desired mod configuration, and then copy the script found
 							at  
 							<a href="https://github.com/asampley/FactorioRatioAssistantApp/blob/master/scripts/factorio-extract.lua">
@@ -310,43 +319,43 @@
 							You can then place these in a folder in your www/mods directory. Add an img/ folder, and blacklist files
 							if necessary. For this device, the directory should be
 							<p class="data-mods"/>
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <script type="text/javascript" src="cordova.js"></script>
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script type="text/javascript" src="cordova.js"></script>
 
-        <script type="text/javascript" src="js/Fraction.js"></script>
-        <script type="text/javascript" src="js/Tree.js"></script>
+		<script type="text/javascript" src="js/Fraction.js"></script>
+		<script type="text/javascript" src="js/Tree.js"></script>
 
-        <script type="text/javascript" src="js/fileutil.js"></script>
+		<script type="text/javascript" src="js/fileutil.js"></script>
 		<script type="text/javascript" src="js/fill_data.js"></script>
 
-        <script type="text/javascript" src="js/factorio/factorio.js"></script>
-        <script type="text/javascript" src="js/factorio/Environment.js"></script>
-        <script type="text/javascript" src="js/factorio/Machine.js"></script>
-        <script type="text/javascript" src="js/factorio/MachineClass.js"></script>
-        <script type="text/javascript" src="js/factorio/Recipe.js"></script>
-        <script type="text/javascript" src="js/factorio/Belt.js"></script>
-        <script type="text/javascript" src="js/factorio/RatioSolver.js"></script>
-        <script type="text/javascript" src="js/ModLoader.js"></script>
+		<script type="text/javascript" src="js/factorio/factorio.js"></script>
+		<script type="text/javascript" src="js/factorio/Environment.js"></script>
+		<script type="text/javascript" src="js/factorio/Machine.js"></script>
+		<script type="text/javascript" src="js/factorio/MachineClass.js"></script>
+		<script type="text/javascript" src="js/factorio/Recipe.js"></script>
+		<script type="text/javascript" src="js/factorio/Belt.js"></script>
+		<script type="text/javascript" src="js/factorio/RatioSolver.js"></script>
+		<script type="text/javascript" src="js/ModLoader.js"></script>
 
-        <script type="text/javascript" src="js/Preferences.js"></script>
+		<script type="text/javascript" src="js/Preferences.js"></script>
 
-        <script type="text/javascript" src="js/index.js"></script>
-        <script type="text/javascript" src="js/border.js"></script>
-        <script type="text/javascript" src="js/help_popup.js"></script>
-        <script type="text/javascript" src="js/content.js"></script>
-        <script type="text/javascript" src="js/pages/pages.js"></script>
+		<script type="text/javascript" src="js/index.js"></script>
+		<script type="text/javascript" src="js/border.js"></script>
+		<script type="text/javascript" src="js/help_popup.js"></script>
+		<script type="text/javascript" src="js/content.js"></script>
+		<script type="text/javascript" src="js/pages/pages.js"></script>
 
 		<script type="text/javascript" src="js/pages/main_menu.js"></script>
-        <script type="text/javascript" src="js/pages/ratio_selection.js"></script>
-        <script type="text/javascript" src="js/pages/ratio_display.js"></script>
-        <script type="text/javascript" src="js/pages/raw_materials_selection.js"></script>
-        <script type="text/javascript" src="js/pages/machine_level_selection.js"></script>
-        <script type="text/javascript" src="js/pages/mod_selection.js"></script>
-        <script type="text/javascript" src="js/overrides.js"></script>
+		<script type="text/javascript" src="js/pages/ratio_selection.js"></script>
+		<script type="text/javascript" src="js/pages/ratio_display.js"></script>
+		<script type="text/javascript" src="js/pages/raw_materials_selection.js"></script>
+		<script type="text/javascript" src="js/pages/machine_level_selection.js"></script>
+		<script type="text/javascript" src="js/pages/mod_selection.js"></script>
+		<script type="text/javascript" src="js/overrides.js"></script>
 
-    </body>
+	</body>
 </html>
