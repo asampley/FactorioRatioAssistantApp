@@ -12,14 +12,14 @@ document.addEventListener(
 			function(item) {
 				if (item in pages.ratio_display.setRawButtons) {
 					for (var i = 0; i < pages.ratio_display.setRawButtons[item].length; ++i) {
-						pages.ratio_display.setRawButtons[item][i].style.backgroundColor = "";
+						pages.ratio_display.setRawButtons[item][i].classList.remove('raw');
 					}
 				}
 			},
 			function(item) {
 				if (item in pages.ratio_display.setRawButtons) {
 					for (var i = 0; i < pages.ratio_display.setRawButtons[item].length; ++i) {
-						pages.ratio_display.setRawButtons[item][i].style.backgroundColor = "var(--color-button-raw)";
+						pages.ratio_display.setRawButtons[item][i].classList.add('raw');
 					}
 				}
 			}
@@ -125,6 +125,7 @@ document.addEventListener(
 					treeNodeItemFrac.classList.add('hidden');
 
 					treeNodeItemInput.classList.remove('hidden');
+					treeNodeItemInput.focus();
 				}
 				treeNodeItemInt.onclick = itemNumberClick;
 				treeNodeItemFrac.onclick = itemNumberClick;
@@ -189,7 +190,7 @@ document.addEventListener(
 					}
 
 					if (!app.ratioSolver.isRaw(outputItem)) {
-						treeNodeRawToggle.style.backgroundColor = "var(--color-button-raw)";
+						treeNodeRawToggle.classList.add('raw');
 					}
 				}
 
@@ -197,10 +198,10 @@ document.addEventListener(
 				var treeNodeButton = treeNode.getElementsByClassName('tree-node-button')[0];
 
 				if (app.ratioSolver.isRaw(outputItem)) {
-					treeNodeButton.style.backgroundColor = "var(--color-button-raw)";
+					treeNodeButton.classList.add('raw');
 
 				} else {
-					treeNodeButton.style.backgroundColor = "";
+					treeNodeButton.classList.remove('raw');
 				}
 
 				treeNode.getElementsByClassName('tree-node-button')[0].onclick = function() {

@@ -1,9 +1,32 @@
 :root {
-	--color-border: #777777;
-	--color-background: #AAAAAA;
-	--color-button: gray;
-	--color-button-active: #774400;
-	--color-button-hover: #FF9900;
-	--color-button-raw: #DD4444;
-	--color-button-selected: #44BB44;
+	--color-border: #404040;
+	--color-border-border: #777777 #222222 #222222 #777777;
+
+
+	--color-background: #303030;
+	--color-background-border: #111111 #666666 #666666 #111111;
+	--color-background-text: white;
+
+
+	--background-button: #FFFFFF radial-gradient(farthest-side, #939393, #777777);
+	--color-button-border: #AAAAAA #666666 #666666 #AAAAAA;
+	--color-button-text: #1C1B1C;
+
+	--background-button-active: #FFFFFF radial-gradient(farthest-side, #FFD480, #FFD480);
+	--color-button-active-border: #DDB260 #FFF6A2 #FFF6A2 #DDB260;
+	--color-button-active-text: inherit;
+
+	--background-button-hover: #FFFFFF radial-gradient(farthest-side, #FFBB22, #FF9900);
+	--color-button-hover-border: #FFBB22 #DD7700 #DD7700 #FFBB22;
+	--color-button-hover-text: inherit;
+
+	--background-button-raw: #DD4444;
+	--color-button-raw-border: #FF6666 #BB2222 #BB2222 #FF6666;
+	--color-button-raw-text: inherit;
+
+	--background-button-selected: #77DD66;
+	--color-button-selected-border: #55BB44 #99FF88 #99FF88 #55BB44;
+	--color-button-selected-text: inherit;
+
+	--background-button-bold: #CC7700;
 };

@@ -67,7 +67,7 @@ pages.machine_level_selection.addMachineClassFunc = function(machineClass) {
 		childElement.appendChild(machineLevelButton);
 
 		if (app.factorioEnvironment.getBelt(app.ratioSolver.getBeltLevel()) == belt) {
-			machineLevelButton.style.backgroundColor = "var(--color-button-selected)";
+			machineLevelButton.classList.add('selected');
 		}
 	} else {
 		for (var i = 0; i < machineClass.names.length; ++i) {
@@ -93,7 +93,7 @@ pages.machine_level_selection.addMachineClassFunc = function(machineClass) {
 			childElement.appendChild(machineLevelButton);
 
 			if (app.ratioSolver.getMachineLevel(machineClass.className) == i) {
-				machineLevelButton.style.backgroundColor = "var(--color-button-selected)";
+				machineLevelButton.classList.add('selected');
 			}
 		}
 	}
@@ -110,11 +110,11 @@ pages.machine_level_selection.machineLevelFunc = function(machineClass, level) {
 	machineIcon.src = app.factorioEnvironment.imgPaths[machineClass.name(level)];
 
 	for (var i = 0; i < classButtons.length; ++i) {
-		classButtons[i].style.backgroundColor = "";
+		classButtons[i].classList.remove('selected');
 	}
 
 	if (classButtons.length > level) {
-		classButtons[level].style.backgroundColor = "var(--color-button-selected)";
+		classButtons[level].classList.add('selected');
 	}
 }
 
@@ -131,11 +131,11 @@ pages.machine_level_selection.beltLevelFunc = function(level) {
 	machineIcon.src = app.factorioEnvironment.imgPaths[belt.name];
 
 	for (var i = 0; i < classButtons.length; ++i) {
-		classButtons[i].style.backgroundColor = "";
+		classButtons[i].classList.remove('selected');
 	}
 
 	if (classButtons.length > level) {
-		classButtons[level].style.backgroundColor = "var(--color-button-selected)";
+		classButtons[level].classList.add('selected');
 	}
 }
 

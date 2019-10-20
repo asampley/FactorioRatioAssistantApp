@@ -26,7 +26,7 @@ pages.ratio_selection = {
 		}
 
 		if (app.ratioSolver.isRaw(item)) {
-			button.style.backgroundColor = "var(--color-button-raw)";
+			button.classList.add('raw');
 		}
 
 		if (!app.ratioSolver.hasRecipe(item)) {
@@ -51,10 +51,14 @@ pages.ratio_selection = {
 		pages.ratio_selection.buttonContainer = buttonContainerEmpty;
 	},
 
-	setItemColor: function(item, color) {
+	setItemRaw: function(item, raw) {
 		var button = document.getElementById('ratio_selection-button-' + item);
 		if (button) {
-			button.style.backgroundColor = color;
+			if (raw) {
+				button.classList.add('raw');
+			} else {
+				button.classList.remove('raw');
+			}
 		}
 	}
 }
@@ -79,8 +83,8 @@ document.addEventListener(
 				app.factorioEnvironment.addRecipeListener(pages.ratio_selection.addRecipe);
 				
 				app.ratioSolver.addSetRawListener(
-					item => pages.ratio_selection.setItemColor(item, 'var(--color-button-raw)'),
-					item => pages.ratio_selection.setItemColor(item, '')
+					item => pages.ratio_selection.setItemRaw(item, true),
+					item => pages.ratio_selection.setItemRaw(item, false)
 				);
 			}
 		);

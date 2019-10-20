@@ -27,7 +27,7 @@ pages.raw_materials_selection = {
 		}
 		
 		if (app.ratioSolver.isRaw(item)) {
-			button.style.backgroundColor = "var(--color-button-raw)";
+			button.classList.add('raw');
 		}
 		
 		if (!app.ratioSolver.hasRecipe(item)) {
@@ -53,10 +53,14 @@ pages.raw_materials_selection = {
 		pages.raw_materials_selection.buttonContainer = buttonContainerEmpty;
 	},
 	
-	setItemColor: function(item, color) {
+	setItemRaw: function(item, raw) {
 		var button = document.getElementById('raw_materials_selection-button-' + item);
 		if (button) {
-			button.style.backgroundColor = color;
+			if (raw) {
+				button.classList.add('raw');
+			} else {
+				button.classList.remove('raw');
+			}
 		}
 	}
 }
@@ -84,8 +88,8 @@ document.addEventListener(
 			app.factorioEnvironment.addRecipeListener(pages.raw_materials_selection.addRecipe);
 			
 			app.ratioSolver.addSetRawListener(
-				item => pages.raw_materials_selection.setItemColor(item, 'var(--color-button-raw)'),
-				item => pages.raw_materials_selection.setItemColor(item, '')
+				item => pages.raw_materials_selection.setItemRaw(item, true),
+				item => pages.raw_materials_selection.setItemRaw(item, false)
 			);
 		});
 	},

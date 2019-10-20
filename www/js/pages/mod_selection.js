@@ -36,14 +36,14 @@ pages.mod_selection = {
 					console.log('Set mod to "' + mod + '"');
 								
 					for (var modButtonName in pages.mod_selection.modButtons) {
-						pages.mod_selection.modButtons[modButtonName].style.backgroundColor = "";
+						pages.mod_selection.modButtons[modButtonName].classList.remove('selected');
 					}
-					this.style.backgroundColor = "var(--color-button-selected)";
+					this.classList.add('selected');
 				}
 			}(modName);
 
 			if (app.modLoader.mod == modName) {
-				pages.mod_selection.modButtons[modName].style.backgroundColor = "var(--color-button-selected)";
+				pages.mod_selection.modButtons[modName].classList.add('selected');
 			}
 			console.log('Added mod selector for mod with name "' + modName + '"');
 		}

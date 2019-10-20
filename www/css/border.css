@@ -4,6 +4,8 @@
 	display: flex;
 	flex-direction: column;
 	background-color: var(--color-border);
+	border: 2px solid;
+	border-color: var(--color-border-border);
 	color: #0000000;
 	width: 100%;
 	height: 100%;
@@ -24,13 +26,11 @@
 }
 
 .border .tab {
-	background-color: inherit;
 	flex-grow: 1;
 }
 
 .button-back {
 	box-sizing: content-box;
-	background-color: rgba(0,0,0,0);
 	width: 1em;
 	height: 1em;
 	margin: 0px;
@@ -45,9 +45,6 @@
 	box-sizing: border-box;
 	width: calc(100% - 4px);
 	height: 100%;
-	border: 2px solid black;
-	border-top-width: 0;
-	border-bottom-width: 0;
 	margin: 0 2px 0 2px;
 	padding: 0;
 	text-align: center;

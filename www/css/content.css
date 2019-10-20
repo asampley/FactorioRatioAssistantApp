@@ -3,7 +3,9 @@
 	grid-template-columns: 1fr;
 
 	box-sizing: border-box;
+	border: 2px solid;
 	background-color: var(--color-background);
+	border-color: var(--color-background-border);
 	margin: 0px;
 	padding: 2px;
 
