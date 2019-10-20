@@ -114,11 +114,13 @@ document.addEventListener(
 				treeNodeItemPost.textContent = " / s";
 				treeNodeItemInput.value =
 					(outputInt == 0 ? "" : outputInt)
-					+ (outputInt !== 0 || outputFrac.n !== 0 ? " " : "")
+					+ (outputInt !== 0 && outputFrac.n !== 0 ? " " : "")
 					+ (outputFrac.n == 0 ? "" : outputFrac.toFraction());
 
 				// hide on click, and switch to input mode
 				var itemNumberClick = function(event) {
+					event.stopPropagation();
+
 					treeNodeItemInt.classList.add('hidden');
 					treeNodeItemFrac.classList.add('hidden');
 
@@ -128,7 +130,7 @@ document.addEventListener(
 				treeNodeItemFrac.onclick = itemNumberClick;
 
 				// on input, change the coeff, and refresh the tree
-				treeNodeItemInput.onchange = function(event) {
+				var itemInputLeave = function(event) {
 					treeNodeItemInput.classList.add('hidden');
 
 					try {
@@ -144,6 +146,8 @@ document.addEventListener(
 					treeNodeItemInt.classList.remove('hidden');
 					treeNodeItemFrac.classList.remove('hidden');
 				}
+				treeNodeItemInput.onblur = itemInputLeave;
+				treeNodeItemInput.onchange = itemInputLeave;
 
 				var treeNodeIcon = treeNode.getElementsByClassName('tree-node-item-icon')[0];
 				treeNodeIcon.onerror = function() {this.onerror = null; this.src = 'img/default.png'};
