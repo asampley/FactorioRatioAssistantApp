@@ -1,0 +1,11 @@
+{
+	"underground-belt": true,
+	"fast-underground-belt": true,
+	"express-underground-belt": true,
+	"splitter": true,
+	"fast-splitter": true,
+	"express-splitter": true,
+	"loader": true,
+	"fast-loader": true,
+	"express-loader": true
+}
